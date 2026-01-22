@@ -369,6 +369,14 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/login/LandingPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/EnhancedLoginPage.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/TopToolbar.tsx",
           "type": "registry:component"
         },
