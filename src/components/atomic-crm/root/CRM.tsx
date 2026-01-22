@@ -18,6 +18,8 @@ import { Dashboard } from "../dashboard/Dashboard";
 import deals from "../deals";
 import { Layout } from "../layout/Layout";
 import { SignupPage } from "../login/SignupPage";
+import { LandingPage } from "../login/LandingPage";
+import { EnhancedLoginPage } from "../login/EnhancedLoginPage";
 import {
   authProvider as defaultAuthProvider,
   dataProvider as defaultDataProvider,
@@ -143,6 +145,8 @@ export const CRM = ({
         {...rest}
       >
         <CustomRoutes noLayout>
+          <Route path={LandingPage.path} element={<LandingPage />} />
+          <Route path={EnhancedLoginPage.path} element={<EnhancedLoginPage />} />
           <Route path={SignupPage.path} element={<SignupPage />} />
           <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
           <Route
