@@ -4,27 +4,60 @@ import type { AuthProvider } from "ra-core";
 import { supabaseAuthProvider } from "ra-supabase-core";
 
 import { canAccess } from "../commons/canAccess";
-import { supabase } from "./supabase";
+import { getSupabaseClient } from "./supabase";
 
-const baseAuthProvider = supabaseAuthProvider(supabase, {
-  getIdentity: async () => {
-    const sale = await getSaleFromCache();
-
-    if (sale == null) {
-      throw new Error();
-    }
-
-    return {
-      id: sale.id,
-      fullName: `${sale.first_name} ${sale.last_name}`,
-      avatar: sale.avatar?.src,
-    };
+const hasSupabaseEnv =
+  Boolean(import.meta.env.VITE_SUPABASE_URL) &&
+  Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY);
+const missingSupabaseError = new Error(
+  "Supabase env missing. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+);
+const missingAuthProvider: AuthProvider = {
+  login: async () => {
+    throw missingSupabaseError;
   },
-});
+  logout: async () => undefined,
+  checkAuth: async () => {
+    throw missingSupabaseError;
+  },
+  checkError: async () => undefined,
+  getIdentity: async () => {
+    throw missingSupabaseError;
+  },
+  getPermissions: async () => undefined,
+  canAccess: async () => false,
+};
+
+const baseAuthProvider = hasSupabaseEnv
+  ? supabaseAuthProvider(getSupabaseClient(), {
+      getIdentity: async () => {
+        const sale = await getSaleFromCache();
+
+        if (sale == null) {
+          throw new Error();
+        }
+
+        return {
+          id: sale.id,
+          fullName: `${sale.first_name} ${sale.last_name}`,
+          avatar: sale.avatar?.src,
+        };
+      },
+    })
+  : missingAuthProvider;
+
+const getSupabase = () => {
+  if (!hasSupabaseEnv) {
+    throw missingSupabaseError;
+  }
+  return getSupabaseClient();
+};
 
 export async function getIsInitialized() {
   if (getIsInitialized._is_initialized_cache == null) {
-    const { data } = await supabase.from("init_state").select("is_initialized");
+    const { data } = await getSupabase()
+      .from("init_state")
+      .select("is_initialized");
 
     getIsInitialized._is_initialized_cache = data?.at(0)?.is_initialized > 0;
   }
@@ -70,7 +103,7 @@ export const authProvider: AuthProvider = {
     const isInitialized = await getIsInitialized();
 
     if (!isInitialized) {
-      await supabase.auth.signOut();
+      await getSupabase().auth.signOut();
       throw {
         redirectTo: "/sign-up",
         message: false,
@@ -92,13 +125,13 @@ export const authProvider: AuthProvider = {
     return canAccess(role, params);
   },
   getAuthorizationDetails(authorizationId: string) {
-    return supabase.auth.oauth.getAuthorizationDetails(authorizationId);
+    return getSupabase().auth.oauth.getAuthorizationDetails(authorizationId);
   },
   approveAuthorization(authorizationId: string) {
-    return supabase.auth.oauth.approveAuthorization(authorizationId);
+    return getSupabase().auth.oauth.approveAuthorization(authorizationId);
   },
   denyAuthorization(authorizationId: string) {
-    return supabase.auth.oauth.denyAuthorization(authorizationId);
+    return getSupabase().auth.oauth.denyAuthorization(authorizationId);
   },
 };
 
@@ -107,14 +140,14 @@ const getSaleFromCache = async () => {
   if (cachedSale != null) return cachedSale;
 
   const { data: dataSession, error: errorSession } =
-    await supabase.auth.getSession();
+    await getSupabase().auth.getSession();
 
   // Shouldn't happen after login but just in case
   if (dataSession?.session?.user == null || errorSession) {
     return undefined;
   }
 
-  const { data: dataSale, error: errorSale } = await supabase
+  const { data: dataSale, error: errorSale } = await getSupabase()
     .from("sales")
     .select("id, first_name, last_name, avatar, administrator")
     .match({ user_id: dataSession?.session?.user.id })

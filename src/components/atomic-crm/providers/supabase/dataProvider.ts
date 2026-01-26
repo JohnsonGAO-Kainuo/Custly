@@ -22,21 +22,52 @@ import { getActivityLog } from "../commons/activity";
 import { getCompanyAvatar } from "../commons/getCompanyAvatar";
 import { getContactAvatar } from "../commons/getContactAvatar";
 import { getIsInitialized } from "./authProvider";
-import { supabase } from "./supabase";
+import { getSupabaseClient } from "./supabase";
 
-if (import.meta.env.VITE_SUPABASE_URL === undefined) {
-  throw new Error("Please set the VITE_SUPABASE_URL environment variable");
-}
-if (import.meta.env.VITE_SUPABASE_ANON_KEY === undefined) {
-  throw new Error("Please set the VITE_SUPABASE_ANON_KEY environment variable");
-}
+const hasSupabaseEnv =
+  Boolean(import.meta.env.VITE_SUPABASE_URL) &&
+  Boolean(import.meta.env.VITE_SUPABASE_ANON_KEY);
+const missingSupabaseError = new Error(
+  "Supabase env missing. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY.",
+);
+const missingSupabaseProvider: DataProvider = {
+  getList: async () => {
+    throw missingSupabaseError;
+  },
+  getOne: async () => {
+    throw missingSupabaseError;
+  },
+  getMany: async () => {
+    throw missingSupabaseError;
+  },
+  getManyReference: async () => {
+    throw missingSupabaseError;
+  },
+  update: async () => {
+    throw missingSupabaseError;
+  },
+  updateMany: async () => {
+    throw missingSupabaseError;
+  },
+  create: async () => {
+    throw missingSupabaseError;
+  },
+  delete: async () => {
+    throw missingSupabaseError;
+  },
+  deleteMany: async () => {
+    throw missingSupabaseError;
+  },
+};
 
-const baseDataProvider = supabaseDataProvider({
-  instanceUrl: import.meta.env.VITE_SUPABASE_URL,
-  apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-  supabaseClient: supabase,
-  sortOrder: "asc,desc.nullslast" as any,
-});
+const baseDataProvider = hasSupabaseEnv
+  ? supabaseDataProvider({
+      instanceUrl: import.meta.env.VITE_SUPABASE_URL,
+      apiKey: import.meta.env.VITE_SUPABASE_ANON_KEY,
+      supabaseClient: getSupabaseClient(),
+      sortOrder: "asc,desc.nullslast" as any,
+    })
+  : missingSupabaseProvider;
 
 const processCompanyLogo = async (params: any) => {
   let logo = params.data.logo;
