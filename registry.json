@@ -157,6 +157,22 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/providers/pocketbase/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/providers/pocketbase/dataProvider.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/providers/pocketbase/client.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/providers/pocketbase/authProvider.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/providers/fakerest/index.ts",
           "type": "registry:component"
         },
@@ -365,11 +381,43 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/login/PricingPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/PocketbaseResetPasswordPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/PocketbaseForgotPasswordPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/ModernNav.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/MarketingBackdrop.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/login/LoginSkeleton.tsx",
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/login/LocaleMenuButton.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/login/LandingPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/FeaturesPage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/login/FAQPage.tsx",
           "type": "registry:component"
         },
         {
