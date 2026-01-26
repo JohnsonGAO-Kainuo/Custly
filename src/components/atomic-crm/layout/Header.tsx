@@ -36,16 +36,10 @@ const Header = () => {
               className="flex items-center gap-3 text-foreground no-underline group"
             >
               <img
-                className="[.light_&]:hidden h-7 transition-transform group-hover:scale-105"
-                src={darkModeLogo}
-                alt={title}
+                src="/logo.svg"
+                alt="Custly"
+                className="h-9 transition-transform group-hover:scale-105"
               />
-              <img
-                className="[.dark_&]:hidden h-7 transition-transform group-hover:scale-105"
-                src={lightModeLogo}
-                alt={title}
-              />
-              <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
             </Link>
             <div>
               <nav className="flex gap-1">

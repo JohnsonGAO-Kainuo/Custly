@@ -20,10 +20,19 @@ import { Layout } from "../layout/Layout";
 import { SignupPage } from "../login/SignupPage";
 import { LandingPage } from "../login/LandingPage";
 import { EnhancedLoginPage } from "../login/EnhancedLoginPage";
+import { PricingPage } from "../login/PricingPage";
+import { FeaturesPage } from "../login/FeaturesPage";
+import { FAQPage } from "../login/FAQPage";
+import { PocketbaseForgotPasswordPage } from "../login/PocketbaseForgotPasswordPage";
+import { PocketbaseResetPasswordPage } from "../login/PocketbaseResetPasswordPage";
 import {
   authProvider as defaultAuthProvider,
   dataProvider as defaultDataProvider,
 } from "../providers/supabase";
+import {
+  authProvider as pocketbaseAuthProvider,
+  dataProvider as pocketbaseDataProvider,
+} from "../providers/pocketbase";
 import sales from "../sales";
 import { SettingsPage } from "../settings/SettingsPage";
 import type { ConfigurationContextValue } from "./ConfigurationContext";
@@ -41,7 +50,6 @@ import {
   defaultTitle,
 } from "./defaultConfiguration";
 import { i18nProvider } from "./i18nProvider";
-import { StartPage } from "../login/StartPage.tsx";
 
 export type CRMProps = {
   dataProvider?: DataProvider;
@@ -100,11 +108,22 @@ export const CRM = ({
   noteStatuses = defaultNoteStatuses,
   taskTypes = defaultTaskTypes,
   title = defaultTitle,
-  dataProvider = defaultDataProvider,
-  authProvider = defaultAuthProvider,
+  dataProvider,
+  authProvider,
   disableTelemetry,
   ...rest
 }: CRMProps) => {
+  const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
+  const isPocketbase = backend === "pocketbase";
+  const resolvedDataProvider =
+    dataProvider ??
+    (isPocketbase ? pocketbaseDataProvider : defaultDataProvider);
+  const resolvedAuthProvider =
+    authProvider ??
+    (isPocketbase ? pocketbaseAuthProvider : defaultAuthProvider);
+  const includeSupabaseRoutes = !isPocketbase;
+  const includePocketbaseRoutes = isPocketbase;
+
   useEffect(() => {
     if (
       disableTelemetry ||
@@ -133,11 +152,11 @@ export const CRM = ({
       title={title}
     >
       <Admin
-        dataProvider={dataProvider}
-        authProvider={authProvider}
+        dataProvider={resolvedDataProvider}
+        authProvider={resolvedAuthProvider}
         store={localStorageStore(undefined, "CRM")}
         layout={Layout}
-        loginPage={StartPage}
+        loginPage={EnhancedLoginPage}
         i18nProvider={i18nProvider}
         dashboard={Dashboard}
         requireAuth
@@ -146,14 +165,37 @@ export const CRM = ({
       >
         <CustomRoutes noLayout>
           <Route path={LandingPage.path} element={<LandingPage />} />
-          <Route path={EnhancedLoginPage.path} element={<EnhancedLoginPage />} />
           <Route path={SignupPage.path} element={<SignupPage />} />
-          <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
-          <Route
-            path={ForgotPasswordPage.path}
-            element={<ForgotPasswordPage />}
-          />
-          <Route path={OAuthConsentPage.path} element={<OAuthConsentPage />} />
+          <Route path={PricingPage.path} element={<PricingPage />} />
+          <Route path={FeaturesPage.path} element={<FeaturesPage />} />
+          <Route path={FAQPage.path} element={<FAQPage />} />
+          {includeSupabaseRoutes ? (
+            <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
+          ) : null}
+          {includeSupabaseRoutes ? (
+            <Route
+              path={ForgotPasswordPage.path}
+              element={<ForgotPasswordPage />}
+            />
+          ) : null}
+          {includeSupabaseRoutes ? (
+            <Route
+              path={OAuthConsentPage.path}
+              element={<OAuthConsentPage />}
+            />
+          ) : null}
+          {includePocketbaseRoutes ? (
+            <Route
+              path={PocketbaseForgotPasswordPage.path}
+              element={<PocketbaseForgotPasswordPage />}
+            />
+          ) : null}
+          {includePocketbaseRoutes ? (
+            <Route
+              path={PocketbaseResetPasswordPage.path}
+              element={<PocketbaseResetPasswordPage />}
+            />
+          ) : null}
         </CustomRoutes>
 
         <CustomRoutes>

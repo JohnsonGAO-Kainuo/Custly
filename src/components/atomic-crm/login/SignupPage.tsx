@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2, ArrowLeft, Github, Mail } from "lucide-react";
-import { useDataProvider, useLogin, useNotify } from "ra-core";
+import { useDataProvider, useLogin, useNotify, useTranslate } from "ra-core";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { Navigate, Link } from "react-router";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { SignUpData } from "../types";
 import { LoginSkeleton } from "./LoginSkeleton";
 import { Notification } from "@/components/admin/notification";
+import { LocaleMenuButton } from "./LocaleMenuButton";
+import { MarketingBackdrop } from "./MarketingBackdrop";
 
 export const SignupPage = () => {
   const queryClient = useQueryClient();
@@ -36,7 +38,7 @@ export const SignupPage = () => {
         password: data.password,
         redirectTo: "/contacts",
       }).then(() => {
-        notify("Initial user successfully created");
+        notify(translate("marketing.auth.signup.success"));
         // FIXME: We should probably provide a hook for that in the ra-core package
         queryClient.invalidateQueries({
           queryKey: ["auth", "canAccess"],
@@ -50,6 +52,10 @@ export const SignupPage = () => {
 
   const login = useLogin();
   const notify = useNotify();
+  const translate = useTranslate();
+  const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
+  const supportsOAuth = backend === "supabase";
+  const allowMultipleSignups = backend === "pocketbase";
 
   const {
     register,
@@ -63,8 +69,8 @@ export const SignupPage = () => {
     return <LoginSkeleton />;
   }
 
-  // For the moment, we only allow one user to sign up. Other users must be created by the administrator.
-  if (isInitialized) {
+  // For Supabase demo, only allow the first user to sign up.
+  if (isInitialized && !allowMultipleSignups) {
     return <Navigate to="/login" />;
   }
 
@@ -73,37 +79,53 @@ export const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
+    <div className="relative min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center p-6">
+      <MarketingBackdrop />
+      <div className="relative z-10 w-full max-w-md">
         {/* Back to Landing */}
-        <Button variant="ghost" size="sm" asChild className="mb-6">
-          <Link to="/landing">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to home
-          </Link>
-        </Button>
+        <div className="flex items-center justify-between mb-6">
+          <Button variant="ghost" size="sm" asChild>
+            <Link to="/landing">
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              {translate("marketing.common.back_to_home")}
+            </Link>
+          </Button>
+          <LocaleMenuButton />
+        </div>
 
-        <Card className="shadow-xl border-border/60">
+        <Card className="shadow-xl border-border/60 bg-card/80 backdrop-blur ring-1 ring-primary/10">
           <CardHeader className="space-y-1 text-center">
             <CardTitle className="text-2xl font-bold tracking-tight">
-              {isInitialized ? "Welcome back" : "Create your account"}
+              {isInitialized && !allowMultipleSignups
+                ? translate("marketing.auth.signup.title_existing")
+                : translate("marketing.auth.signup.title_new")}
             </CardTitle>
             <CardDescription>
-              {isInitialized 
-                ? "You already have an account. Please sign in."
-                : "Set up the first user account to get started"}
+              {isInitialized && !allowMultipleSignups
+                ? translate("marketing.auth.signup.subtitle_existing")
+                : translate("marketing.auth.signup.subtitle_new")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* OAuth Buttons - only show for initial signup */}
-            {!isInitialized && (
+            {!isInitialized && supportsOAuth ? (
               <>
                 <div className="space-y-3">
-                  <Button variant="outline" className="w-full" disabled>
+                  <Button 
+                    variant="outline" 
+                    className="w-full !bg-[#24292e] hover:!bg-[#1a1e22] !text-white !border-[#24292e] hover:!border-[#1a1e22] [&>svg]:!text-white" 
+                    style={{ backgroundColor: '#24292e', color: '#ffffff', borderColor: '#24292e' }}
+                    disabled
+                  >
                     <Github className="mr-2 h-5 w-5" />
-                    Continue with GitHub
+                    {translate("marketing.auth.signup.oauth_github")}
                   </Button>
-                  <Button variant="outline" className="w-full" disabled>
+                  <Button 
+                    variant="outline" 
+                    className="w-full !bg-white hover:!bg-gray-50 !text-gray-900 !border-gray-300 hover:!border-gray-400" 
+                    style={{ backgroundColor: '#ffffff', color: '#111827', borderColor: '#d1d5db' }}
+                    disabled
+                  >
                     <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -122,7 +144,7 @@ export const SignupPage = () => {
                         d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                       />
                     </svg>
-                    Continue with Google
+                    {translate("marketing.auth.signup.oauth_google")}
                   </Button>
                 </div>
 
@@ -133,17 +155,19 @@ export const SignupPage = () => {
                   </div>
                   <div className="relative flex justify-center text-xs uppercase">
                     <span className="bg-card px-2 text-muted-foreground">
-                      Or continue with email
+                      {translate("marketing.auth.signup.or_email")}
                     </span>
                   </div>
                 </div>
               </>
-            )}
+            ) : null}
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="first_name">First name</Label>
+                  <Label htmlFor="first_name">
+                    {translate("marketing.auth.signup.first_name")}
+                  </Label>
                   <Input
                     {...register("first_name", { required: true })}
                     id="first_name"
@@ -152,7 +176,9 @@ export const SignupPage = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="last_name">Last name</Label>
+                  <Label htmlFor="last_name">
+                    {translate("marketing.auth.signup.last_name")}
+                  </Label>
                   <Input
                     {...register("last_name", { required: true })}
                     id="last_name"
@@ -162,26 +188,30 @@ export const SignupPage = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">
+                  {translate("marketing.auth.signup.email_label")}
+                </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     {...register("email", { required: true })}
                     id="email"
                     type="email"
-                    placeholder="name@example.com"
+                    placeholder={translate("marketing.auth.signup.email_placeholder")}
                     className="pl-10"
                     required
                   />
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">
+                  {translate("marketing.auth.signup.password_label")}
+                </Label>
                 <Input
                   {...register("password", { required: true })}
                   id="password"
                   type="password"
-                  placeholder="Create a strong password"
+                  placeholder={translate("marketing.auth.signup.password_placeholder")}
                   required
                 />
               </div>
@@ -193,19 +223,19 @@ export const SignupPage = () => {
                 {isSignUpPending ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                    Creating account...
+                    {translate("marketing.auth.signup.submitting")}
                   </>
                 ) : (
-                  "Create account"
+                  translate("marketing.auth.signup.submit")
                 )}
               </Button>
             </form>
 
             {/* Sign In Link */}
             <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{" "}
+              {translate("marketing.auth.signup.have_account")}{" "}
               <Link to="/login" className="text-primary hover:underline font-medium">
-                Sign in
+                {translate("marketing.auth.signup.sign_in")}
               </Link>
             </div>
           </CardContent>

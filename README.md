@@ -1,10 +1,10 @@
-# Atomic CRM
+# Custly
 
-A full-featured CRM built with React, shadcn-admin-kit, and Supabase.
+A full-featured CRM built with React, shadcn-admin-kit, and PocketBase (default). Supabase is still supported as an optional backend.
+
+> 基于 [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) 开源项目
 
 https://github.com/user-attachments/assets/0d7554b5-49ef-41c6-bcc9-a76214fc5c99
-
-Atomic CRM is free and open-source. You can test it online at https://marmelab.com/atomic-crm-demo.
 
 ## Features
 
@@ -14,87 +14,115 @@ Atomic CRM is free and open-source. You can test it online at https://marmelab.c
 - ✉️ **Capture Emails**: CC Atomic CRM to automatically save communications as notes.
 - 📊 **Manage Deals**: Visualize and track your sales pipeline in a Kanban board.
 - 🔄 **Import & Export Data**: Easily transfer contacts in and out of the system.
-- 🔐 **Control Access**: Log in with Google, Azure, Keycloak, and Auth0.
+- 🔐 **Authentication**: Email/password by default; OAuth available when using Supabase.
 - 📜 **Track Activity History**: View all interactions in aggregated activity logs.
 - 🔗 **Integrate via API**: Connect seamlessly with other systems using our API.
 - 🛠️ **Customize Everything**: Add custom fields, change the theme, and replace any component to fit your needs.
+- 🌍 **Multi-language**: Support for English, Simplified Chinese, and Traditional Chinese.
 
 ## Installation
 
 To run this project locally, you will need the following tools installed on your computer:
 
-- Make
 - Node 22 LTS
-- Docker (required by Supabase)
+- Docker (only if you want to run Supabase locally)
 
-Fork the [`marmelab/atomic-crm`](https://github.com/marmelab/atomic-crm) repository to your user/organization, then clone it locally:
+Clone this repository locally:
 
 ```sh
-git clone https://github.com/[username]/atomic-crm.git
+git clone https://github.com/[username]/custly.git
 ```
 
 Install dependencies:
 
 ```sh
-cd atomic-crm
+cd custly
 make install
 ```
 
-This will install the dependencies for the frontend and the backend, including a local Supabase instance.
-
-Once your app is configured, start the app locally with the following command:
+Or use npm directly:
 
 ```sh
-make start
+npm install
 ```
 
-This will start the Vite dev server for the frontend, the local Supabase instance for the API, and a Postgres database (thanks to Docker).
+This installs the frontend dependencies. The backend runs separately (PocketBase or Supabase).
 
-You can then access the app via [http://localhost:5173/](http://localhost:5173/). You will be prompted to create the first user.
+## Quick Start
 
-If you need debug the backend, you can access the following services: 
+**PocketBase (recommended)**
+1. Start your PocketBase instance (local or Pockethost).
+2. Set environment variables in `.env.development`:
+   ```
+   VITE_BACKEND=pocketbase
+   VITE_POCKETBASE_URL=http://127.0.0.1:8090
+   ```
+3. Run the frontend:
+   ```sh
+   npm run dev
+   ```
 
-- Supabase dashboard: [http://localhost:54323/](http://localhost:54323/)
-- REST API: [http://127.0.0.1:54321](http://127.0.0.1:54321)
-- Attachments storage: [http://localhost:54323/project/default/storage/buckets/attachments](http://localhost:54323/project/default/storage/buckets/attachments)
-- Inbucket email testing service: [http://localhost:54324/](http://localhost:54324/)
+**Demo Mode** (no backend):
+```sh
+npm run dev:demo
+```
 
-## User Documentation
+Access the app via [http://localhost:5173/](http://localhost:5173/)
 
-1. [User Management](./doc/src/content/docs/users/user-management.mdx)
-2. [Importing And Exporting Data](./doc/src/content/docs/users/import-contacts.mdx)
-3. [Inbound Email](./doc/src/content/docs/users/inbound-email.mdx)
+## 📚 Documentation
+
+**For developers**, see **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** (中文) for:
+- 项目架构和目录结构
+- 开发命令和常见问题
+- 多语言支持实现
+- 当前进度和待办事项
+
+**For product requirements**, see [requirements/atomic-crm-prd.md](./requirements/atomic-crm-prd.md)
+
+**Upstream documentation**:
+- [User Management](./doc/src/content/docs/users/user-management.mdx)
+- [Import/Export Data](./doc/src/content/docs/users/import-contacts.mdx)
+- [Inbound Email](./doc/src/content/docs/users/inbound-email.mdx)
+- [Customizing](./doc/src/content/docs/developers/customizing.mdx)
+- [Architecture](./doc/src/content/docs/developers/architecture-choices.mdx)
+
+## 🌍 Multi-language Support
+
+Custly supports 3 languages:
+- 🇬🇧 English
+- 🇨🇳 简体中文 (Simplified Chinese)  
+- 🇹🇼 繁體中文 (Traditional Chinese)
+
+Users can switch languages from the user menu.
 
 ## Deploying to Production
 
+**Frontend (Vercel)**
+- Set `VITE_BACKEND=pocketbase`
+- Set `VITE_POCKETBASE_URL=https://your-instance.pockethost.io`
+
+**Backend options**
+- PocketBase on Pockethost (recommended for speed)
+- Supabase (legacy option, see docs below)
+
+Supabase docs (optional):
 1. [Configuring Supabase](./doc/src/content/docs/developers/supabase-configuration.mdx)
-2. [Configuring Inbound Email](./doc/src/content/docs/developers/inbound-email-configuration.mdx) *(optional)*
-3. [Deployment](./doc/src/content/docs/developers/deploy.mdx)
+2. [Configuring Inbound Email](./doc/src/content/docs/developers/inbound-email-configuration.mdx)
 
-## Customizing Atomic CRM
+## Testing
 
-To customize Atomic CRM, you will need TypeScript and React programming skills as there is no graphical user interface for customization. Here are some resources to assist you in getting started.
-
-1. [Customizing the CRM](./doc/src/content/docs/developers/customizing.mdx)
-2. [Creating Migrations](./doc/src/content/docs/developers/migrations.mdx) *(optional)*
-3. [Using Fake Rest Data Provider for Development](./doc/src/content/docs/developers/data-providers.mdx) *(optional)*
-4. [Architecture Decisions](./doc/src/content/docs/developers/architecture-choices.mdx) *(optional)*
-
-## Testing Changes
-
-This project contains unit tests. Run them with the following command:
+Run unit tests:
 
 ```sh
 make test
 ```
 
-You can add your own unit tests powered by Jest anywhere in the `src` directory. The test files should be named `*.test.tsx` or `*.test.ts`.
+## Learn More
 
-## Registry
-
-Atomic CRM components are published as a Shadcn Registry file:
-- The `registry.json` file is automatically generated by the `scripts/generate-registry.mjs` script as a pre-commit hook.
-- The `http://marmelab.com/atomic-crm/r/atomic-crm.json` file is automatically published by the CI/CD pipeline
+For more information about the upstream project:
+- [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm)
+- [Online Demo](https://marmelab.com/atomic-crm-demo)
+- [React-Admin Documentation](https://marmelab.com/react-admin/documentation.html)
 
 > [!WARNING]  
 > If the `registry.json` misses some changes you made, you MUST update the `scripts/generate-registry.mjs` to include those changes.

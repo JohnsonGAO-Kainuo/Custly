@@ -54,8 +54,8 @@ export function AppSidebar() {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link to="/">
-                <Shell className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <img src="/logo.svg" alt="Custly" className="!size-8" />
+                <span className="text-base font-semibold">Custly</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
