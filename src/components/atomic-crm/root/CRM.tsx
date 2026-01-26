@@ -30,6 +30,10 @@ import {
   dataProvider as defaultDataProvider,
 } from "../providers/supabase";
 import {
+  authProvider as fakerestAuthProvider,
+  dataProvider as fakerestDataProvider,
+} from "../providers/fakerest";
+import {
   authProvider as pocketbaseAuthProvider,
   dataProvider as pocketbaseDataProvider,
 } from "../providers/pocketbase";
@@ -115,14 +119,24 @@ export const CRM = ({
 }: CRMProps) => {
   const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
   const isPocketbase = backend === "pocketbase";
+  const isFakerest = backend === "fakerest";
   const resolvedDataProvider =
     dataProvider ??
-    (isPocketbase ? pocketbaseDataProvider : defaultDataProvider);
+    (isFakerest
+      ? fakerestDataProvider
+      : isPocketbase
+        ? pocketbaseDataProvider
+        : defaultDataProvider);
   const resolvedAuthProvider =
     authProvider ??
-    (isPocketbase ? pocketbaseAuthProvider : defaultAuthProvider);
-  const includeSupabaseRoutes = !isPocketbase;
+    (isFakerest
+      ? fakerestAuthProvider
+      : isPocketbase
+        ? pocketbaseAuthProvider
+        : defaultAuthProvider);
+  const includeSupabaseRoutes = !isPocketbase && !isFakerest;
   const includePocketbaseRoutes = isPocketbase;
+  const requireAuth = !isFakerest;
 
   useEffect(() => {
     if (
@@ -159,7 +173,7 @@ export const CRM = ({
         loginPage={EnhancedLoginPage}
         i18nProvider={i18nProvider}
         dashboard={Dashboard}
-        requireAuth
+        requireAuth={requireAuth}
         disableTelemetry
         {...rest}
       >
