@@ -287,6 +287,20 @@ export const crmChineseTraditionalMessages = {
     details: "詳情",
     settings: "設置",
   },
+  crm: {
+    dashboard: {
+      latest_activity: "最新動態",
+      tasks_empty: "聯繫人相關的任務會顯示在這裡。",
+      welcome: {
+        title: "歡迎使用 Custly",
+        description:
+          "Custly 是一款現代 CRM，幫助你優雅高效地管理客戶關係。",
+        demo_note:
+          "此示範使用模擬資料，你可以自由瀏覽與修改，重新整理後會重置。",
+        built_with: "基於 React、shadcn/ui 與 Tailwind CSS 構建。",
+      },
+    },
+  },
 };
 
 export default crmChineseTraditionalMessages;

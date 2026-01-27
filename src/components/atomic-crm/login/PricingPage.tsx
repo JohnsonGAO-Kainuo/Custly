@@ -8,6 +8,7 @@ import { MarketingBackdrop } from "./MarketingBackdrop";
 
 export const PricingPage = () => {
   const translate = useTranslate();
+  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   const plans = [
     {
@@ -89,6 +90,11 @@ export const PricingPage = () => {
               </nav>
               <div className="flex items-center gap-4">
                 <LocaleMenuButton />
+                <Button variant="outline" asChild>
+                  <a href={demoUrl} target="_blank" rel="noreferrer">
+                    {translate("marketing.common.view_demo")}
+                  </a>
+                </Button>
                 <Button variant="ghost" asChild>
                   <Link to="/login">{translate("marketing.common.sign_in")}</Link>
                 </Button>

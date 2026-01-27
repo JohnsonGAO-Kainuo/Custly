@@ -1,4 +1,11 @@
 import { CRM } from "@/components/atomic-crm/root/CRM";
+import {
+  authProvider as fakerestAuthProvider,
+  dataProvider as fakerestDataProvider,
+} from "@/components/atomic-crm/providers/fakerest";
+
+const isDemoPath =
+  typeof window !== "undefined" && window.location.pathname.startsWith("/demo");
 
 /**
  * Application entry point
@@ -25,6 +32,16 @@ import { CRM } from "@/components/atomic-crm/root/CRM";
  *    />
  * );
  */
-const App = () => <CRM />;
+const App = () =>
+  isDemoPath ? (
+    <CRM
+      dataProvider={fakerestDataProvider}
+      authProvider={fakerestAuthProvider}
+      requireAuth={false}
+      basename="/demo"
+    />
+  ) : (
+    <CRM />
+  );
 
 export default App;

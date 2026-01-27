@@ -11,6 +11,7 @@ const marketingEnglishMessages: TranslationMessages = {
       sign_in: "Sign in",
       sign_up: "Sign up",
       get_started: "Get started",
+      view_demo: "View demo",
       back_to_home: "Back to home",
       try_now: "Try now",
       read_customer_stories: "Read our customer stories",

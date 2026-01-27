@@ -11,6 +11,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
       sign_in: "登錄",
       sign_up: "註冊",
       get_started: "立即開始",
+      view_demo: "查看示範",
       back_to_home: "返回首頁",
       try_now: "立即試用",
       read_customer_stories: "閱讀客戶故事",

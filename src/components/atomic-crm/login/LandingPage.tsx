@@ -57,6 +57,7 @@ const GitHubIconButton = () => {
 
 export const LandingPage = () => {
   const translate = useTranslate();
+  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   return (
     <div className="relative min-h-screen bg-background">
@@ -98,6 +99,16 @@ export const LandingPage = () => {
                 <GitHubIconButton />
                 <LocaleMenuButton />
                 <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="rounded-md px-4"
+                >
+                  <a href={demoUrl} target="_blank" rel="noreferrer">
+                    {translate("marketing.common.view_demo")}
+                  </a>
+                </Button>
+                <Button
                   variant="ghost"
                   size="sm"
                   asChild
@@ -129,12 +140,24 @@ export const LandingPage = () => {
 
             {/* CTA Button */}
             <div className="pt-4">
-              <Button size="lg" asChild className="rounded-md px-6 gap-2">
-                <Link to="/sign-up">
-                  {translate("marketing.common.try_now")}
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-              </Button>
+              <div className="flex flex-col sm:flex-row justify-center gap-3">
+                <Button size="lg" asChild className="rounded-md px-6 gap-2">
+                  <Link to="/sign-up">
+                    {translate("marketing.common.try_now")}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </Button>
+                <Button
+                  size="lg"
+                  variant="outline"
+                  asChild
+                  className="rounded-md px-6 gap-2"
+                >
+                  <a href={demoUrl} target="_blank" rel="noreferrer">
+                    {translate("marketing.common.view_demo")}
+                  </a>
+                </Button>
+              </div>
             </div>
 
             {/* Search/Demo Box */}

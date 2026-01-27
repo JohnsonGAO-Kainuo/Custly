@@ -4,6 +4,7 @@ import englishMessages from "ra-language-english";
 import { raSupabaseEnglishMessages } from "ra-supabase-language-english";
 import chineseMessages from "@/i18n/zh-CN";
 import chineseTraditionalMessages from "@/i18n/zh-TW";
+import crmEnglishMessages from "@/i18n/crm-en";
 import crmChineseMessages from "@/i18n/crm-zh-CN";
 import crmChineseTraditionalMessages from "@/i18n/crm-zh-TW";
 import marketingEnglishMessages from "@/i18n/marketing-en";
@@ -80,6 +81,7 @@ export const i18nProvider = polyglotI18nProvider(
       englishMessages,
       raSupabaseEnglishMessages,
       raSupabaseEnglishMessagesOverride,
+      crmEnglishMessages,
       marketingEnglishMessages,
     );
   },
