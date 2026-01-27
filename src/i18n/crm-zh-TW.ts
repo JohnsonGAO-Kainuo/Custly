@@ -303,10 +303,34 @@ export const crmChineseTraditionalMessages = {
         tasks_hint: "下一步動作",
       },
       hot_contacts: {
+        kicker: "熱門聯繫人",
         title: "熱門聯繫人",
         create: "建立聯繫人",
         empty_title: "狀態為「熱門」的聯繫人會顯示在這裡。",
         empty_note: "透過新增備註並點擊「顯示選項」來修改狀態。",
+      },
+      tasks: {
+        kicker: "任務",
+        title: "待辦任務",
+        filters: {
+          overdue: "逾期",
+          today: "今天",
+          tomorrow: "明天",
+          this_week: "本週",
+          later: "以後",
+        },
+      },
+      activity: {
+        kicker: "動態",
+      },
+      pipeline: {
+        kicker: "管道",
+        title: "預計成交收入",
+        window: "近 6 個月",
+        legend: {
+          won: "已成交",
+          lost: "已流失",
+        },
       },
       latest_activity: "最新動態",
       tasks_empty: "聯繫人相關的任務會顯示在這裡。",

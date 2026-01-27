@@ -303,10 +303,34 @@ export const crmChineseMessages = {
         tasks_hint: "下一步动作",
       },
       hot_contacts: {
+        kicker: "热门联系人",
         title: "热门联系人",
         create: "创建联系人",
         empty_title: "状态为“热门”的联系人会显示在这里。",
         empty_note: "通过添加备注并点击“显示选项”来修改联系人状态。",
+      },
+      tasks: {
+        kicker: "任务",
+        title: "待办任务",
+        filters: {
+          overdue: "逾期",
+          today: "今天",
+          tomorrow: "明天",
+          this_week: "本周",
+          later: "以后",
+        },
+      },
+      activity: {
+        kicker: "动态",
+      },
+      pipeline: {
+        kicker: "管道",
+        title: "预计成交收入",
+        window: "近 6 个月",
+        legend: {
+          won: "已成交",
+          lost: "已流失",
+        },
       },
       latest_activity: "最新动态",
       tasks_empty: "联系人相关的任务会显示在这里。",

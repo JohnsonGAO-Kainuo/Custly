@@ -1,8 +1,9 @@
 import { ResponsiveBar } from "@nivo/bar";
 import { format, startOfMonth } from "date-fns";
 import { DollarSign } from "lucide-react";
-import { useGetList } from "ra-core";
+import { useGetList, useTranslate } from "ra-core";
 import { memo, useMemo } from "react";
+import { Card } from "@/components/ui/card";
 
 import type { Deal } from "../types";
 
@@ -21,6 +22,7 @@ const DEFAULT_LOCALE = "en-US";
 const CURRENCY = "USD";
 
 export const DealsChart = memo(() => {
+  const translate = useTranslate();
   const acceptedLanguages = navigator
     ? navigator.languages || [navigator.language]
     : [DEFAULT_LOCALE];
@@ -83,22 +85,39 @@ export const DealsChart = memo(() => {
     },
     { min: 0, max: 0 },
   );
+  const markerWonLabel = translate("crm.dashboard.pipeline.legend.won");
+  const markerLostLabel = translate("crm.dashboard.pipeline.legend.lost");
+
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center mb-4">
-        <div className="mr-3 flex">
-          <DollarSign className="text-muted-foreground w-6 h-6" />
+    <Card className="p-4 border-border/60 bg-card/70">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+            <DollarSign className="text-primary w-5 h-5" />
+          </div>
+          <div>
+            <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              {translate("crm.dashboard.pipeline.kicker")}
+            </p>
+            <h2 className="text-base font-semibold text-foreground/90">
+              {translate("crm.dashboard.pipeline.title")}
+            </h2>
+          </div>
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground">
-          Upcoming Deal Revenue
-        </h2>
+        <span className="text-xs text-muted-foreground">
+          {translate("crm.dashboard.pipeline.window")}
+        </span>
       </div>
-      <div className="h-[400px]">
+      <div className="h-[340px]">
         <ResponsiveBar
           data={months}
           indexBy="date"
           keys={["won", "pending", "lost"]}
-          colors={["#61cdbb", "#97e3d5", "#e25c3b"]}
+          colors={[
+            "var(--color-chart-1)",
+            "var(--color-chart-2)",
+            "var(--color-chart-3)",
+          ]}
           margin={{ top: 30, right: 50, bottom: 30, left: 0 }}
           padding={0.3}
           valueScale={{
@@ -176,8 +195,8 @@ export const DealsChart = memo(() => {
                 axis: "y",
                 value: 0,
                 lineStyle: { strokeOpacity: 0 },
-                textStyle: { fill: "#2ebca6" },
-                legend: "Won",
+                textStyle: { fill: "var(--color-chart-1)" },
+                legend: markerWonLabel,
                 legendPosition: "top-left",
                 legendOrientation: "vertical",
               },
@@ -185,11 +204,11 @@ export const DealsChart = memo(() => {
                 axis: "y",
                 value: 0,
                 lineStyle: {
-                  stroke: "#f47560",
+                  stroke: "var(--color-chart-3)",
                   strokeWidth: 1,
                 },
-                textStyle: { fill: "#e25c3b" },
-                legend: "Lost",
+                textStyle: { fill: "var(--color-chart-3)" },
+                legend: markerLostLabel,
                 legendPosition: "bottom-left",
                 legendOrientation: "vertical",
               },
@@ -197,6 +216,6 @@ export const DealsChart = memo(() => {
           }
         />
       </div>
-    </div>
+    </Card>
   );
 });

@@ -8,16 +8,21 @@ export function DashboardActivityLog() {
   const translate = useTranslate();
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center mb-2">
-        <div className="mr-3 flex">
-          <Clock className="text-muted-foreground w-6 h-6" />
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center">
+        <div className="mr-3 flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
+          <Clock className="text-primary w-5 h-5" />
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground">
-          {translate("crm.dashboard.latest_activity")}
-        </h2>
+        <div>
+          <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+            {translate("crm.dashboard.activity.kicker")}
+          </p>
+          <h2 className="text-base font-semibold text-foreground/90">
+            {translate("crm.dashboard.latest_activity")}
+          </h2>
+        </div>
       </div>
-      <Card className="mb-2 p-6">
+      <Card className="mb-2 p-6 border-border/60 bg-card/70">
         <ActivityLog pageSize={10} />
       </Card>
     </div>

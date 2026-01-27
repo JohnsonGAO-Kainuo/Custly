@@ -34,12 +34,17 @@ export const HotContacts = () => {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center">
-        <div className="mr-3 flex">
-          <Users className="text-muted-foreground w-6 h-6" />
+        <div className="mr-3 flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
+          <Users className="text-primary w-5 h-5" />
         </div>
-        <h2 className="text-xl font-semibold text-muted-foreground">
-          {translate("crm.dashboard.hot_contacts.title")}
-        </h2>
+        <div className="flex-1">
+          <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
+            {translate("crm.dashboard.hot_contacts.kicker")}
+          </p>
+          <h2 className="text-base font-semibold text-foreground/90">
+            {translate("crm.dashboard.hot_contacts.title")}
+          </h2>
+        </div>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -60,7 +65,7 @@ export const HotContacts = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <Card className="py-0">
+      <Card className="py-0 border-border/60 bg-card/70">
         <SimpleList<Contact>
           linkType="show"
           data={contactData}
