@@ -150,13 +150,15 @@ export const PricingPage = () => {
                   <div className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-br from-primary/15 via-transparent to-transparent" />
                 )}
                 {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <div className="absolute top-3 left-1/2 -translate-x-1/2">
                     <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
                       {translate("marketing.pricing_page.most_popular")}
                     </span>
                   </div>
                 )}
-                <CardHeader className="relative z-10 text-center pb-8">
+                <CardHeader
+                  className={`relative z-10 text-center pb-8 ${plan.popular ? "pt-10" : ""}`}
+                >
                   <CardTitle className="text-2xl mb-2">{planName}</CardTitle>
                   <CardDescription className="text-base">
                     {planDescription}

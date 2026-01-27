@@ -16,6 +16,13 @@ const crmEnglishMessages: TranslationMessages = {
         tasks: "Tasks",
         tasks_hint: "Next actions",
       },
+      hot_contacts: {
+        title: "Hot Contacts",
+        create: "Create contact",
+        empty_title: "Contacts with a \"hot\" status will appear here.",
+        empty_note:
+          "Change the status by adding a note to a contact and clicking \"show options\".",
+      },
       latest_activity: "Latest Activity",
       tasks_empty: "Tasks added to your contacts will appear here.",
       welcome: {

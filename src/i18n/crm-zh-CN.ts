@@ -302,6 +302,12 @@ export const crmChineseMessages = {
         tasks: "任务",
         tasks_hint: "下一步动作",
       },
+      hot_contacts: {
+        title: "热门联系人",
+        create: "创建联系人",
+        empty_title: "状态为“热门”的联系人会显示在这里。",
+        empty_note: "通过添加备注并点击“显示选项”来修改联系人状态。",
+      },
       latest_activity: "最新动态",
       tasks_empty: "联系人相关的任务会显示在这里。",
       welcome: {
