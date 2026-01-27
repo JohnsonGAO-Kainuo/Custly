@@ -289,6 +289,19 @@ export const crmChineseMessages = {
   },
   crm: {
     dashboard: {
+      overview: {
+        kicker: "总览",
+        title: "今日工作台",
+        subtitle: "一眼掌握销售与客户动向。",
+        contacts: "联系人",
+        contacts_hint: "活跃关系",
+        companies: "公司",
+        companies_hint: "进行中账户",
+        deals: "交易",
+        deals_hint: "开放机会",
+        tasks: "任务",
+        tasks_hint: "下一步动作",
+      },
       latest_activity: "最新动态",
       tasks_empty: "联系人相关的任务会显示在这里。",
       welcome: {

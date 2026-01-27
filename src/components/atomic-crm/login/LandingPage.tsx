@@ -126,21 +126,39 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-muted/10 to-background" />
-        
         <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-24">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <h1 className="text-4xl md:text-5xl font-serif font-normal text-foreground/90 leading-tight">
-              {translate("marketing.landing.hero.title")}
-            </h1>
-            <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-              {translate("marketing.landing.hero.subtitle")}
-            </p>
-
-            {/* CTA Button */}
-            <div className="pt-4">
-              <div className="flex flex-col sm:flex-row justify-center gap-3">
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+            <div className="space-y-6">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                <span className="inline-flex h-2 w-2 rounded-full bg-primary/70" />
+                {translate("marketing.landing.hero.kicker")}
+              </div>
+              <h1 className="text-4xl md:text-5xl font-serif font-normal text-foreground/90 leading-tight">
+                {translate("marketing.landing.hero.title")}
+              </h1>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
+                {translate("marketing.landing.hero.subtitle")}
+              </p>
+              <div className="grid sm:grid-cols-2 gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-primary" />
+                  {translate("marketing.landing.hero.highlights.quick_setup")}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="h-4 w-4 text-primary" />
+                  {translate("marketing.landing.hero.highlights.privacy_ready")}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Layers className="h-4 w-4 text-primary" />
+                  {translate("marketing.landing.hero.highlights.templates")}
+                </div>
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-primary" />
+                  {translate("marketing.landing.hero.highlights.analytics")}
+                </div>
+              </div>
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
                 <Button size="lg" asChild className="rounded-md px-6 gap-2">
                   <Link to="/sign-up">
                     {translate("marketing.common.try_now")}
@@ -158,23 +176,74 @@ export const LandingPage = () => {
                   </a>
                 </Button>
               </div>
+              <div className="flex flex-wrap gap-6 text-xs text-muted-foreground/80 pt-2">
+                <div>
+                  <p className="text-lg font-semibold text-foreground/80">120+</p>
+                  <p>{translate("marketing.landing.hero.metrics.active_teams")}</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-foreground/80">8</p>
+                  <p>{translate("marketing.landing.hero.metrics.templates")}</p>
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-foreground/80">35%</p>
+                  <p>{translate("marketing.landing.hero.metrics.time_saved")}</p>
+                </div>
+              </div>
             </div>
 
-            {/* Search/Demo Box */}
-            <div className="mt-12 max-w-xl mx-auto">
-              <div className="rounded-lg border border-border/60 bg-card/60 backdrop-blur-sm p-5 shadow-sm">
-                <p className="text-sm text-muted-foreground text-left mb-3">
-                  {translate("marketing.landing.search.prompt")}
-                </p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground/60">
-                    {translate("marketing.landing.search.response")}
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <ArrowRight className="w-4 h-4 text-primary" />
+            <div className="relative">
+              <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-sm p-6 shadow-xl">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                      {translate("marketing.landing.preview.kicker")}
+                    </p>
+                    <h3 className="text-lg font-semibold text-foreground/90">
+                      {translate("marketing.landing.preview.title")}
+                    </h3>
+                    <p className="text-xs text-muted-foreground">
+                      {translate("marketing.landing.preview.subtitle")}
+                    </p>
+                  </div>
+                  <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <ArrowRight className="h-4 w-4 text-primary" />
+                  </div>
+                </div>
+                <div className="grid gap-3">
+                  <div className="grid grid-cols-3 gap-3">
+                    <PreviewStat
+                      label={translate("marketing.landing.preview.stats.deals")}
+                      value="24"
+                    />
+                    <PreviewStat
+                      label={translate("marketing.landing.preview.stats.tasks")}
+                      value="68"
+                    />
+                    <PreviewStat
+                      label={translate("marketing.landing.preview.stats.pipeline")}
+                      value="$420k"
+                    />
+                  </div>
+                  <div className="rounded-xl border border-border/50 bg-muted/30 p-4">
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {translate("marketing.landing.search.prompt")}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground/60">
+                        {translate("marketing.landing.search.response")}
+                      </span>
+                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                        <ArrowRight className="w-4 h-4 text-primary" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="rounded-xl bg-primary/10 p-4 text-xs text-primary/80">
+                    {translate("marketing.landing.preview.note")}
                   </div>
                 </div>
               </div>
+              <div className="absolute -bottom-6 -right-8 hidden md:block h-24 w-24 rounded-2xl bg-primary/15 blur-2xl" />
             </div>
           </div>
         </div>
@@ -205,13 +274,50 @@ export const LandingPage = () => {
       {/* Value Proposition Section */}
       <section className="py-20 bg-primary/5">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-3xl font-serif font-normal text-foreground/90 mb-4">
-              {translate("marketing.landing.value.title")}
-            </h2>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {translate("marketing.landing.value.description")}
-            </p>
+          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 items-start">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-serif font-normal text-foreground/90">
+                {translate("marketing.landing.value.title")}
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xl">
+                {translate("marketing.landing.value.description")}
+              </p>
+              <Button variant="outline" asChild className="rounded-md px-4">
+                <a href={demoUrl} target="_blank" rel="noreferrer">
+                  {translate("marketing.common.view_demo")}
+                </a>
+              </Button>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <ValueCard
+                icon={<Users className="w-4 h-4" />}
+                title={translate("marketing.landing.value.points.relationships.title")}
+                description={translate(
+                  "marketing.landing.value.points.relationships.description",
+                )}
+              />
+              <ValueCard
+                icon={<ClipboardList className="w-4 h-4" />}
+                title={translate("marketing.landing.value.points.clarity.title")}
+                description={translate(
+                  "marketing.landing.value.points.clarity.description",
+                )}
+              />
+              <ValueCard
+                icon={<Shield className="w-4 h-4" />}
+                title={translate("marketing.landing.value.points.control.title")}
+                description={translate(
+                  "marketing.landing.value.points.control.description",
+                )}
+              />
+              <ValueCard
+                icon={<BarChart3 className="w-4 h-4" />}
+                title={translate("marketing.landing.value.points.momentum.title")}
+                description={translate(
+                  "marketing.landing.value.points.momentum.description",
+                )}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -569,6 +675,33 @@ const FeatureCard = ({
     </div>
     <h4 className="text-base font-semibold mb-2 text-foreground/90">{title}</h4>
     <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+  </div>
+);
+
+const ValueCard = ({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) => (
+  <div className="rounded-2xl border border-border/60 bg-card/70 p-4 shadow-sm">
+    <div className="flex items-center gap-2 text-primary mb-2">
+      <span className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+        {icon}
+      </span>
+      <span className="text-sm font-semibold text-foreground/90">{title}</span>
+    </div>
+    <p className="text-xs text-muted-foreground leading-relaxed">{description}</p>
+  </div>
+);
+
+const PreviewStat = ({ label, value }: { label: string; value: string }) => (
+  <div className="rounded-xl border border-border/60 bg-card/80 p-3 text-center">
+    <p className="text-sm font-semibold text-foreground/90">{value}</p>
+    <p className="text-[11px] text-muted-foreground">{label}</p>
   </div>
 );
 

@@ -25,9 +25,21 @@ const marketingEnglishMessages: TranslationMessages = {
     },
     landing: {
       hero: {
+        kicker: "Purpose-built for growing teams",
         title: "CRM for Modern Business",
         subtitle:
           "Custly helps teams manage customer relationships with elegance and efficiency",
+        highlights: {
+          quick_setup: "Launch a CRM workspace in under 30 minutes",
+          privacy_ready: "Privacy-first by default with clear ownership",
+          templates: "Industry templates you can remix",
+          analytics: "Insightful dashboards out of the box",
+        },
+        metrics: {
+          active_teams: "active teams",
+          templates: "industry templates",
+          time_saved: "faster follow-ups",
+        },
       },
       search: {
         prompt: "How can we help you manage customers better?",
@@ -40,6 +52,39 @@ const marketingEnglishMessages: TranslationMessages = {
         title: "Stand on the shoulders of giants",
         description:
           "Use Custly to understand your customers better, so that you can grow your business faster.",
+        points: {
+          relationships: {
+            title: "Relationships first",
+            description:
+              "Capture the context behind every customer and keep the team aligned.",
+          },
+          clarity: {
+            title: "Clarity at a glance",
+            description:
+              "Prioritize follow-ups with a focused view of what matters today.",
+          },
+          control: {
+            title: "Ownership & control",
+            description:
+              "Keep customer data transparent, with clear roles and audit trails.",
+          },
+          momentum: {
+            title: "Momentum tracking",
+            description:
+              "Measure progress with clean dashboards and smart summaries.",
+          },
+        },
+      },
+      preview: {
+        kicker: "Live preview",
+        title: "A calm dashboard, ready for action",
+        subtitle: "Fictional data, real workflows",
+        note: "Click view demo to explore the full experience.",
+        stats: {
+          deals: "Open deals",
+          tasks: "Tasks due",
+          pipeline: "Pipeline",
+        },
       },
       differentiators: {
         title: "How we're different",

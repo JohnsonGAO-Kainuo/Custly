@@ -25,8 +25,20 @@ const marketingChineseMessages: TranslationMessages = {
     },
     landing: {
       hero: {
+        kicker: "为成长型团队打造",
         title: "面向现代企业的 CRM",
         subtitle: "Custly 让团队以优雅高效的方式管理客户关系",
+        highlights: {
+          quick_setup: "30 分钟内完成 CRM 工作台上线",
+          privacy_ready: "默认隐私优先，清晰的归属权",
+          templates: "可复用的行业模板",
+          analytics: "内置清晰的分析看板",
+        },
+        metrics: {
+          active_teams: "正在使用的团队",
+          templates: "行业模板",
+          time_saved: "跟进效率提升",
+        },
       },
       search: {
         prompt: "我们能如何帮助你更好地管理客户？",
@@ -38,6 +50,35 @@ const marketingChineseMessages: TranslationMessages = {
       value: {
         title: "站在巨人的肩膀上",
         description: "用 Custly 更深入地了解客户，从而更快增长业务。",
+        points: {
+          relationships: {
+            title: "关系优先",
+            description: "记录客户背景，让团队始终保持一致。",
+          },
+          clarity: {
+            title: "一眼清晰",
+            description: "聚焦今天最重要的待办与重点客户。",
+          },
+          control: {
+            title: "可控透明",
+            description: "数据归属清晰，权限与审计可追溯。",
+          },
+          momentum: {
+            title: "增长节奏",
+            description: "用简洁仪表盘持续跟进业务进展。",
+          },
+        },
+      },
+      preview: {
+        kicker: "实时预览",
+        title: "更安静的控制台，更清晰的动作",
+        subtitle: "虚拟数据，真实流程",
+        note: "点击查看演示，体验完整流程。",
+        stats: {
+          deals: "进行中的交易",
+          tasks: "待办任务",
+          pipeline: "销售管道",
+        },
       },
       differentiators: {
         title: "我们的不同之处",
