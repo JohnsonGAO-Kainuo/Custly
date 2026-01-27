@@ -6,6 +6,9 @@ import {
 
 const isDemoPath =
   typeof window !== "undefined" && window.location.pathname.startsWith("/demo");
+const isDemoHash =
+  typeof window !== "undefined" && window.location.hash.startsWith("#/demo");
+const isDemo = isDemoPath || isDemoHash;
 
 /**
  * Application entry point
@@ -33,12 +36,11 @@ const isDemoPath =
  * );
  */
 const App = () =>
-  isDemoPath ? (
+  isDemo ? (
     <CRM
       dataProvider={fakerestDataProvider}
       authProvider={fakerestAuthProvider}
       requireAuth={false}
-      basename="/demo"
     />
   ) : (
     <CRM />
