@@ -353,6 +353,99 @@ export const crmChineseMessages = {
         built_with: "基于 React、shadcn/ui 与 Tailwind CSS 构建。",
       },
     },
+    templates: {
+      kicker: "模板",
+      title: "模板中心",
+      subtitle: "选择行业模板来调整流程与字段结构。",
+      active: "当前模板",
+      apply: "应用模板",
+      applied: "模板已应用",
+      applied_button: "已应用",
+      reset: "恢复默认",
+      reset_done: "已恢复默认模板",
+      reload_hint: "刷新后生效。",
+      sections: {
+        highlights: "重点",
+        pipeline: "流程",
+        fields: "字段",
+        tags: "标签",
+      },
+      general: {
+        name: "通用 CRM",
+        badge: "默认",
+        summary: "适用于大多数客户与销售团队的平衡配置。",
+        highlights: {
+          0: "统一销售流程",
+          1: "灵活任务类型",
+          2: "标准客户生命周期",
+        },
+        pipeline: {
+          0: "机会 → 方案 → 谈判",
+          1: "成交/流失跟踪",
+          2: "跟进阶段",
+        },
+        fields: {
+          0: "公司规模与行业",
+          1: "成交金额与预计时间",
+          2: "联系人角色",
+        },
+        tags: {
+          0: "线索",
+          1: "加购",
+          2: "优先级",
+        },
+      },
+      counseling: {
+        name: "心理咨询",
+        badge: "咨询",
+        summary: "适合接待、评估与后续随访流程。",
+        highlights: {
+          0: "咨询接待优先",
+          1: "方案记录清晰",
+          2: "随访节奏明确",
+        },
+        pipeline: {
+          0: "咨询 → 评估 → 方案",
+          1: "治疗跟进",
+          2: "复访提醒",
+        },
+        fields: {
+          0: "紧急程度",
+          1: "咨询频次",
+          2: "转介来源",
+        },
+        tags: {
+          0: "高优先级",
+          1: "复诊",
+          2: "转介",
+        },
+      },
+      ecommerce: {
+        name: "跨境电商",
+        badge: "增长",
+        summary: "适合询盘、报价与售后协同。",
+        highlights: {
+          0: "询盘到成交",
+          1: "报价跟进",
+          2: "售后触达",
+        },
+        pipeline: {
+          0: "线索 → 报价 → 谈判",
+          1: "成交与流失视图",
+          2: "售后阶段",
+        },
+        fields: {
+          0: "渠道与 SKU",
+          1: "订单金额",
+          2: "履约状态",
+        },
+        tags: {
+          0: "高毛利",
+          1: "批发",
+          2: "平台",
+        },
+      },
+    },
   },
 };
 

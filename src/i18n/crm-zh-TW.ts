@@ -353,6 +353,99 @@ export const crmChineseTraditionalMessages = {
         built_with: "基於 React、shadcn/ui 與 Tailwind CSS 構建。",
       },
     },
+    templates: {
+      kicker: "模板",
+      title: "模板中心",
+      subtitle: "選擇產業模板來調整流程與欄位結構。",
+      active: "目前模板",
+      apply: "套用模板",
+      applied: "模板已套用",
+      applied_button: "已套用",
+      reset: "恢復預設",
+      reset_done: "已恢復預設模板",
+      reload_hint: "重新整理後生效。",
+      sections: {
+        highlights: "重點",
+        pipeline: "流程",
+        fields: "欄位",
+        tags: "標籤",
+      },
+      general: {
+        name: "通用 CRM",
+        badge: "預設",
+        summary: "適合多數客戶與銷售團隊的平衡設定。",
+        highlights: {
+          0: "統一銷售流程",
+          1: "彈性任務類型",
+          2: "標準客戶生命週期",
+        },
+        pipeline: {
+          0: "機會 → 方案 → 談判",
+          1: "成交/流失追蹤",
+          2: "跟進階段",
+        },
+        fields: {
+          0: "公司規模與產業",
+          1: "成交金額與預計時間",
+          2: "聯繫人角色",
+        },
+        tags: {
+          0: "線索",
+          1: "加購",
+          2: "優先級",
+        },
+      },
+      counseling: {
+        name: "心理諮詢",
+        badge: "諮詢",
+        summary: "適合接待、評估與後續追蹤流程。",
+        highlights: {
+          0: "諮詢接待優先",
+          1: "方案紀錄清晰",
+          2: "追蹤節奏明確",
+        },
+        pipeline: {
+          0: "諮詢 → 評估 → 方案",
+          1: "治療追蹤",
+          2: "回訪提醒",
+        },
+        fields: {
+          0: "緊急程度",
+          1: "諮詢頻次",
+          2: "轉介來源",
+        },
+        tags: {
+          0: "高優先級",
+          1: "回診",
+          2: "轉介",
+        },
+      },
+      ecommerce: {
+        name: "跨境電商",
+        badge: "成長",
+        summary: "適合詢盤、報價與售後協作。",
+        highlights: {
+          0: "詢盤到成交",
+          1: "報價跟進",
+          2: "售後觸達",
+        },
+        pipeline: {
+          0: "線索 → 報價 → 談判",
+          1: "成交與流失視圖",
+          2: "售後階段",
+        },
+        fields: {
+          0: "渠道與 SKU",
+          1: "訂單金額",
+          2: "履約狀態",
+        },
+        tags: {
+          0: "高毛利",
+          1: "批發",
+          2: "平台",
+        },
+      },
+    },
   },
 };
 

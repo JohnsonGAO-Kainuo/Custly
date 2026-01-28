@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Settings, User } from "lucide-react";
+import { LayoutGrid, Settings, User } from "lucide-react";
 import { CanAccess } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -117,12 +117,20 @@ const UsersMenu = () => {
 const ConfigurationMenu = () => {
   const { onClose } = useUserMenu() ?? {};
   return (
-    <DropdownMenuItem asChild onClick={onClose}>
-      <Link to="/settings" className="flex items-center gap-2">
-        <Settings />
-        My info
-      </Link>
-    </DropdownMenuItem>
+    <>
+      <DropdownMenuItem asChild onClick={onClose}>
+        <Link to="/templates" className="flex items-center gap-2">
+          <LayoutGrid />
+          Templates
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild onClick={onClose}>
+        <Link to="/settings" className="flex items-center gap-2">
+          <Settings />
+          My info
+        </Link>
+      </DropdownMenuItem>
+    </>
   );
 };
 export default Header;

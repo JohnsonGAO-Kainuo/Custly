@@ -41,6 +41,7 @@ const App = () =>
       dataProvider={fakerestDataProvider}
       authProvider={fakerestAuthProvider}
       requireAuth={false}
+      basename="/demo"
     />
   ) : (
     <CRM />

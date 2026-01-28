@@ -39,6 +39,8 @@ import {
 } from "../providers/pocketbase";
 import sales from "../sales";
 import { SettingsPage } from "../settings/SettingsPage";
+import { TemplateCenterPage } from "../templates/TemplateCenterPage";
+import { getTemplateOverrides } from "../templates/templates";
 import type { ConfigurationContextValue } from "./ConfigurationContext";
 import { ConfigurationProvider } from "./ConfigurationContext";
 import {
@@ -117,6 +119,7 @@ export const CRM = ({
   disableTelemetry,
   ...rest
 }: CRMProps) => {
+  const templateOverrides = getTemplateOverrides() ?? {};
   const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
   const isPocketbase = backend === "pocketbase";
   const isFakerest = backend === "fakerest";
@@ -152,17 +155,30 @@ export const CRM = ({
     img.src = `https://atomic-crm-telemetry.marmelab.com/atomic-crm-telemetry?domain=${window.location.hostname}`;
   }, [disableTelemetry]);
 
+  const resolvedCompanySectors =
+    templateOverrides.companySectors ?? companySectors;
+  const resolvedDealCategories =
+    templateOverrides.dealCategories ?? dealCategories;
+  const resolvedDealPipelineStatuses =
+    templateOverrides.dealPipelineStatuses ?? dealPipelineStatuses;
+  const resolvedDealStages =
+    templateOverrides.dealStages ?? dealStages;
+  const resolvedNoteStatuses =
+    templateOverrides.noteStatuses ?? noteStatuses;
+  const resolvedTaskTypes =
+    templateOverrides.taskTypes ?? taskTypes;
+
   return (
     <ConfigurationProvider
       contactGender={contactGender}
-      companySectors={companySectors}
-      dealCategories={dealCategories}
-      dealPipelineStatuses={dealPipelineStatuses}
-      dealStages={dealStages}
+      companySectors={resolvedCompanySectors}
+      dealCategories={resolvedDealCategories}
+      dealPipelineStatuses={resolvedDealPipelineStatuses}
+      dealStages={resolvedDealStages}
       darkModeLogo={darkModeLogo}
       lightModeLogo={lightModeLogo}
-      noteStatuses={noteStatuses}
-      taskTypes={taskTypes}
+      noteStatuses={resolvedNoteStatuses}
+      taskTypes={resolvedTaskTypes}
       title={title}
     >
       <Admin
@@ -214,6 +230,10 @@ export const CRM = ({
 
         <CustomRoutes>
           <Route path={SettingsPage.path} element={<SettingsPage />} />
+          <Route
+            path={TemplateCenterPage.path}
+            element={<TemplateCenterPage />}
+          />
         </CustomRoutes>
         <Resource name="deals" {...deals} />
         <Resource name="contacts" {...contacts} />

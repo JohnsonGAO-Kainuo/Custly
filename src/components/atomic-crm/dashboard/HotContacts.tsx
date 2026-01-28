@@ -95,9 +95,6 @@ export const HotContacts = () => {
               {contact.title} at {contact.company_name}
             </span>
           )}
-          tertiaryText={(contact) =>
-            formatLastSeen(contact.last_seen) || undefined
-          }
           leftAvatar={(contact) => <Avatar record={contact} />}
           rightIcon={(contact) => {
             const email = getPrimaryEmail(contact);
@@ -108,7 +105,7 @@ export const HotContacts = () => {
             const lastSeen = formatLastSeen(contact.last_seen);
 
             return (
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-col items-end gap-2 pr-1">
                 <div className="flex flex-wrap justify-end gap-1 text-[10px] uppercase tracking-wide">
                   <span className="rounded-full border border-border/60 bg-muted/60 px-2 py-0.5 text-foreground/70">
                     {statusLabel}
@@ -132,7 +129,7 @@ export const HotContacts = () => {
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   {lastSeen && (
-                    <span className="hidden sm:inline-flex items-center gap-1">
+                    <span className="hidden md:inline-flex items-center gap-1">
                       <CalendarClock className="h-3 w-3" />
                       {translate("crm.dashboard.hot_contacts.last_seen", {
                         date: lastSeen,
@@ -140,7 +137,7 @@ export const HotContacts = () => {
                       })}
                     </span>
                   )}
-                  <div className="hidden sm:flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     {email && (
                       <TooltipProvider>
                         <Tooltip>
