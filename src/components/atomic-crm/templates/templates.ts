@@ -29,6 +29,17 @@ export type TemplateDefinition = {
 
 const unique = (items: string[]) => Array.from(new Set(items));
 
+export type TemplateConfig = TemplateDefinition["config"];
+
+export type CustomTemplate = {
+  id: string;
+  name: string;
+  description?: string;
+  config: TemplateConfig;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 const counselingStages: DealStage[] = [
   { value: "opportunity", label: "Inquiry" },
   { value: "proposal-sent", label: "Assessment" },
@@ -183,6 +194,8 @@ export const templates: TemplateDefinition[] = [
 ];
 
 const STORAGE_KEY = "custly:template";
+const TEMPLATE_CONFIG_KEY = "custly:template:config";
+const CUSTOM_TEMPLATES_KEY = "custly:templates:custom";
 
 export const getStoredTemplateId = () => {
   if (typeof window === "undefined") return null;
@@ -199,6 +212,39 @@ export const clearStoredTemplateId = () => {
   window.localStorage.removeItem(STORAGE_KEY);
 };
 
+export const getStoredTemplateConfig = () => {
+  if (typeof window === "undefined") return null;
+  const raw = window.localStorage.getItem(TEMPLATE_CONFIG_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as TemplateConfig;
+  } catch {
+    return null;
+  }
+};
+
+export const setStoredTemplateConfig = (config: TemplateConfig) => {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(TEMPLATE_CONFIG_KEY, JSON.stringify(config));
+};
+
+export const clearStoredTemplateConfig = () => {
+  if (typeof window === "undefined") return;
+  window.localStorage.removeItem(TEMPLATE_CONFIG_KEY);
+};
+
+export const applyTemplateSelection = (
+  id: string,
+  config?: TemplateConfig,
+) => {
+  setStoredTemplateId(id);
+  if (config) {
+    setStoredTemplateConfig(config);
+  } else {
+    clearStoredTemplateConfig();
+  }
+};
+
 export const getActiveTemplate = () => {
   const storedId = getStoredTemplateId();
   if (!storedId) return null;
@@ -206,5 +252,43 @@ export const getActiveTemplate = () => {
 };
 
 export const getTemplateOverrides = () => {
+  const storedConfig = getStoredTemplateConfig();
+  if (storedConfig) return storedConfig;
   return getActiveTemplate()?.config ?? null;
+};
+
+export const getStoredCustomTemplates = (): CustomTemplate[] => {
+  if (typeof window === "undefined") return [];
+  const raw = window.localStorage.getItem(CUSTOM_TEMPLATES_KEY);
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as CustomTemplate[];
+  } catch {
+    return [];
+  }
+};
+
+export const saveCustomTemplateLocal = (template: CustomTemplate) => {
+  if (typeof window === "undefined") return [];
+  const existing = getStoredCustomTemplates().filter(
+    (item) => item.id !== template.id,
+  );
+  const next = [template, ...existing];
+  window.localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(next));
+  return next;
+};
+
+export const deleteCustomTemplateLocal = (id: string) => {
+  if (typeof window === "undefined") return [];
+  const next = getStoredCustomTemplates().filter((item) => item.id !== id);
+  window.localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(next));
+  return next;
+};
+
+export const isDemoMode = () => {
+  if (typeof window === "undefined") return false;
+  const params = new URLSearchParams(window.location.search);
+  return (
+    window.location.pathname.startsWith("/demo") || params.get("demo") === "1"
+  );
 };
