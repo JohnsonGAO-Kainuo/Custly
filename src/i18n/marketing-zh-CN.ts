@@ -171,34 +171,93 @@ const marketingChineseMessages: TranslationMessages = {
         secondary: "联系销售",
       },
       footer: {
+        tagline: "沉静、现代的 CRM，让客户信息更有条理、更易执行。",
         sections: {
-          solutions: "解决方案",
-          industries: "行业",
-          resources: "资源",
-          more: "更多",
+          product: "产品",
+          account: "账户",
         },
         links: {
-          contact_management: "联系人管理",
-          deal_pipeline: "交易管道",
-          reports: "报告",
-          integrations: "集成",
-          technology: "科技",
-          healthcare: "医疗健康",
-          professional_services: "专业服务",
-          retail: "零售",
-          customers: "客户",
-          blog: "博客",
-          help_center: "帮助中心",
-          documentation: "文档",
-          team: "团队",
-          careers: "招聘",
-          contact: "联系",
+          features: "功能",
+          pricing: "定价",
+          faq: "常见问题",
+          demo: "查看演示",
+          sign_in: "登录",
+          sign_up: "注册",
+          contact: "联系我们",
         },
         bottom: {
           copyright: "© 2026 Custly, Inc.",
           privacy: "隐私政策",
           terms: "服务条款",
           policies: "政策",
+        },
+      },
+    },
+    legal: {
+      privacy: {
+        title: "隐私政策",
+        subtitle: "本摘要说明 Custly 如何处理个人数据与账户信息。",
+        sections: {
+          overview: {
+            title: "概览",
+            body: "Custly 只收集用于创建与运行工作区所需的最少信息。",
+          },
+          data: {
+            title: "我们存储的数据",
+            body: "账户资料、你上传的 CRM 记录，以及保障安全所需的系统日志。",
+          },
+          rights: {
+            title: "你的选择",
+            body: "你可以随时在管理端导出、更新或删除工作区数据。",
+          },
+          contact: {
+            title: "联系",
+            body: "如有疑问，请发送邮件至 contact@kainuotech.com。",
+          },
+        },
+      },
+      terms: {
+        title: "服务条款",
+        subtitle: "这些条款说明使用 Custly 与演示环境的基本规则。",
+        sections: {
+          eligibility: {
+            title: "适用对象",
+            body: "创建账户即表示你有权代表团队合法使用本服务。",
+          },
+          usage: {
+            title: "使用规范",
+            body: "请勿滥用平台、尝试绕过安全机制或上传违法内容。",
+          },
+          changes: {
+            title: "变更",
+            body: "我们会随着产品迭代更新功能，并通知重要变更。",
+          },
+          contact: {
+            title: "联系",
+            body: "对条款有疑问请联系 contact@kainuotech.com。",
+          },
+        },
+      },
+      policies: {
+        title: "相关政策",
+        subtitle: "Custly 的运营与安全实践说明。",
+        sections: {
+          security: {
+            title: "安全",
+            body: "核心操作采用权限控制与审计追踪。",
+          },
+          retention: {
+            title: "数据保留",
+            body: "数据默认保留至工作区关闭或你提出删除请求。",
+          },
+          transparency: {
+            title: "透明度",
+            body: "我们会记录数据结构与运营实践的重要更新。",
+          },
+          contact: {
+            title: "联系",
+            body: "合规问题请联系 contact@kainuotech.com。",
+          },
         },
       },
     },

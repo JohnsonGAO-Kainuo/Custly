@@ -23,6 +23,9 @@ import { EnhancedLoginPage } from "../login/EnhancedLoginPage";
 import { PricingPage } from "../login/PricingPage";
 import { FeaturesPage } from "../login/FeaturesPage";
 import { FAQPage } from "../login/FAQPage";
+import { PrivacyPage } from "../login/PrivacyPage";
+import { TermsPage } from "../login/TermsPage";
+import { PoliciesPage } from "../login/PoliciesPage";
 import { PocketbaseForgotPasswordPage } from "../login/PocketbaseForgotPasswordPage";
 import { PocketbaseResetPasswordPage } from "../login/PocketbaseResetPasswordPage";
 import {
@@ -199,6 +202,9 @@ export const CRM = ({
           <Route path={PricingPage.path} element={<PricingPage />} />
           <Route path={FeaturesPage.path} element={<FeaturesPage />} />
           <Route path={FAQPage.path} element={<FAQPage />} />
+          <Route path={PrivacyPage.path} element={<PrivacyPage />} />
+          <Route path={TermsPage.path} element={<TermsPage />} />
+          <Route path={PoliciesPage.path} element={<PoliciesPage />} />
           {includeSupabaseRoutes ? (
             <Route path={SetPasswordPage.path} element={<SetPasswordPage />} />
           ) : null}

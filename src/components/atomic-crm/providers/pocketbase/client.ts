@@ -4,6 +4,23 @@ type AuthState = {
 };
 
 const AUTH_STORAGE_KEY = "custly_pb_auth";
+const OAUTH_STORAGE_KEY = "custly_pb_oauth";
+
+type OAuthState = {
+  state: string;
+  provider: string;
+  codeVerifier?: string;
+  redirectUrl?: string;
+  createdAt: number;
+};
+
+export type OAuthProviderInfo = {
+  name: string;
+  displayName?: string;
+  authUrl?: string;
+  state?: string;
+  codeVerifier?: string;
+};
 
 export const getPocketBaseUrl = () => {
   return (
@@ -42,4 +59,85 @@ export const buildFileUrl = (
   const baseUrl = getPocketBaseUrl();
   const encoded = encodeURIComponent(fileName);
   return `${baseUrl}/api/files/${collection}/${recordId}/${encoded}`;
+};
+
+const loadOAuthStates = (): OAuthState[] => {
+  if (typeof window === "undefined") return [];
+  const raw = window.sessionStorage.getItem(OAUTH_STORAGE_KEY);
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed)) return parsed as OAuthState[];
+    return [];
+  } catch {
+    return [];
+  }
+};
+
+const saveOAuthStates = (states: OAuthState[]) => {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(OAUTH_STORAGE_KEY, JSON.stringify(states));
+};
+
+export const storeOAuthState = (payload: OAuthState) => {
+  const states = loadOAuthStates();
+  const filtered = states.filter((item) => item.state !== payload.state);
+  filtered.push(payload);
+  saveOAuthStates(filtered);
+};
+
+export const consumeOAuthState = (state: string) => {
+  const states = loadOAuthStates();
+  const match = states.find((item) => item.state === state);
+  const remaining = states.filter((item) => item.state !== state);
+  saveOAuthStates(remaining);
+  return match ?? null;
+};
+
+export const fetchOAuthProviders = async (
+  redirectUrl?: string,
+): Promise<OAuthProviderInfo[]> => {
+  const baseUrl = getPocketBaseUrl();
+  const resolvedRedirectUrl =
+    redirectUrl ||
+    (typeof window !== "undefined"
+      ? `${window.location.origin}/login`
+      : "");
+  const response = await fetch(
+    `${baseUrl}/api/collections/sales/auth-methods`,
+  );
+  if (!response.ok) {
+    return [];
+  }
+  const data = (await response.json()) as Record<string, any>;
+  const providers =
+    data?.authProviders || data?.oauth2?.providers || data?.providers || [];
+  if (!Array.isArray(providers)) return [];
+  return providers
+    .map((provider: Record<string, any>) => {
+      const authUrl = String(provider?.authUrl ?? provider?.authURL ?? "");
+      let resolvedAuthUrl = authUrl;
+
+      if (authUrl && resolvedRedirectUrl) {
+        try {
+          const url = new URL(authUrl);
+          const existingRedirect = url.searchParams.get("redirect_uri");
+          if (!existingRedirect) {
+            url.searchParams.set("redirect_uri", resolvedRedirectUrl);
+          }
+          resolvedAuthUrl = url.toString();
+        } catch {
+          resolvedAuthUrl = authUrl;
+        }
+      }
+
+      return {
+        name: String(provider?.name ?? provider?.id ?? ""),
+        displayName: provider?.displayName,
+        authUrl: resolvedAuthUrl,
+        state: provider?.state,
+        codeVerifier: provider?.codeVerifier,
+      };
+    })
+    .filter((provider) => provider.name);
 };

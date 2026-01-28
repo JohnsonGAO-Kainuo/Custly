@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ElementType } from "react";
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
 import { Button } from "@/components/ui/button";
@@ -69,7 +69,7 @@ export const LandingPage = () => {
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
               <Link to="/landing" className="flex items-center gap-3 group">
-                <img src="/logo.svg" alt="Custly" className="h-11 w-auto" />
+                <img src="/logo.svg" alt="Custly" className="h-14 w-auto" />
               </Link>
 
               {/* Center Navigation - Fixed position, same style as CRM backend */}
@@ -130,11 +130,11 @@ export const LandingPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-muted/10 to-background" />
 
         <div className="relative max-w-7xl mx-auto px-6 pt-20 pb-24">
-          <div className="text-center max-w-3xl mx-auto space-y-6">
-            <h1 className="text-4xl md:text-5xl font-serif font-normal text-foreground/90 leading-tight">
+          <div className="text-center max-w-4xl mx-auto space-y-6">
+            <h1 className="text-5xl md:text-6xl font-serif font-normal text-foreground/90 leading-tight">
               {translate("marketing.landing.hero.title")}
             </h1>
-            <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
               {translate("marketing.landing.hero.subtitle")}
             </p>
 
@@ -176,28 +176,6 @@ export const LandingPage = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Trust Section */}
-      <section id="trust" className="py-12 border-y border-border/30">
-        <div className="max-w-7xl mx-auto px-6">
-          <p className="text-center text-xs text-muted-foreground/60 tracking-wider mb-8">
-            {translate("marketing.landing.trust.title")}
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-            <span className="text-lg font-bold text-muted-foreground/50">ACME</span>
-            <span className="text-lg font-semibold text-muted-foreground/50">TechCorp</span>
-            <span className="text-lg font-serif text-muted-foreground/50">Stanford</span>
-            <span className="text-lg font-medium text-muted-foreground/50">GlobalInc</span>
-            <span className="text-lg text-muted-foreground/50">Innovate</span>
-          </div>
-          <div className="text-center mt-8">
-            <Button variant="outline" size="sm" className="rounded-full text-xs px-4 gap-1">
-              {translate("marketing.common.read_customer_stories")}
-              <ArrowRight className="w-3 h-3" />
-            </Button>
           </div>
         </div>
       </section>
@@ -387,93 +365,51 @@ export const LandingPage = () => {
         </div>
       </section>
 
-      {/* Footer - Figma Style */}
-      <footer className="bg-primary text-primary-foreground py-10">
+      {/* Footer */}
+      <footer className="bg-primary text-primary-foreground">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-5 gap-6 mb-8">
-            {/* Logo */}
-            <div className="md:col-span-1">
-              <Link to="/landing" className="flex items-center gap-2 mb-4">
-                <img src="/logo.svg" alt="Custly" className="h-12 w-auto brightness-0 invert" />
+          <div className="grid md:grid-cols-3 gap-8 py-10">
+            <div className="space-y-4">
+              <Link to="/landing" className="flex items-center gap-2">
+                <img src="/logo.svg" alt="Custly" className="h-14 w-auto brightness-0 invert" />
               </Link>
+              <p className="text-sm text-primary-foreground/70 max-w-xs">
+                {translate("marketing.landing.footer.tagline")}
+              </p>
             </div>
 
-            {/* Solutions */}
             <div>
               <h4 className="text-xs font-bold text-primary-foreground/60 mb-4 tracking-wider">
-                {translate("marketing.landing.footer.sections.solutions")}
+                {translate("marketing.landing.footer.sections.product")}
               </h4>
               <ul className="space-y-3">
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.contact_management")}
+                <FooterLink as={Link} to="/features">
+                  {translate("marketing.landing.footer.links.features")}
                 </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.deal_pipeline")}
+                <FooterLink as={Link} to="/pricing">
+                  {translate("marketing.landing.footer.links.pricing")}
                 </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.reports")}
+                <FooterLink as={Link} to="/faq">
+                  {translate("marketing.landing.footer.links.faq")}
                 </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.integrations")}
+                <FooterLink as="a" href={demoUrl} target="_blank" rel="noreferrer">
+                  {translate("marketing.landing.footer.links.demo")}
                 </FooterLink>
               </ul>
             </div>
 
-            {/* Industries */}
             <div>
               <h4 className="text-xs font-bold text-primary-foreground/60 mb-4 tracking-wider">
-                {translate("marketing.landing.footer.sections.industries")}
+                {translate("marketing.landing.footer.sections.account")}
               </h4>
               <ul className="space-y-3">
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.technology")}
+                <FooterLink as={Link} to="/login">
+                  {translate("marketing.landing.footer.links.sign_in")}
                 </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.healthcare")}
+                <FooterLink as={Link} to="/sign-up">
+                  {translate("marketing.landing.footer.links.sign_up")}
                 </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.professional_services")}
-                </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.retail")}
-                </FooterLink>
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h4 className="text-xs font-bold text-primary-foreground/60 mb-4 tracking-wider">
-                {translate("marketing.landing.footer.sections.resources")}
-              </h4>
-              <ul className="space-y-3">
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.customers")}
-                </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.blog")}
-                </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.help_center")}
-                </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.documentation")}
-                </FooterLink>
-              </ul>
-            </div>
-
-            {/* More */}
-            <div>
-              <h4 className="text-xs font-bold text-primary-foreground/60 mb-4 tracking-wider">
-                {translate("marketing.landing.footer.sections.more")}
-              </h4>
-              <ul className="space-y-3">
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.team")}
-                </FooterLink>
-                <FooterLink>
-                  {translate("marketing.landing.footer.links.careers")}
-                </FooterLink>
-                <FooterLink>
+                <FooterLink as="a" href="mailto:contact@kainuotech.com">
                   {translate("marketing.landing.footer.links.contact")}
                 </FooterLink>
               </ul>
@@ -481,7 +417,7 @@ export const LandingPage = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-6 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="py-4 border-t border-primary-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-primary-foreground/60">
             <div className="flex items-center gap-4">
               <a 
                 href="https://github.com/JohnsonGAO-Kainuo"
@@ -492,15 +428,15 @@ export const LandingPage = () => {
                 <Github className="w-5 h-5" />
               </a>
             </div>
-            <div className="flex items-center gap-6 text-sm text-primary-foreground/60">
+            <div className="flex items-center gap-6">
               <span>{translate("marketing.landing.footer.bottom.copyright")}</span>
-              <Link to="#" className="hover:text-primary-foreground transition-colors">
+              <Link to="/privacy" className="hover:text-primary-foreground transition-colors">
                 {translate("marketing.landing.footer.bottom.privacy")}
               </Link>
-              <Link to="#" className="hover:text-primary-foreground transition-colors">
+              <Link to="/terms" className="hover:text-primary-foreground transition-colors">
                 {translate("marketing.landing.footer.bottom.terms")}
               </Link>
-              <Link to="#" className="hover:text-primary-foreground transition-colors">
+              <Link to="/policies" className="hover:text-primary-foreground transition-colors">
                 {translate("marketing.landing.footer.bottom.policies")}
               </Link>
             </div>
@@ -582,12 +518,39 @@ const FAQItem = ({ question }: { question: string }) => (
 );
 
 // Component: Footer Link
-const FooterLink = ({ children }: { children: React.ReactNode }) => (
-  <li>
-    <Link to="#" className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-      {children}
-    </Link>
-  </li>
-);
+const FooterLink = ({
+  as: Component = Link,
+  to,
+  href,
+  children,
+  ...rest
+}: {
+  as?: ElementType;
+  to?: string;
+  href?: string;
+  children: React.ReactNode;
+  [key: string]: any;
+}) => {
+  const className =
+    "text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors";
+
+  if (Component === "a") {
+    return (
+      <li>
+        <a href={href} className={className} {...rest}>
+          {children}
+        </a>
+      </li>
+    );
+  }
+
+  return (
+    <li>
+      <Component to={to ?? "#"} className={className} {...rest}>
+        {children}
+      </Component>
+    </li>
+  );
+};
 
 LandingPage.path = "/landing";

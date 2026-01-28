@@ -84,7 +84,7 @@ export const FeaturesPage = () => {
           <div className="container mx-auto px-6">
             <div className="flex items-center justify-between h-16">
               <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
-                <img src="/logo.svg" alt="Custly" className="h-11 w-auto" />
+                <img src="/logo.svg" alt="Custly" className="h-14 w-auto" />
               </Link>
               <nav className="hidden md:flex gap-1">
                 <Link

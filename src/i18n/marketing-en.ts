@@ -192,27 +192,19 @@ const marketingEnglishMessages: TranslationMessages = {
         secondary: "Talk to sales",
       },
       footer: {
+        tagline:
+          "A calm, modern CRM that keeps customer context organized and actionable.",
         sections: {
-          solutions: "SOLUTIONS",
-          industries: "INDUSTRIES",
-          resources: "RESOURCES",
-          more: "MORE",
+          product: "PRODUCT",
+          account: "ACCOUNT",
         },
         links: {
-          contact_management: "Contact Management",
-          deal_pipeline: "Deal Pipeline",
-          reports: "Reports",
-          integrations: "Integrations",
-          technology: "Technology",
-          healthcare: "Healthcare",
-          professional_services: "Professional Services",
-          retail: "Retail",
-          customers: "Customers",
-          blog: "Blog",
-          help_center: "Help center",
-          documentation: "Documentation",
-          team: "Team",
-          careers: "Careers",
+          features: "Features",
+          pricing: "Pricing",
+          faq: "FAQ",
+          demo: "View demo",
+          sign_in: "Sign in",
+          sign_up: "Sign up",
           contact: "Contact",
         },
         bottom: {
@@ -220,6 +212,89 @@ const marketingEnglishMessages: TranslationMessages = {
           privacy: "Privacy policy",
           terms: "Terms of service",
           policies: "Policies",
+        },
+      },
+    },
+    legal: {
+      privacy: {
+        title: "Privacy Policy",
+        subtitle:
+          "This summary explains how Custly handles personal data and account information.",
+        sections: {
+          overview: {
+            title: "Overview",
+            body:
+              "Custly collects the minimum information required to create and operate your workspace.",
+          },
+          data: {
+            title: "Data we store",
+            body:
+              "Account profile data, CRM records you upload, and system logs needed to keep the service secure.",
+          },
+          rights: {
+            title: "Your choices",
+            body:
+              "You can export, update, or delete your workspace data at any time through the admin console.",
+          },
+          contact: {
+            title: "Contact",
+            body:
+              "If you have questions, reach out at contact@kainuotech.com.",
+          },
+        },
+      },
+      terms: {
+        title: "Terms of Service",
+        subtitle:
+          "These terms describe the basic rules for using Custly and our demo environments.",
+        sections: {
+          eligibility: {
+            title: "Eligibility",
+            body:
+              "By creating an account you confirm you can legally use the service on behalf of your team.",
+          },
+          usage: {
+            title: "Acceptable use",
+            body:
+              "Do not misuse the platform, attempt to bypass security, or upload unlawful content.",
+          },
+          changes: {
+            title: "Changes",
+            body:
+              "We may update features as the product evolves and will communicate material changes.",
+          },
+          contact: {
+            title: "Contact",
+            body:
+              "Questions about these terms? Email contact@kainuotech.com.",
+          },
+        },
+      },
+      policies: {
+        title: "Policies",
+        subtitle:
+          "Operational and security practices that guide how Custly is maintained.",
+        sections: {
+          security: {
+            title: "Security",
+            body:
+              "Access is protected with role-based permissions and audit trails for core actions.",
+          },
+          retention: {
+            title: "Data retention",
+            body:
+              "Data is retained for as long as your workspace is active unless you request deletion.",
+          },
+          transparency: {
+            title: "Transparency",
+            body:
+              "We document changes to data structures and operational practices as we iterate.",
+          },
+          contact: {
+            title: "Contact",
+            body:
+              "Reach out at contact@kainuotech.com for compliance requests.",
+          },
         },
       },
     },

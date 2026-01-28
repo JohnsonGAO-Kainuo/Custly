@@ -4,9 +4,12 @@ import { canAccess } from "../commons/canAccess";
 import {
   buildFileUrl,
   clearAuthState,
+  consumeOAuthState,
+  fetchOAuthProviders,
   getAuthState,
   getAuthToken,
   getPocketBaseUrl,
+  storeOAuthState,
   setAuthState,
 } from "./client";
 
@@ -17,6 +20,10 @@ export async function getIsInitialized() {
       `${baseUrl}/api/collections/sales/records?page=1&perPage=1`,
     );
     if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        getIsInitialized._is_initialized_cache = true;
+        return getIsInitialized._is_initialized_cache;
+      }
       throw new Error("Failed to check initialization state");
     }
     const data = (await response.json()) as { totalItems?: number };
@@ -40,7 +47,82 @@ const getAvatarUrl = (record: Record<string, unknown>) => {
 export const authProvider: AuthProvider = {
   login: async (params) => {
     if ("provider" in params) {
-      throw new Error("PocketBase does not support OAuth providers yet");
+      const { provider, code, state } = params as {
+        provider?: string;
+        code?: string;
+        state?: string;
+      };
+      const baseUrl = getPocketBaseUrl();
+
+      if (code && state) {
+        const stored = consumeOAuthState(state);
+        const resolvedProvider = provider || stored?.provider;
+        if (!resolvedProvider) {
+          throw new Error("Missing OAuth provider");
+        }
+
+        const response = await fetch(
+          `${baseUrl}/api/collections/sales/auth-with-oauth2`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              provider: resolvedProvider,
+              code,
+              codeVerifier: stored?.codeVerifier,
+              redirectUrl: stored?.redirectUrl,
+              state,
+            }),
+          },
+        );
+        if (!response.ok) {
+          const message = await response.text();
+          throw new Error(message || "OAuth login failed");
+        }
+        const data = (await response.json()) as {
+          token: string;
+          record: Record<string, unknown>;
+        };
+        setAuthState({ token: data.token, record: data.record });
+        return;
+      }
+
+      if (!provider) {
+        throw new Error("Missing OAuth provider");
+      }
+
+      const redirectUrl = `${window.location.origin}/login`;
+      const providers = await fetchOAuthProviders(redirectUrl);
+      const selected = providers.find((item) => item.name === provider);
+      if (!selected?.authUrl) {
+        throw new Error("OAuth provider not configured");
+      }
+
+      const derivedState =
+        selected.state ||
+        (() => {
+          try {
+            const url = new URL(selected.authUrl);
+            return url.searchParams.get("state") || "";
+          } catch {
+            return "";
+          }
+        })();
+
+      if (!derivedState) {
+        throw new Error("Missing OAuth state");
+      }
+
+      storeOAuthState({
+        state: derivedState,
+        provider,
+        codeVerifier: selected.codeVerifier,
+        redirectUrl,
+        createdAt: Date.now(),
+      });
+
+      window.location.href = selected.authUrl;
+      return;
     }
     const { email, password } = params as { email: string; password: string };
     const baseUrl = getPocketBaseUrl();

@@ -14,11 +14,13 @@ https://github.com/user-attachments/assets/0d7554b5-49ef-41c6-bcc9-a76214fc5c99
 - ✉️ **Capture Emails**: CC Atomic CRM to automatically save communications as notes.
 - 📊 **Manage Deals**: Visualize and track your sales pipeline in a Kanban board.
 - 🔄 **Import & Export Data**: Easily transfer contacts in and out of the system.
-- 🔐 **Authentication**: Email/password by default; OAuth available when using Supabase.
+- 🔐 **Authentication**: Email/password + OAuth (GitHub/Google) with PocketBase or Supabase.
 - 📜 **Track Activity History**: View all interactions in aggregated activity logs.
 - 🔗 **Integrate via API**: Connect seamlessly with other systems using our API.
 - 🛠️ **Customize Everything**: Add custom fields, change the theme, and replace any component to fit your needs.
 - 🌍 **Multi-language**: Support for English, Simplified Chinese, and Traditional Chinese.
+- 🧩 **Template Center**: Apply built‑in templates and create custom templates per industry.
+- 🎨 **UI Refresh**: Updated landing + dashboard styling for Custly’s green identity.
 
 ## Installation
 
@@ -60,6 +62,13 @@ This installs the frontend dependencies. The backend runs separately (PocketBase
 3. Run the frontend:
    ```sh
    npm run dev
+   ```
+4. Initialize PocketBase collections:
+   ```sh
+   POCKETBASE_URL=http://127.0.0.1:8090 \
+   POCKETBASE_ADMIN_EMAIL=you@example.com \
+   POCKETBASE_ADMIN_PASSWORD=yourpassword \
+   npm run pocketbase:init
    ```
 
 **Demo Mode** (no backend):
@@ -108,6 +117,14 @@ Users can switch languages from the user menu.
 Supabase docs (optional):
 1. [Configuring Supabase](./doc/src/content/docs/developers/supabase-configuration.mdx)
 2. [Configuring Inbound Email](./doc/src/content/docs/developers/inbound-email-configuration.mdx)
+
+## OAuth Setup (PocketBase)
+
+1. In PocketBase Admin, open `sales` → Auth providers, enable Google/GitHub.
+2. Use the **redirect URL shown there** (typically `https://<pb-domain>/api/oauth2-redirect`) when creating OAuth apps.
+3. For frontend login flow, set the OAuth app callback to:
+   - `https://your-frontend-domain/login`
+   - and include `http://localhost:5173/login` for local dev
 
 ## Testing
 
