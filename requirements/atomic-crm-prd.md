@@ -1,23 +1,24 @@
 # Custly 产品需求文档（PocketBase版与墨绿色UI重设计）
 
-> **项目名称**: Custly  
-> **基于**: [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) (MIT License)  
-> **版本**：v0.2（进行中）  
-> **更新日期**：2026年1月23日  
+> **公司**：Kainuo Innovision Tech Co., Limited  
+> **项目名称**：Custly  
+> **基于**：[marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) (MIT License)  
+> **版本**：v0.3（进行中）  
+> **更新日期**：2026年1月28日  
 > **目标**：功能保持稳定，小幅增量；全面重做 UI/布局（墨绿色主色，避免蓝/紫及高饱和色），后端迁移至 PocketBase；输出可执行的开发路线与验收标准。
 
 ---
 
-## 📊 项目当前状态总览（2026-01-23更新）
+## 📊 项目当前状态总览（2026-01-28更新）
 
-### 🎯 整体进度：Phase 1（基础功能）100%完成 | Phase 2（多语言）95%完成 | Phase 3（PocketBase迁移）0%
+### 🎯 整体进度：Phase 1（基础功能）100%完成 | Phase 2（多语言）100%完成 | Phase 3（PocketBase迁移）80%完成 | Phase 4（UI重设计）70%完成
 
 | 阶段 | 状态 | 完成度 | 说明 |
 |------|------|--------|------|
 | **Phase 1: 基础CRM功能** | ✅ 完成 | 100% | 所有核心模块已实现 |
-| **Phase 2: 多语言支持** | ✅ 95%完成 | 95% | 中英文支持已完成，营销页待翻译 |
-| **Phase 3: PocketBase迁移** | ⏳ 未开始 | 0% | 待启动 |
-| **Phase 4: UI重设计** | ⏳ 未开始 | 0% | 待启动 |
+| **Phase 2: 多语言支持** | ✅ 完成 | 100% | Marketing + Dashboard 全面覆盖 |
+| **Phase 3: PocketBase迁移** | 🟡 进行中 | 80% | Pockethost 已部署，集合与脚本已完成 |
+| **Phase 4: UI重设计** | 🟡 进行中 | 70% | Dashboard / Demo 已改版，持续优化中 |
 
 ### ✅ 已完成功能清单
 
@@ -31,18 +32,20 @@
 - ✅ **用户管理**：OAuth认证 + 权限控制 + 禁用功能
 - ✅ **标签系统**：自定义标签 + 颜色标记
 - ✅ **仪表板**：数据可视化 + 图表展示 + 统计分析
+- ✅ **模板中心**：行业模板 + 自定义模板（电商/心理咨询）
 
-#### 多语言国际化（95%）
-- ✅ **i18n框架**：基于ra-i18n-polyglot + Polyglot实现
-- ✅ **简体中文**：完整翻译（React Admin基础 + CRM业务术语）
-- ✅ **繁体中文**：完整翻译（React Admin基础 + CRM业务术语）
+#### 多语言国际化（100%）
+- ✅ **i18n框架**：基于 ra-i18n-polyglot + Polyglot
+- ✅ **简体中文**：完整翻译（Marketing + Dashboard）
+- ✅ **繁体中文**：完整翻译（Marketing + Dashboard）
 - ✅ **语言切换**：用户菜单语言选择器（English/简体中文/繁體中文）
 - ✅ **翻译文件**：
-  - `/src/i18n/zh-CN.ts` - React Admin简体中文基础翻译
-  - `/src/i18n/zh-TW.ts` - React Admin繁体中文基础翻译
-  - `/src/i18n/crm-zh-CN.ts` - CRM业务简体中文翻译
-  - `/src/i18n/crm-zh-TW.ts` - CRM业务繁体中文翻译
-- ⚠️ **待完成**：营销页面（Landing/Features/Pricing/FAQ）中文化
+  - `/src/i18n/marketing-en.ts`
+  - `/src/i18n/marketing-zh-CN.ts`
+  - `/src/i18n/marketing-zh-TW.ts`
+  - `/src/i18n/crm-en.ts`
+  - `/src/i18n/crm-zh-CN.ts`
+  - `/src/i18n/crm-zh-TW.ts`
 
 #### 技术架构（100%）
 - ✅ **前端框架**：React 19 + TypeScript + Vite
@@ -51,72 +54,69 @@
 - ✅ **表单处理**：React Hook Form
 - ✅ **UI组件**：Shadcn UI + Radix UI
 - ✅ **样式方案**：Tailwind CSS v4
-- ✅ **后端（当前）**：Supabase（PostgreSQL + REST API + Auth + Storage）
+- ✅ **后端（当前）**：PocketBase（Auth + Data）
+- ✅ **后端（可选）**：Supabase（Enterprise 升级路径）
 - ✅ **Demo模式**：FakeRest（无需Docker的本地演示）
 
-#### 主题与UI（部分完成）
+#### 主题与UI（进行中）
 - ✅ **OKLCH色系**：主色 `oklch(0.45 0.04 155)` sage green
-- ⚠️ **待优化**：墨绿色主题全面重构（按PRD第6节要求）
+- ✅ **Landing & Dashboard 大部分布局重构**
 - ⚠️ **待优化**：SVG图标系统统一
-- ⚠️ **待优化**：响应式移动端优化
+- ⚠️ **待优化**：移动端响应式细节
 
-### ⏳ 进行中/待办事项
+---
 
-#### 短期任务（1-2周）
-- [ ] 营销页面中文化（Landing/Features/Pricing/FAQ）
-- [ ] 移动端响应式优化
-- [ ] 多语言功能全面测试
-- [ ] 用户文档中文版
+## 📈 市场分析与机会（外部数据）
 
-#### 中期任务（1-2月）
-- [ ] PocketBase后端迁移准备
-  - [ ] PocketBase部署方式确定
-  - [ ] 集合与规则定义
-  - [ ] 数据提供器适配层开发
-  - [ ] 迁移脚本与验证
-- [ ] UI主题全面重构（墨绿色系）
-  - [ ] 色板规范与令牌系统
-  - [ ] 组件库重构
-  - [ ] SVG图标统一
-  - [ ] 无障碍性检查
+### 1) 香港 SME 规模（目标市场基础）
+- 香港 SME 超过 **350,000 家**，占本地企业 **98%+**。
+- SME 就业约 **1.2 百万人**，占本地就业 **43%+**。
+- 这意味着 CRM 的目标市场集中且具有明确付费潜力（销售、顾问、跨境电商与服务行业）。
 
-#### 长期规划（3-6月）
-- [ ] 可选增量功能
-  - [ ] 指令盘/全局搜索（Cmd+K）
-  - [ ] 轻量提醒/跟进节奏
-  - [ ] 发票最小闭环（交易生成发票）
-- [ ] 性能优化与测试覆盖率提升
-- [ ] 生产环境部署文档完善
+**数据来源**：HKSAR TID SUCCESS SME Statistics（截至 2025 年 9 月）。
 
-### 📁 关键文档位置
+### 2) 全球 CRM 市场趋势（增长佐证）
+- 全球 CRM 市场规模：**USD 101.41B (2024)** → **USD ~114.2B (2025E, CAGR‑based)** → **USD 262.74B (2032)**
+- 预计 CAGR **~12.6%（2024–2032）**
 
-| 文档 | 路径 | 说明 |
-|------|------|------|
-| **开发指南** | `/AGENTS.md` | AI Agent开发上下文文档 |
-| **多语言报告** | `/MULTILINGUAL_REPORT.md` | 多语言实现完整文档 |
-| **系统检查报告** | `/SYSTEM_CHECK_REPORT.md` | 项目状态与问题诊断 |
-| **PRD文档** | `/requirements/atomic-crm-prd.md` | 本文档 |
-| **架构文档** | `/doc/src/content/docs/developers/architecture-choices.mdx` | 技术架构说明 |
+**数据来源**：Fortune Business Insights（2024年5月）。
 
-### 🚀 下一步行动建议
+#### 可视化（数据示意）
 
-**立即可做（高优先级）**：
-1. 测试多语言切换功能
-2. 完善营销页面中文翻译
-3. 创建用户使用文档（中文版）
+```
+全球CRM市场规模（USD B）
+2024 | ███████████████████ 101
+2025E| ██████████████████████ 114
+2032 | █████████████████████████████████████████ 263
+```
 
-**近期规划（中优先级）**：
-1. 评估PocketBase迁移可行性
-2. 制定UI重构详细计划
-3. 移动端体验优化
+> 结论：香港 SME 的数量级 + 全球 CRM 高增长趋势，验证 Custly 的市场窗口与产品方向。
 
-**技术债务**：
+---
+
+## ⏳ 进行中/待办事项
+
+### 短期任务（1-2周）
+- [ ] 完善 OAuth 登录稳定性与回调测试
+- [ ] 多语言 UI 的细节复核（内容溢出、按钮长度）
+- [ ] Landing Page 页脚与 Logo 显示优化
+
+### 中期任务（1-2月）
+- [ ] PocketBase 权限规则/审计日志完善
+- [ ] 模板中心：模板分类与模板分享机制
+- [ ] 移动端体验优化与性能调优
+
+### 长期规划（3-6月）
+- [ ] AI 辅助摘要/建议（MVP 试点）
+- [ ] 轻量提醒/跟进节奏
+- [ ] 企业级导出/审计/权限
+
+### 技术债务
 - 单元测试覆盖率需提升
 - 部分复杂组件需重构
 - 性能监控体系待建立
 
 ---
-
 ## 1. Purpose & Scope
 - 保持现有 CRM 功能（联系人、公司、交易、任务、笔记、活动、导入/导出、认证）。
 - UI/UX 大幅重构：主题、布局、组件、响应式、可访问性；使用 SVG 图标，避免蓝紫和高饱和色，主色为墨绿系（低饱和、对比清晰）。
@@ -125,7 +125,7 @@
 
 ## 2. Context & Assumptions
 - 现有前端：React 19、Vite、React Router v7、React Query、React Hook Form、shadcn-admin-kit、Mutable deps（`src/components/admin`、`src/components/ui`）。
-- 现有后端：Supabase（Auth、PostgREST、存储、触发器/视图），即将替换为 PocketBase。
+- 现有后端：PocketBase（Auth + Data）；Supabase 作为企业级升级路径保留。
 - 数据导入导出：CSV（联系人等），需保持兼容。
 - 不支持用户物理删除（禁用代替删除）。
 

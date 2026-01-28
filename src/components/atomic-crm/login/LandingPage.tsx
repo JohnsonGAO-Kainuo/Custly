@@ -57,7 +57,7 @@ const GitHubIconButton = () => {
 
 export const LandingPage = () => {
   const translate = useTranslate();
-  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/?demo=1";
+  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   return (
     <div className="relative min-h-screen bg-background">

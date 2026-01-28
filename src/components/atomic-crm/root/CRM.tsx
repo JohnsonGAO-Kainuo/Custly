@@ -19,6 +19,7 @@ import deals from "../deals";
 import { Layout } from "../layout/Layout";
 import { SignupPage } from "../login/SignupPage";
 import { LandingPage } from "../login/LandingPage";
+import { StartPage } from "../login/StartPage";
 import { EnhancedLoginPage } from "../login/EnhancedLoginPage";
 import { PricingPage } from "../login/PricingPage";
 import { FeaturesPage } from "../login/FeaturesPage";
@@ -122,6 +123,16 @@ export const CRM = ({
   disableTelemetry,
   ...rest
 }: CRMProps) => {
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
+  const searchParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : null;
+  const isDemoPath = pathname.startsWith("/demo");
+  const isDemoQuery = searchParams?.get("demo") === "1";
+  const isDemo = isDemoPath || isDemoQuery;
+
   const templateOverrides = getTemplateOverrides() ?? {};
   const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
   const isPocketbase = backend === "pocketbase";
@@ -197,6 +208,7 @@ export const CRM = ({
         {...rest}
       >
         <CustomRoutes noLayout>
+          {!isDemo ? <Route path="/" element={<StartPage />} /> : null}
           <Route path={LandingPage.path} element={<LandingPage />} />
           <Route path={SignupPage.path} element={<SignupPage />} />
           <Route path={PricingPage.path} element={<PricingPage />} />
