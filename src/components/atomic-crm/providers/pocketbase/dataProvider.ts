@@ -50,6 +50,9 @@ const normalizeResource = (resource: string) => {
 const escapeFilterValue = (value: string) => value.replace(/"/g, '\\"');
 
 const formatFilterValue = (value: unknown) => {
+  if (value === null) {
+    return "null";
+  }
   if (typeof value === "number" || typeof value === "boolean") {
     return `${value}`;
   }
@@ -62,7 +65,9 @@ const formatFilterValue = (value: unknown) => {
 
 const parseFilterKey = (key: string, value: unknown) => {
   if (key.includes("@")) {
-    const [field, op] = key.split("@");
+    const lastIndex = key.lastIndexOf("@");
+    const field = key.slice(0, lastIndex);
+    const op = key.slice(lastIndex + 1);
     if (op === "ilike" || op === "like") {
       return { field, operator: "~" };
     }
@@ -70,6 +75,27 @@ const parseFilterKey = (key: string, value: unknown) => {
       const raw = typeof value === "string" ? value : "";
       const cleaned = raw.replace(/^{/, "").replace(/}$/, "");
       return { field, operator: "?=", normalizedValue: cleaned };
+    }
+    if (op === "lt") {
+      return { field, operator: "<" };
+    }
+    if (op === "lte") {
+      return { field, operator: "<=" };
+    }
+    if (op === "gt") {
+      return { field, operator: ">" };
+    }
+    if (op === "gte") {
+      return { field, operator: ">=" };
+    }
+    if (op === "neq" || op === "ne") {
+      return { field, operator: "!=", allowNull: true };
+    }
+    if (op === "is") {
+      return { field, operator: "=", allowNull: true };
+    }
+    if (op === "not.is") {
+      return { field, operator: "!=", allowNull: true };
     }
     return { field, operator: "=" };
   }
@@ -93,7 +119,6 @@ const buildFilter = (resource: string, filter?: Record<string, unknown>) => {
   }
 
   for (const [key, value] of Object.entries(rest)) {
-    if (value === undefined || value === null || value === "") continue;
     if (key === "@or" && typeof value === "object" && value) {
       const orParts = Object.entries(value).map(([orKey, orValue]) => {
         const parsed = parseFilterKey(orKey, orValue);
@@ -112,6 +137,14 @@ const buildFilter = (resource: string, filter?: Record<string, unknown>) => {
     const parsed = parseFilterKey(key, value);
     const normalizedValue =
       parsed.normalizedValue ?? value;
+    if (
+      (normalizedValue === undefined ||
+        normalizedValue === null ||
+        normalizedValue === "") &&
+      !parsed.allowNull
+    ) {
+      continue;
+    }
 
     if (Array.isArray(normalizedValue)) {
       const orClause = normalizedValue

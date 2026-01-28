@@ -306,12 +306,22 @@ export const crmChineseTraditionalMessages = {
         kicker: "熱門聯繫人",
         title: "熱門聯繫人",
         create: "建立聯繫人",
+        last_seen: "最後聯繫 %{date}",
+        badges: {
+          tasks: "%{count} 項任務",
+          newsletter: "訂閱用戶",
+        },
+        actions: {
+          email: "發送郵件",
+          call: "撥打電話",
+        },
         empty_title: "狀態為「熱門」的聯繫人會顯示在這裡。",
         empty_note: "透過新增備註並點擊「顯示選項」來修改狀態。",
       },
       tasks: {
         kicker: "任務",
         title: "待辦任務",
+        progress: "已完成 %{done} / %{total}",
         filters: {
           overdue: "逾期",
           today: "今天",

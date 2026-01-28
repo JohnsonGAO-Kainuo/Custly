@@ -20,6 +20,15 @@ const crmEnglishMessages: TranslationMessages = {
         kicker: "Hot contacts",
         title: "Hot Contacts",
         create: "Create contact",
+        last_seen: "Last seen %{date}",
+        badges: {
+          tasks: "%{count} tasks",
+          newsletter: "Newsletter",
+        },
+        actions: {
+          email: "Email",
+          call: "Call",
+        },
         empty_title: "Contacts with a \"hot\" status will appear here.",
         empty_note:
           "Change the status by adding a note to a contact and clicking \"show options\".",
@@ -27,6 +36,7 @@ const crmEnglishMessages: TranslationMessages = {
       tasks: {
         kicker: "Tasks",
         title: "Upcoming Tasks",
+        progress: "Done %{done} / %{total}",
         filters: {
           overdue: "Overdue",
           today: "Today",
@@ -58,6 +68,12 @@ const crmEnglishMessages: TranslationMessages = {
         built_with: "Built with React, shadcn/ui, and Tailwind CSS.",
       },
     },
+  },
+  noteStatus: {
+    cold: "Cold",
+    warm: "Warm",
+    hot: "Hot",
+    in_contract: "In contract",
   },
 };
 

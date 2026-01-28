@@ -306,12 +306,22 @@ export const crmChineseMessages = {
         kicker: "热门联系人",
         title: "热门联系人",
         create: "创建联系人",
+        last_seen: "最后联系 %{date}",
+        badges: {
+          tasks: "%{count} 项任务",
+          newsletter: "订阅用户",
+        },
+        actions: {
+          email: "发送邮件",
+          call: "拨打电话",
+        },
         empty_title: "状态为“热门”的联系人会显示在这里。",
         empty_note: "通过添加备注并点击“显示选项”来修改联系人状态。",
       },
       tasks: {
         kicker: "任务",
         title: "待办任务",
+        progress: "已完成 %{done} / %{total}",
         filters: {
           overdue: "逾期",
           today: "今天",

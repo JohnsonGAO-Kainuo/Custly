@@ -1,6 +1,4 @@
-import { Fragment, useState } from "react";
-
-import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 import {
   COMPANY_CREATED,
   CONTACT_CREATED,
@@ -30,12 +28,22 @@ export function ActivityLogIterator({
 
   return (
     <div className="space-y-4">
-      {filteredActivities.map((activity, index) => (
-        <Fragment key={index}>
-          <ActivityItem key={activity.id} activity={activity} />
-          <Separator />
-        </Fragment>
-      ))}
+      {filteredActivities.map((activity, index) => {
+        const isLast = index === filteredActivities.length - 1;
+        return (
+          <div className="flex gap-4" key={activity.id}>
+            <div className="flex flex-col items-center">
+              <span className="mt-1 h-2.5 w-2.5 rounded-full bg-primary/70 ring-4 ring-primary/10" />
+              {!isLast && (
+                <span className="mt-2 w-px flex-1 bg-border/70" />
+              )}
+            </div>
+            <div className="flex-1 pb-4">
+              <ActivityItem activity={activity} />
+            </div>
+          </div>
+        );
+      })}
 
       {activitiesDisplayed < activities.length && (
         <a

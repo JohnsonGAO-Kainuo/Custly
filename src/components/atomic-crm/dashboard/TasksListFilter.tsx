@@ -4,7 +4,9 @@ import {
   useGetIdentity,
   useGetList,
   useList,
+  useTranslate,
 } from "ra-core";
+import { Progress } from "@/components/ui/progress";
 
 import { TasksIterator } from "../tasks/TasksIterator";
 
@@ -16,6 +18,13 @@ export const TasksListFilter = ({
   filter: any;
 }) => {
   const { identity } = useGetIdentity();
+  const translate = useTranslate();
+
+  const doneFilter = {
+    ...filter,
+    "done_date@neq": null,
+  } as Record<string, unknown>;
+  delete doneFilter["done_date@is"];
 
   const {
     data: tasks,
@@ -34,26 +43,63 @@ export const TasksListFilter = ({
     { enabled: !!identity },
   );
 
+  const {
+    total: doneTotal,
+    isPending: donePending,
+  } = useGetList(
+    "tasks",
+    {
+      pagination: { page: 1, perPage: 1 },
+      sort: { field: "due_date", order: "ASC" },
+      filter: {
+        ...doneFilter,
+        sales_id: identity?.id,
+      },
+    },
+    { enabled: !!identity },
+  );
+
   const listContext = useList({
-    data: tasks,
+    data: tasks ?? [],
     isPending,
     resource: "tasks",
     perPage: 5,
   });
 
-  if (isPending || !tasks || !total) return null;
+  if (isPending || donePending) return null;
+
+  const pendingTotal = total ?? 0;
+  const completedTotal = doneTotal ?? 0;
+  const totalTasks = pendingTotal + completedTotal;
+  const progressValue =
+    totalTasks > 0 ? Math.round((completedTotal / totalTasks) * 100) : 0;
+
+  if (totalTasks === 0) return null;
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium mb-2">
-        {title}
-      </p>
+      <div className="flex items-center justify-between">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+          {title}
+        </p>
+        <span className="text-xs text-muted-foreground">
+          {translate("crm.dashboard.tasks.progress", {
+            done: completedTotal,
+            total: totalTasks,
+            _: `${completedTotal}/${totalTasks}`,
+          })}
+        </span>
+      </div>
+      <Progress
+        value={progressValue}
+        className="h-1.5 bg-muted/50"
+      />
       <ResourceContextProvider value="tasks">
         <ListContextProvider value={listContext}>
-          <TasksIterator showContact />
+          {pendingTotal > 0 && <TasksIterator showContact />}
         </ListContextProvider>
       </ResourceContextProvider>
-      {total > listContext.perPage && (
+      {pendingTotal > listContext.perPage && (
         <div className="flex justify-center">
           <a
             href="#"
