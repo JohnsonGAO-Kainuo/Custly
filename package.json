@@ -16,6 +16,7 @@
     "prettier": "prettier --config ./.prettierrc.json --check \"**/*.{js,json,ts,tsx,css,md,html}\"",
     "registry:build": "npx shadcn build",
     "registry:gen": "node ./scripts/generate-registry.mjs",
+    "pocketbase:init": "node ./scripts/pocketbase-init.mjs",
     "ghpages:deploy": "node ./scripts/ghpages-deploy.mjs",
     "supabase:remote:init": "node ./scripts/supabase-remote-init.mjs",
     "prepare": "husky"
