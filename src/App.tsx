@@ -4,9 +4,16 @@ import {
   dataProvider as fakerestDataProvider,
 } from "@/components/atomic-crm/providers/fakerest";
 
-const isDemoPath =
-  typeof window !== "undefined" && window.location.pathname.startsWith("/demo");
-const isDemo = isDemoPath;
+const pathname =
+  typeof window !== "undefined" ? window.location.pathname : "";
+const searchParams =
+  typeof window !== "undefined"
+    ? new URLSearchParams(window.location.search)
+    : null;
+const isDemoPath = pathname.startsWith("/demo");
+const isDemoQuery = searchParams?.get("demo") === "1";
+const isDemo = isDemoPath || isDemoQuery;
+const demoBasename = isDemoPath ? "/demo" : undefined;
 
 /**
  * Application entry point
@@ -39,7 +46,7 @@ const App = () =>
       dataProvider={fakerestDataProvider}
       authProvider={fakerestAuthProvider}
       requireAuth={false}
-      basename="/demo"
+      basename={demoBasename}
     />
   ) : (
     <CRM />

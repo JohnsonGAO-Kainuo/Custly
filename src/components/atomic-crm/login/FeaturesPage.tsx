@@ -22,7 +22,7 @@ import {
 
 export const FeaturesPage = () => {
   const translate = useTranslate();
-  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/?demo=1";
 
   const features = [
     {
