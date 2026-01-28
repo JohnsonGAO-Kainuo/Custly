@@ -188,7 +188,7 @@ export const TemplateCenterPage = () => {
         data: {
           name: localTemplate.name,
           description: localTemplate.description,
-          config: JSON.stringify(config),
+          config,
         },
       });
       const createdId =
