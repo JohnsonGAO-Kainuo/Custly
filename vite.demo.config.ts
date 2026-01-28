@@ -6,6 +6,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 import createHtmlPlugin from "vite-plugin-simple-html";
 
 // https://vitejs.dev/config/
+const base = process.env.VITE_BASE ?? "/";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -32,7 +34,7 @@ export default defineConfig({
       process.env.VITE_SUPABASE_ANON_KEY ?? "https://demo.example.org",
     ),
   },
-  base: "./",
+  base,
   esbuild: {
     keepNames: true,
   },
