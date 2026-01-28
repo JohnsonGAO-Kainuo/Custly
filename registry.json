@@ -33,6 +33,14 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/templates/templates.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/templates/TemplateCenterPage.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/tasks/TasksIterator.tsx",
           "type": "registry:component"
         },
