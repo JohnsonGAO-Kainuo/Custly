@@ -42,6 +42,8 @@ export const TemplateCenterPage = () => {
   const translate = useTranslate();
   const notify = useNotify();
   const dataProvider = useDataProvider<CrmDataProvider>();
+  const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
+  const isPocketbase = backend === "pocketbase";
   const [activeTemplateId, setActiveTemplateId] = useState(
     () => getStoredTemplateId() ?? "general",
   );
@@ -52,6 +54,7 @@ export const TemplateCenterPage = () => {
   const [templateDescription, setTemplateDescription] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const isDemo = isDemoMode();
+  const shouldUseRemote = isPocketbase && !isDemo;
   const {
     companySectors,
     dealCategories,
@@ -72,7 +75,7 @@ export const TemplateCenterPage = () => {
       sort: { field: "updated", order: "DESC" },
       filter: {},
     },
-    { enabled: !isDemo },
+    { enabled: shouldUseRemote },
   );
 
   const normalizeRemoteTemplate = (record: any): CustomTemplate => {
@@ -111,18 +114,18 @@ export const TemplateCenterPage = () => {
   };
 
   useEffect(() => {
-    if (isDemo) return;
+    if (!shouldUseRemote) return;
     if (remoteTemplates && !remotePending && !remoteError) {
       const mapped = remoteTemplates.map(normalizeRemoteTemplate);
       setCustomTemplates(mapped);
     }
-  }, [remoteTemplates, remotePending, remoteError, isDemo]);
+  }, [remoteTemplates, remotePending, remoteError, shouldUseRemote]);
 
   const activeTemplate = useMemo(
     () => templates.find((template) => template.id === activeTemplateId),
     [activeTemplateId],
   );
-  const storageLabel = isDemo || remoteError
+  const storageLabel = !shouldUseRemote || remoteError
     ? translate("crm.templates.my.storage_local")
     : translate("crm.templates.my.storage_cloud");
   const mapItems = (items: string[]) =>
@@ -170,7 +173,7 @@ export const TemplateCenterPage = () => {
       updatedAt: now,
     };
 
-    if (isDemo) {
+    if (!shouldUseRemote) {
       const next = saveCustomTemplateLocal(localTemplate);
       setCustomTemplates(next);
       setTemplateName("");
@@ -207,7 +210,7 @@ export const TemplateCenterPage = () => {
   };
 
   const handleDeleteTemplate = async (template: CustomTemplate) => {
-    if (isDemo) {
+    if (!shouldUseRemote) {
       const next = deleteCustomTemplateLocal(template.id);
       setCustomTemplates(next);
       notify(translate("crm.templates.deleted"), { type: "info" });
