@@ -1,3 +1,4 @@
+import { useTranslate } from "ra-core";
 import { Link } from "react-router";
 
 import { ReferenceField } from "@/components/admin/reference-field";
@@ -15,6 +16,7 @@ export function ActivityLogContactCreated({
   activity,
 }: ActivityLogContactCreatedProps) {
   const context = useActivityLogContext();
+  const translate = useTranslate();
   const { contact } = activity;
   return (
     <div className="p-0">
@@ -24,12 +26,19 @@ export function ActivityLogContactCreated({
           <ReferenceField source="sales_id" reference="sales" record={activity}>
             <SaleName />
           </ReferenceField>
-          &nbsp;added&nbsp;
+          &nbsp;{translate("crm.activity.added_contact")}&nbsp;
           <Link to={`/contacts/${contact.id}/show`}>
             {contact.first_name}&nbsp;{contact.last_name}
           </Link>
-          &nbsp;
-          {context !== "company" && <>to company {activity.company_id}</>}
+          {context !== "company" && (
+            <>
+              &nbsp;
+              {translate("crm.activity.to_company", {
+                id: activity.company_id,
+                _: `to company ${activity.company_id}`,
+              })}
+            </>
+          )}
         </span>
         {context === "company" && (
           <span className="text-muted-foreground text-sm">

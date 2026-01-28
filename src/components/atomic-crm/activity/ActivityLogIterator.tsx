@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslate } from "ra-core";
 import {
   COMPANY_CREATED,
   CONTACT_CREATED,
@@ -22,6 +23,7 @@ export function ActivityLogIterator({
   activities,
   pageSize,
 }: ActivityLogIteratorProps) {
+  const translate = useTranslate();
   const [activitiesDisplayed, setActivityDisplayed] = useState(pageSize);
 
   const filteredActivities = activities.slice(0, activitiesDisplayed);
@@ -56,7 +58,7 @@ export function ActivityLogIterator({
           }}
           className="flex w-full justify-center text-sm underline hover:no-underline"
         >
-          Load more activity
+          {translate("crm.activity.load_more")}
         </a>
       )}
     </div>

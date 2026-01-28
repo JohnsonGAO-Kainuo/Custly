@@ -109,7 +109,7 @@ export const TasksListFilter = ({
             }}
             className="text-sm underline hover:no-underline"
           >
-            Load more
+            {translate("crm.common.load_more")}
           </a>
         </div>
       )}

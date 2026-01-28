@@ -1,6 +1,11 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { MoreVertical } from "lucide-react";
-import { useDeleteWithUndoController, useNotify, useUpdate } from "ra-core";
+import {
+  useDeleteWithUndoController,
+  useNotify,
+  useTranslate,
+  useUpdate,
+} from "ra-core";
 import { useEffect, useState } from "react";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { DateField } from "@/components/admin/date-field";
@@ -24,6 +29,7 @@ export const Task = ({
   showContact?: boolean;
 }) => {
   const notify = useNotify();
+  const translate = useTranslate();
   const queryClient = useQueryClient();
 
   const [openEdit, setOpenEdit] = useState(false);
@@ -39,7 +45,9 @@ export const Task = ({
     redirect: false,
     mutationOptions: {
       onSuccess() {
-        notify("Task deleted successfully", { undoable: true });
+        notify(translate("crm.tasks.notifications.deleted"), {
+          undoable: true,
+        });
       },
     },
   });
@@ -95,7 +103,7 @@ export const Task = ({
               {task.text}
             </div>
             <div className="text-sm text-muted-foreground">
-              due&nbsp;
+              {translate("crm.tasks.due")}&nbsp;
               <DateField source="due_date" record={task} />
               {showContact && (
                 <ReferenceField<TData, Contact>
@@ -109,7 +117,7 @@ export const Task = ({
                     return (
                       <>
                         {" "}
-                        (Re:&nbsp;
+                        ({translate("crm.tasks.re")}&nbsp;
                         {referenceRecord?.first_name}{" "}
                         {referenceRecord?.last_name})
                       </>
@@ -147,7 +155,7 @@ export const Task = ({
                 });
               }}
             >
-              Postpone to tomorrow
+              {translate("crm.tasks.actions.postpone_tomorrow")}
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
@@ -163,13 +171,13 @@ export const Task = ({
                 });
               }}
             >
-              Postpone to next week
+              {translate("crm.tasks.actions.postpone_next_week")}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onClick={handleEdit}>
-              Edit
+              {translate("crm.tasks.actions.edit")}
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
-              Delete
+              {translate("crm.tasks.actions.delete")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

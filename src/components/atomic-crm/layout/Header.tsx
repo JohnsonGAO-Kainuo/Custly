@@ -1,6 +1,6 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { LayoutGrid, Settings, User } from "lucide-react";
-import { CanAccess } from "ra-core";
+import { CanAccess, useTranslate } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
@@ -11,6 +11,7 @@ import { useConfigurationContext } from "../root/ConfigurationContext";
 
 const Header = () => {
   const { darkModeLogo, lightModeLogo, title } = useConfigurationContext();
+  const translate = useTranslate();
   const location = useLocation();
 
   let currentPath: string | boolean = "/";
@@ -46,27 +47,27 @@ const Header = () => {
             <div>
               <nav className="flex gap-1">
                 <NavigationTab
-                  label="Dashboard"
+                  label={translate("crm.nav.dashboard")}
                   to="/"
                   isActive={currentPath === "/"}
                 />
                 <NavigationTab
-                  label="Contacts"
+                  label={translate("crm.nav.contacts")}
                   to="/contacts"
                   isActive={currentPath === "/contacts"}
                 />
                 <NavigationTab
-                  label="Companies"
+                  label={translate("crm.nav.companies")}
                   to="/companies"
                   isActive={currentPath === "/companies"}
                 />
                 <NavigationTab
-                  label="Deals"
+                  label={translate("crm.nav.deals")}
                   to="/deals"
                   isActive={currentPath === "/deals"}
                 />
                 <NavigationTab
-                  label="Templates"
+                  label={translate("crm.nav.templates")}
                   to="/templates"
                   isActive={currentPath === "/templates"}
                 />
@@ -112,10 +113,11 @@ const NavigationTab = ({
 
 const UsersMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <DropdownMenuItem asChild onClick={onClose}>
       <Link to="/sales" className="flex items-center gap-2">
-        <User /> Users
+        <User /> {translate("crm.menu.users")}
       </Link>
     </DropdownMenuItem>
   );
@@ -123,18 +125,19 @@ const UsersMenu = () => {
 
 const ConfigurationMenu = () => {
   const { onClose } = useUserMenu() ?? {};
+  const translate = useTranslate();
   return (
     <>
       <DropdownMenuItem asChild onClick={onClose}>
         <Link to="/templates" className="flex items-center gap-2">
           <LayoutGrid />
-          Templates
+          {translate("crm.menu.templates")}
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild onClick={onClose}>
         <Link to="/settings" className="flex items-center gap-2">
           <Settings />
-          My info
+          {translate("crm.menu.profile")}
         </Link>
       </DropdownMenuItem>
     </>
