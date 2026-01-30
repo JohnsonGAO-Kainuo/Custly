@@ -5,6 +5,7 @@ import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
 import { ThemeModeToggle } from "@/components/admin/theme-mode-toggle";
 import { UserMenu } from "@/components/admin/user-menu";
+import { LocalesMenuButton } from "@/components/admin/locales-menu-button";
 import { useUserMenu } from "@/hooks/user-menu-context";
 
 import { useConfigurationContext } from "../root/ConfigurationContext";
@@ -74,6 +75,7 @@ const Header = () => {
               </nav>
             </div>
             <div className="flex items-center gap-1">
+              <LocalesMenuButton />
               <ThemeModeToggle />
               <RefreshButton />
               <UserMenu>
