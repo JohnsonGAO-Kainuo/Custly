@@ -1,4 +1,4 @@
-import { required, useRecordContext } from "ra-core";
+import { required, useRecordContext, useTranslate } from "ra-core";
 import { ReferenceInput } from "@/components/admin/reference-input";
 import { TextInput } from "@/components/admin/text-input";
 import { SelectInput } from "@/components/admin/select-input";
@@ -12,6 +12,7 @@ import { isLinkedinUrl } from "../misc/isLinkedInUrl";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Company, Sale } from "../types";
 import { sizes } from "./sizes";
+import { getCompanySectorLabel } from "./sectorLabels";
 
 const isUrl = (url: string) => {
   if (!url) return;
@@ -47,6 +48,7 @@ export const CompanyInputs = () => {
 
 const CompanyDisplayInputs = () => {
   const record = useRecordContext<Company>();
+  const translate = useTranslate();
   return (
     <div className="flex gap-4 flex-1 flex-row">
       <ImageEditorField
@@ -62,16 +64,19 @@ const CompanyDisplayInputs = () => {
         className="w-full h-fit"
         validate={required()}
         helperText={false}
-        placeholder="Company name"
+        placeholder={translate("crm.companies.placeholders.name")}
       />
     </div>
   );
 };
 
 const CompanyContactInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Contact</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.companies.sections.contact")}
+      </h6>
       <TextInput source="website" helperText={false} validate={isUrl} />
       <TextInput
         source="linkedin_url"
@@ -84,19 +89,26 @@ const CompanyContactInputs = () => {
 };
 
 const CompanyContextInputs = () => {
+  const translate = useTranslate();
   const { companySectors } = useConfigurationContext();
+  const sizeChoices = sizes.map((size) => ({
+    ...size,
+    name: translate(size.key, { _: size.name }),
+  }));
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Context</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.companies.sections.context")}
+      </h6>
       <SelectInput
         source="sector"
         choices={companySectors.map((sector) => ({
           id: sector,
-          name: sector,
+          name: getCompanySectorLabel(sector, translate),
         }))}
         helperText={false}
       />
-      <SelectInput source="size" choices={sizes} helperText={false} />
+      <SelectInput source="size" choices={sizeChoices} helperText={false} />
       <TextInput source="revenue" helperText={false} />
       <TextInput source="tax_identifier" helperText={false} />
     </div>
@@ -104,9 +116,12 @@ const CompanyContextInputs = () => {
 };
 
 const CompanyAddressInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Address</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.companies.sections.address")}
+      </h6>
       <TextInput source="address" helperText={false} />
       <TextInput source="city" helperText={false} />
       <TextInput source="zipcode" helperText={false} />
@@ -117,9 +132,12 @@ const CompanyAddressInputs = () => {
 };
 
 const CompanyAdditionalInformationInputs = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Additional information</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.companies.sections.additional_information")}
+      </h6>
       <TextInput source="description" multiline helperText={false} />
       <ArrayInput source="context_links" helperText={false}>
         <SimpleFormIterator disableReordering fullWidth getItemLabel={false}>
@@ -136,9 +154,12 @@ const CompanyAdditionalInformationInputs = () => {
 };
 
 const CompanyAccountManagerInput = () => {
+  const translate = useTranslate();
   return (
     <div className="flex flex-col gap-4">
-      <h6 className="text-lg font-semibold">Account manager</h6>
+      <h6 className="text-lg font-semibold">
+        {translate("crm.companies.sections.account_manager")}
+      </h6>
       <ReferenceInput
         source="sales_id"
         reference="sales"
@@ -147,7 +168,7 @@ const CompanyAccountManagerInput = () => {
         }}
       >
         <SelectInput
-          label="Account manager"
+          label={translate("crm.companies.sections.account_manager")}
           helperText={false}
           optionText={saleOptionRenderer}
         />

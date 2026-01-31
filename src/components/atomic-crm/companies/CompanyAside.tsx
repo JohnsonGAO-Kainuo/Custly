@@ -1,5 +1,5 @@
 import { Globe, Linkedin, Phone } from "lucide-react";
-import { useRecordContext } from "ra-core";
+import { useRecordContext, useTranslate } from "ra-core";
 import { EditButton } from "@/components/admin/edit-button";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { ReferenceField } from "@/components/admin/reference-field";
@@ -7,12 +7,12 @@ import { ShowButton } from "@/components/admin/show-button";
 import { TextField } from "@/components/admin/text-field";
 import { DateField } from "@/components/admin/date-field";
 import { UrlField } from "@/components/admin/url-field";
-import { SelectField } from "@/components/admin/select-field";
 
 import { AsideSection } from "../misc/AsideSection";
 import { SaleName } from "../sales/SaleName";
 import type { Company } from "../types";
 import { sizes } from "./sizes";
+import { getCompanySectorLabel } from "./sectorLabels";
 
 interface CompanyAsideProps {
   link?: string;
@@ -20,15 +20,16 @@ interface CompanyAsideProps {
 
 export const CompanyAside = ({ link = "edit" }: CompanyAsideProps) => {
   const record = useRecordContext<Company>();
+  const translate = useTranslate();
   if (!record) return null;
 
   return (
     <div className="hidden sm:block w-[250px] min-w-[250px] space-y-4">
       <div className="flex flex-row space-x-1">
         {link === "edit" ? (
-          <EditButton label="Edit Company" />
+          <EditButton label={translate("crm.companies.edit_company")} />
         ) : (
-          <ShowButton label="Show Company" />
+          <ShowButton label={translate("crm.companies.show_company")} />
         )}
       </div>
 
@@ -53,12 +54,13 @@ export const CompanyAside = ({ link = "edit" }: CompanyAsideProps) => {
 };
 
 const CompanyInfo = ({ record }: { record: Company }) => {
+  const translate = useTranslate();
   if (!record.website && !record.linkedin_url && !record.phone_number) {
     return null;
   }
 
   return (
-    <AsideSection title="Company Info">
+    <AsideSection title={translate("crm.companies.company_info")}>
       {record.website && (
         <div className="flex flex-row items-center gap-1 min-h-[24px]">
           <Globe className="w-4 h-4" />
@@ -82,7 +84,7 @@ const CompanyInfo = ({ record }: { record: Company }) => {
             rel="noopener noreferrer"
             title={record.linkedin_url}
           >
-            LinkedIn
+            {translate("crm.contacts.linkedin")}
           </a>
         </div>
       )}
@@ -97,30 +99,38 @@ const CompanyInfo = ({ record }: { record: Company }) => {
 };
 
 const ContextInfo = ({ record }: { record: Company }) => {
+  const translate = useTranslate();
   if (!record.revenue && !record.id) {
     return null;
   }
 
   return (
-    <AsideSection title="Context">
+    <AsideSection title={translate("crm.companies.context")}>
       {record.sector && (
         <span>
-          Sector: <TextField source="sector" />
+          {translate("crm.companies.sector")}:{" "}
+          {getCompanySectorLabel(record.sector, translate)}
         </span>
       )}
       {record.size && (
         <span>
-          Size: <SelectField source="size" choices={sizes} />
+          {translate("crm.companies.size")}:{" "}
+          {(() => {
+            const sizeMatch = sizes.find((size) => size.id === record.size);
+            if (!sizeMatch) return record.size;
+            return translate(sizeMatch.key, { _: sizeMatch.name });
+          })()}
         </span>
       )}
       {record.revenue && (
         <span>
-          Revenue: <TextField source="revenue" />
+          {translate("crm.companies.revenue")}: <TextField source="revenue" />
         </span>
       )}
       {record.tax_identifier && (
         <span>
-          Tax Identifier: <TextField source="tax_identifier" />
+          {translate("crm.companies.tax_identifier")}:{" "}
+          <TextField source="tax_identifier" />
         </span>
       )}
     </AsideSection>
@@ -128,12 +138,13 @@ const ContextInfo = ({ record }: { record: Company }) => {
 };
 
 const AddressInfo = ({ record }: { record: Company }) => {
+  const translate = useTranslate();
   if (!record.address && !record.city && !record.zipcode && !record.stateAbbr) {
     return null;
   }
 
   return (
-    <AsideSection title="Main Address" noGap>
+    <AsideSection title={translate("crm.companies.main_address")} noGap>
       <TextField source="address" />
       <TextField source="city" />
       <TextField source="zipcode" />
@@ -144,6 +155,7 @@ const AddressInfo = ({ record }: { record: Company }) => {
 };
 
 const AdditionalInfo = ({ record }: { record: Company }) => {
+  const translate = useTranslate();
   if (
     !record.created_at &&
     !record.sales_id &&
@@ -158,7 +170,7 @@ const AdditionalInfo = ({ record }: { record: Company }) => {
   };
 
   return (
-    <AsideSection title="Additional Info">
+    <AsideSection title={translate("crm.companies.additional_info")}>
       {record.description && (
         <p className="text-sm  mb-1">{record.description}</p>
       )}
@@ -182,7 +194,7 @@ const AdditionalInfo = ({ record }: { record: Company }) => {
       )}
       {record.sales_id !== null && (
         <div className="inline-flex text-sm text-muted-foreground mb-1">
-          Followed by&nbsp;
+          {translate("crm.companies.followed_by")}&nbsp;
           <ReferenceField source="sales_id" reference="sales" record={record}>
             <SaleName />
           </ReferenceField>
@@ -190,7 +202,7 @@ const AdditionalInfo = ({ record }: { record: Company }) => {
       )}
       {record.created_at && (
         <p className="text-sm text-muted-foreground mb-1">
-          Added on{" "}
+          {translate("crm.companies.added_on")}{" "}
           <DateField
             source="created_at"
             record={record}

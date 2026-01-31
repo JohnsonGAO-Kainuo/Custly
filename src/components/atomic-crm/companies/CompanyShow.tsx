@@ -1,11 +1,14 @@
-import { formatDistance } from "date-fns";
+import { formatRelative } from "date-fns";
+import { enUS, zhCN, zhTW } from "date-fns/locale";
 import { UserPlus } from "lucide-react";
 import {
   RecordContextProvider,
   ShowBase,
   useListContext,
+  useLocaleState,
   useRecordContext,
   useShowContext,
+  useTranslate,
 } from "ra-core";
 import {
   Link as RouterLink,
@@ -22,7 +25,7 @@ import { SortButton } from "@/components/admin/sort-button";
 import { ActivityLog } from "../activity/ActivityLog";
 import { Avatar } from "../contacts/Avatar";
 import { TagsList } from "../contacts/TagsList";
-import { findDealLabel } from "../deals/deal";
+import { findDealCategoryLabel, findDealLabel } from "../deals/deal";
 import { Status } from "../misc/Status";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 import type { Company, Contact, Deal } from "../types";
@@ -38,6 +41,7 @@ export const CompanyShow = () => (
 const CompanyShowContent = () => {
   const { record, isPending } = useShowContext<Company>();
   const navigate = useNavigate();
+  const translate = useTranslate();
 
   // Get tab from URL or default to "activity"
   const tabMatch = useMatch("/companies/:id/show/:tab");
@@ -65,19 +69,23 @@ const CompanyShowContent = () => {
             </div>
             <Tabs defaultValue={currentTab} onValueChange={handleTabChange}>
               <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="activity">Activity</TabsTrigger>
+                <TabsTrigger value="activity">
+                  {translate("crm.tabs.activity")}
+                </TabsTrigger>
                 <TabsTrigger value="contacts">
                   {record.nb_contacts
-                    ? record.nb_contacts === 1
-                      ? "1 Contact"
-                      : `${record.nb_contacts} Contacts`
-                    : "No Contacts"}
+                    ? translate("crm.contacts.count", {
+                        smart_count: record.nb_contacts,
+                        _: `${record.nb_contacts} Contacts`,
+                      })
+                    : translate("crm.contacts.none")}
                 </TabsTrigger>
                 {record.nb_deals ? (
                   <TabsTrigger value="deals">
-                    {record.nb_deals === 1
-                      ? "1 deal"
-                      : `${record.nb_deals} deals`}
+                    {translate("crm.deals.count", {
+                      smart_count: record.nb_deals,
+                      _: `${record.nb_deals} deals`,
+                    })}
                   </TabsTrigger>
                 ) : null}
               </TabsList>
@@ -134,6 +142,10 @@ const CompanyShowContent = () => {
 const ContactsIterator = () => {
   const location = useLocation();
   const { data: contacts, error, isPending } = useListContext<Contact>();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateLocale =
+    locale === "zh-CN" ? zhCN : locale === "zh-TW" ? zhTW : enUS;
 
   if (isPending || error) return null;
 
@@ -158,9 +170,10 @@ const ContactsIterator = () => {
                 <div className="text-sm text-muted-foreground">
                   {contact.title}
                   {contact.nb_tasks
-                    ? ` - ${contact.nb_tasks} task${
-                        contact.nb_tasks > 1 ? "s" : ""
-                      }`
+                    ? ` • ${translate("crm.contacts.tasks_count", {
+                        smart_count: contact.nb_tasks,
+                        _: `${contact.nb_tasks} tasks`,
+                      })}`
                     : ""}
                   &nbsp; &nbsp;
                   <TagsList />
@@ -169,7 +182,16 @@ const ContactsIterator = () => {
               {contact.last_seen && (
                 <div className="text-right">
                   <div className="text-sm text-muted-foreground">
-                    last activity {formatDistance(contact.last_seen, now)} ago{" "}
+                    {translate("crm.contacts.last_activity", {
+                      time: formatRelative(new Date(contact.last_seen), now, {
+                        locale: dateLocale,
+                      }),
+                      _: `last activity ${formatRelative(
+                        new Date(contact.last_seen),
+                        now,
+                        { locale: dateLocale },
+                      )}`,
+                    })}{" "}
                     <Status status={contact.status} />
                   </div>
                 </div>
@@ -184,6 +206,7 @@ const ContactsIterator = () => {
 
 const CreateRelatedContactButton = () => {
   const company = useRecordContext<Company>();
+  const translate = useTranslate();
   return (
     <Button variant="outline" asChild size="sm" className="h-9">
       <RouterLink
@@ -192,7 +215,7 @@ const CreateRelatedContactButton = () => {
         className="flex items-center gap-2"
       >
         <UserPlus className="h-4 w-4" />
-        Add contact
+        {translate("crm.actions.add_contact")}
       </RouterLink>
     </Button>
   );
@@ -201,6 +224,10 @@ const CreateRelatedContactButton = () => {
 const DealsIterator = () => {
   const { data: deals, error, isPending } = useListContext<Deal>();
   const { dealStages } = useConfigurationContext();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateLocale =
+    locale === "zh-CN" ? zhCN : locale === "zh-TW" ? zhTW : enUS;
   if (isPending || error) return null;
 
   const now = Date.now();
@@ -216,7 +243,7 @@ const DealsIterator = () => {
               <div className="flex-1 min-w-0">
                 <div className="font-medium">{deal.name}</div>
                 <div className="text-sm text-muted-foreground">
-                  {findDealLabel(dealStages, deal.stage)},{" "}
+                  {findDealLabel(dealStages, deal.stage, translate)},{" "}
                   {deal.amount.toLocaleString("en-US", {
                     notation: "compact",
                     style: "currency",
@@ -224,12 +251,23 @@ const DealsIterator = () => {
                     currencyDisplay: "narrowSymbol",
                     minimumSignificantDigits: 3,
                   })}
-                  {deal.category ? `, ${deal.category}` : ""}
+                  {deal.category
+                    ? `, ${findDealCategoryLabel(deal.category, translate)}`
+                    : ""}
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-sm text-muted-foreground">
-                  last activity {formatDistance(deal.updated_at, now)} ago{" "}
+                  {translate("crm.contacts.last_activity", {
+                    time: formatRelative(new Date(deal.updated_at), now, {
+                      locale: dateLocale,
+                    }),
+                    _: `last activity ${formatRelative(
+                      new Date(deal.updated_at),
+                      now,
+                      { locale: dateLocale },
+                    )}`,
+                  })}{" "}
                 </div>
               </div>
             </RouterLink>

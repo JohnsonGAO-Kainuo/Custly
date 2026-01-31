@@ -8,6 +8,7 @@ import {
   useRecordContext,
   useRedirect,
   useRefresh,
+  useTranslate,
   useUpdate,
 } from "ra-core";
 import { DeleteButton } from "@/components/admin/delete-button";
@@ -49,6 +50,7 @@ export const DealShow = ({ open, id }: { open: boolean; id?: string }) => {
 
 const DealShowContent = () => {
   const { dealStages } = useConfigurationContext();
+  const translate = useTranslate();
   const record = useRecordContext<Deal>();
   if (!record) return null;
 
@@ -129,7 +131,7 @@ const DealShowContent = () => {
                 Stage
               </span>
               <span className="text-sm">
-                {findDealLabel(dealStages, record.stage)}
+                {findDealLabel(dealStages, record.stage, translate)}
               </span>
             </div>
           </div>

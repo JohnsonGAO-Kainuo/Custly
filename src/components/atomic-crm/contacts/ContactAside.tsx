@@ -1,5 +1,5 @@
 import { Linkedin, Mail, Phone } from "lucide-react";
-import { useRecordContext, WithRecord } from "ra-core";
+import { useRecordContext, useTranslate, WithRecord } from "ra-core";
 import type { ReactNode } from "react";
 import { ArrayField } from "@/components/admin/array-field";
 import { EditButton } from "@/components/admin/edit-button";
@@ -24,6 +24,7 @@ import { ExportVCardButton } from "./ExportVCardButton";
 
 export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
   const { contactGender } = useConfigurationContext();
+  const translate = useTranslate();
   const record = useRecordContext<Contact>();
 
   if (!record) return null;
@@ -31,13 +32,13 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
     <div className="hidden sm:block w-64 min-w-64 text-sm">
       <div className="mb-4 -ml-1">
         {link === "edit" ? (
-          <EditButton label="Edit Contact" />
+          <EditButton label={translate("crm.contacts.edit_contact")} />
         ) : (
-          <ShowButton label="Show Contact" />
+          <ShowButton label={translate("crm.contacts.show_contact")} />
         )}
       </div>
 
-      <AsideSection title="Personal info">
+      <AsideSection title={translate("crm.contacts.personal_info")}>
         <ArrayField source="email_jsonb">
           <SingleFieldList className="flex-col">
             <PersonalInfoRow
@@ -49,7 +50,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
 
         {record.has_newsletter && (
           <p className="pl-6 text-sm text-muted-foreground">
-            Subscribed to newsletter
+            {translate("crm.contacts.newsletter_subscribed")}
           </p>
         )}
 
@@ -64,7 +65,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
                 rel="noopener noreferrer"
                 title={record.linkedin_url}
               >
-                LinkedIn
+                {translate("crm.contacts.linkedin")}
               </a>
             }
           />
@@ -95,7 +96,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           })
           .filter(Boolean)}
       </AsideSection>
-      <AsideSection title="Background info">
+      <AsideSection title={translate("crm.contacts.background_info")}>
         <WithRecord<Contact>
           render={(record) =>
             record?.background ? (
@@ -104,7 +105,7 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
           }
         />
         <div className="text-muted-foreground">
-          <span className="text-sm">Added on</span>{" "}
+          <span className="text-sm">{translate("crm.contacts.added_on")}</span>{" "}
           <DateField
             source="first_seen"
             options={{ year: "numeric", month: "long", day: "numeric" }}
@@ -112,7 +113,9 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
         </div>
 
         <div className="text-muted-foreground">
-          <span className="text-sm">Last activity on</span>{" "}
+          <span className="text-sm">
+            {translate("crm.contacts.last_activity_on")}
+          </span>{" "}
           <DateField
             source="last_seen"
             options={{ year: "numeric", month: "long", day: "numeric" }}
@@ -120,18 +123,18 @@ export const ContactAside = ({ link = "edit" }: { link?: "edit" | "show" }) => {
         </div>
 
         <div className="inline-flex text-muted-foreground">
-          Followed by&nbsp;
+          {translate("crm.contacts.followed_by")}&nbsp;
           <ReferenceField source="sales_id" reference="sales">
             <SaleName />
           </ReferenceField>
         </div>
       </AsideSection>
 
-      <AsideSection title="Tags">
+      <AsideSection title={translate("crm.contacts.tags")}>
         <TagsListEdit />
       </AsideSection>
 
-      <AsideSection title="Tasks">
+      <AsideSection title={translate("crm.contacts.tasks")}>
         <ReferenceManyField
           target="contact_id"
           reference="tasks"

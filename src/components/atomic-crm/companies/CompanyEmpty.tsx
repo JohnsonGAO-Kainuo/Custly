@@ -1,9 +1,11 @@
+import { useTranslate } from "ra-core";
 import { CreateButton } from "@/components/admin/create-button";
 
 import useAppBarHeight from "../misc/useAppBarHeight";
 
 export const CompanyEmpty = () => {
   const appbarHeight = useAppBarHeight();
+  const translate = useTranslate();
   return (
     <div
       className="flex flex-col justify-center items-center gap-6"
@@ -11,15 +13,20 @@ export const CompanyEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img src="./img/empty.svg" alt="No companies found" />
+      <img
+        src="./img/empty.svg"
+        alt={translate("crm.companies.empty_title")}
+      />
       <div className="flex flex-col gap-0 items-center">
-        <h6 className="text-lg font-bold">No companies found</h6>
+        <h6 className="text-lg font-bold">
+          {translate("crm.companies.empty_title")}
+        </h6>
         <p className="text-sm text-center text-muted-foreground mb-4">
-          It seems your company list is empty.
+          {translate("crm.companies.empty_subtitle")}
         </p>
       </div>
       <div className="flex space-x-2">
-        <CreateButton label="Create Company" />
+        <CreateButton label={translate("crm.actions.new_company")} />
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import { Draggable } from "@hello-pangea/dnd";
-import { useRedirect } from "ra-core";
+import { useRedirect, useTranslate } from "ra-core";
 import { ReferenceField } from "@/components/admin/reference-field";
 import { Card, CardContent } from "@/components/ui/card";
 
 import { CompanyAvatar } from "../companies/CompanyAvatar";
 import type { Deal } from "../types";
+import { findDealCategoryLabel } from "./deal";
 
 export const DealCard = ({ deal, index }: { deal: Deal; index: number }) => {
   if (!deal) return null;
@@ -28,6 +29,10 @@ export const DealCardContent = ({
   deal: Deal;
 }) => {
   const redirect = useRedirect();
+  const translate = useTranslate();
+  const categoryLabel = deal.category
+    ? findDealCategoryLabel(deal.category, translate)
+    : "";
   const handleClick = () => {
     redirect(`/deals/${deal.id}/show`, undefined, undefined, undefined, {
       _scrollToTop: false,
@@ -68,7 +73,7 @@ export const DealCardContent = ({
                 currencyDisplay: "narrowSymbol",
                 minimumSignificantDigits: 3,
               })}
-              {deal.category ? `, ${deal.category}` : ""}
+              {categoryLabel ? `, ${categoryLabel}` : ""}
             </p>
           </div>
         </CardContent>

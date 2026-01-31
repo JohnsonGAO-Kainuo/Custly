@@ -1,5 +1,6 @@
 import { formatRelative } from "date-fns";
-import { RecordContextProvider, useListContext } from "ra-core";
+import { enUS, zhCN, zhTW } from "date-fns/locale";
+import { RecordContextProvider, useListContext, useLocaleState, useTranslate } from "ra-core";
 import { type MouseEvent, useCallback } from "react";
 import { Link } from "react-router";
 import { ReferenceField } from "@/components/admin/reference-field";
@@ -22,6 +23,10 @@ export const ContactListContent = () => {
     selectedIds,
   } = useListContext<Contact>();
   const isSmall = useIsMobile();
+  const translate = useTranslate();
+  const [locale] = useLocaleState();
+  const dateLocale =
+    locale === "zh-CN" ? zhCN : locale === "zh-TW" ? zhTW : enUS;
 
   // StopPropagation does not work for some reason on Checkbox, this handler is a workaround
   const handleLinkClick = useCallback(function handleLinkClick(
@@ -62,7 +67,7 @@ export const ContactListContent = () => {
               </div>
               <div className="text-sm text-muted-foreground">
                 {contact.title}
-                {contact.title && contact.company_id != null && " at "}
+                {contact.title && contact.company_id != null && ` ${translate("crm.contacts.at")} `}
                 {contact.company_id != null && (
                   <ReferenceField
                     source="company_id"
@@ -73,9 +78,10 @@ export const ContactListContent = () => {
                   </ReferenceField>
                 )}
                 {contact.nb_tasks
-                  ? ` - ${contact.nb_tasks} task${
-                      contact.nb_tasks > 1 ? "s" : ""
-                    }`
+                  ? ` • ${translate("crm.contacts.tasks_count", {
+                      smart_count: contact.nb_tasks,
+                      _: `${contact.nb_tasks} tasks`,
+                    })}`
                   : ""}
                 &nbsp;&nbsp;
                 <TagsList />
@@ -87,8 +93,21 @@ export const ContactListContent = () => {
                   className="text-sm text-muted-foreground"
                   title={contact.last_seen}
                 >
-                  {!isSmall && "last activity "}
-                  {formatRelative(contact.last_seen, now)}{" "}
+                  {!isSmall &&
+                    translate("crm.contacts.last_activity", {
+                      time: formatRelative(new Date(contact.last_seen), now, {
+                        locale: dateLocale,
+                      }),
+                      _: `last activity ${formatRelative(
+                        new Date(contact.last_seen),
+                        now,
+                        { locale: dateLocale },
+                      )}`,
+                    })}
+                  {isSmall &&
+                    formatRelative(new Date(contact.last_seen), now, {
+                      locale: dateLocale,
+                    })}{" "}
                   <Status status={contact.status} />
                 </div>
               </div>
@@ -99,7 +118,9 @@ export const ContactListContent = () => {
 
       {contacts.length === 0 && (
         <div className="p-4">
-          <div className="text-muted-foreground">No contacts found</div>
+          <div className="text-muted-foreground">
+            {translate("crm.contacts.empty")}
+          </div>
         </div>
       )}
     </div>
