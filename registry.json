@@ -653,6 +653,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/companies/sectorLabels.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/companies/index.ts",
           "type": "registry:component"
         },
