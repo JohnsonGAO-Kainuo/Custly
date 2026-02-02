@@ -118,7 +118,26 @@ export const authProvider: AuthProvider = {
         throw new Error(data?.["message"] || rawBody || "OAuth login failed");
       }
 
-      setAuthState({ token: data.token, record: data.record });
+      try {
+        setAuthState({ token: data.token, record: data.record });
+        if (typeof window !== "undefined") {
+          const persisted = window.localStorage.getItem("custly_pb_auth");
+          // eslint-disable-next-line no-console
+          console.debug("custly_auth_written", persisted);
+          try {
+            window.sessionStorage.setItem(
+              "custly_auth_written",
+              persisted ?? "",
+            );
+          } catch {
+            /* ignore */
+          }
+        }
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error("custly_auth_set_failed", err);
+        throw err;
+      }
       return;
     }
 
