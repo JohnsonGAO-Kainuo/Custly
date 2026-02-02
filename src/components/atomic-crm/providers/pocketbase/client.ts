@@ -5,6 +5,7 @@ type AuthState = {
 
 const AUTH_STORAGE_KEY = "custly_pb_auth";
 const AUTH_STORAGE_KEY_SESSION = "custly_pb_auth_session";
+const OAUTH_DEBUG_KEY = "custly_oauth_debug";
 let IN_MEMORY_AUTH_STATE: AuthState | null = null;
 const OAUTH_STORAGE_KEY = "custly_pb_oauth";
 
@@ -59,6 +60,29 @@ export const getAuthState = (): AuthState | null => {
     readSession(AUTH_STORAGE_KEY) ||
     readSession(AUTH_STORAGE_KEY_SESSION) ||
     read(AUTH_STORAGE_KEY_SESSION);
+
+  if (!state) {
+    // Fallback: derive from debug payload if存在
+    const debugRaw = window.sessionStorage.getItem(OAUTH_DEBUG_KEY);
+    if (debugRaw) {
+      try {
+        const parsed = JSON.parse(debugRaw) as any;
+        if (parsed?.rawBody) {
+          const body = JSON.parse(parsed.rawBody);
+          if (body?.token && body?.record) {
+            const derived: AuthState = {
+              token: body.token,
+              record: body.record,
+            };
+            IN_MEMORY_AUTH_STATE = derived;
+            return derived;
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+  }
 
   if (state) {
     IN_MEMORY_AUTH_STATE = state;
