@@ -5,6 +5,7 @@ type AuthState = {
 
 const AUTH_STORAGE_KEY = "custly_pb_auth";
 const AUTH_STORAGE_KEY_SESSION = "custly_pb_auth_session";
+let IN_MEMORY_AUTH_STATE: AuthState | null = null;
 const OAUTH_STORAGE_KEY = "custly_pb_oauth";
 
 type OAuthState = {
@@ -30,6 +31,7 @@ export const getPocketBaseUrl = () => {
 };
 
 export const getAuthState = (): AuthState | null => {
+  if (IN_MEMORY_AUTH_STATE) return IN_MEMORY_AUTH_STATE;
   if (typeof window === "undefined") return null;
 
   const read = (key: string) => {
@@ -52,16 +54,21 @@ export const getAuthState = (): AuthState | null => {
     }
   };
 
-  return (
+  const state =
     read(AUTH_STORAGE_KEY) ||
     readSession(AUTH_STORAGE_KEY) ||
     readSession(AUTH_STORAGE_KEY_SESSION) ||
-    read(AUTH_STORAGE_KEY_SESSION)
-  );
+    read(AUTH_STORAGE_KEY_SESSION);
+
+  if (state) {
+    IN_MEMORY_AUTH_STATE = state;
+  }
+  return state;
 };
 
 export const setAuthState = (state: AuthState) => {
   if (typeof window === "undefined") return;
+  IN_MEMORY_AUTH_STATE = state;
   const payload = JSON.stringify(state);
   try {
     window.localStorage.setItem(AUTH_STORAGE_KEY, payload);
@@ -78,6 +85,7 @@ export const setAuthState = (state: AuthState) => {
 
 export const clearAuthState = () => {
   if (typeof window === "undefined") return;
+  IN_MEMORY_AUTH_STATE = null;
   window.localStorage.removeItem(AUTH_STORAGE_KEY);
   window.localStorage.removeItem(AUTH_STORAGE_KEY_SESSION);
   window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
