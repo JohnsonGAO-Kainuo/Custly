@@ -22,8 +22,8 @@ export const EnhancedLoginPage = () => {
   const { providers: pocketbaseProviders } = usePocketbaseOAuthProviders(
     isPocketbase,
     typeof window !== "undefined"
-      ? `${window.location.origin}/#/login`
-      : "/#/login",
+      ? `${window.location.origin}/login`
+      : "/login",
   );
   const supportsOAuth =
     backend === "supabase" || (isPocketbase && pocketbaseProviders.length > 0);

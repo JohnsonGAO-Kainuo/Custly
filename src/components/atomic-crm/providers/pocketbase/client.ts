@@ -101,7 +101,7 @@ export const fetchOAuthProviders = async (
   const resolvedRedirectUrl =
     redirectUrl ||
     (typeof window !== "undefined"
-      ? `${window.location.origin}/#/login`
+      ? `${window.location.origin}/login`
       : "");
   const response = await fetch(
     `${baseUrl}/api/collections/sales/auth-methods`,

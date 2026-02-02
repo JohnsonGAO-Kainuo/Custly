@@ -6,6 +6,7 @@ import {
   type CoreAdminProps,
   localStorageStore,
 } from "ra-core";
+import { createBrowserHistory } from "history";
 import { i18nProvider as defaultI18nProvider } from "@/lib/i18nProvider";
 import { Layout } from "@/components/admin/layout";
 import { LoginPage } from "@/components/admin/login-page";
@@ -101,6 +102,7 @@ export const Admin = (props: CoreAdminProps) => {
     store = defaultStore,
     title = "Custly",
   } = props;
+  const history = createBrowserHistory();
   return (
     <AdminContext
       authProvider={authProvider}
@@ -109,6 +111,7 @@ export const Admin = (props: CoreAdminProps) => {
       i18nProvider={i18nProvider}
       queryClient={queryClient}
       store={store}
+      history={history}
     >
       <AdminUI
         accessDenied={accessDenied}
