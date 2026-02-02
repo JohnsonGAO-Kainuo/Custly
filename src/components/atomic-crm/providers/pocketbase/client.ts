@@ -4,6 +4,7 @@ type AuthState = {
 };
 
 const AUTH_STORAGE_KEY = "custly_pb_auth";
+const AUTH_STORAGE_KEY_SESSION = "custly_pb_auth_session";
 const OAUTH_STORAGE_KEY = "custly_pb_oauth";
 
 type OAuthState = {
@@ -30,23 +31,57 @@ export const getPocketBaseUrl = () => {
 
 export const getAuthState = (): AuthState | null => {
   if (typeof window === "undefined") return null;
-  const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw) as AuthState;
-  } catch {
-    return null;
-  }
+
+  const read = (key: string) => {
+    const raw = window.localStorage.getItem(key);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as AuthState;
+    } catch {
+      return null;
+    }
+  };
+
+  const readSession = (key: string) => {
+    const raw = window.sessionStorage.getItem(key);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as AuthState;
+    } catch {
+      return null;
+    }
+  };
+
+  return (
+    read(AUTH_STORAGE_KEY) ||
+    readSession(AUTH_STORAGE_KEY) ||
+    readSession(AUTH_STORAGE_KEY_SESSION) ||
+    read(AUTH_STORAGE_KEY_SESSION)
+  );
 };
 
 export const setAuthState = (state: AuthState) => {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(state));
+  const payload = JSON.stringify(state);
+  try {
+    window.localStorage.setItem(AUTH_STORAGE_KEY, payload);
+  } catch (err) {
+    // fallback to sessionStorage if localStorage is blocked (incognito / privacy mode)
+    try {
+      window.sessionStorage.setItem(AUTH_STORAGE_KEY_SESSION, payload);
+    } catch {
+      // eslint-disable-next-line no-console
+      console.error("custly_auth_store_failed", err);
+    }
+  }
 };
 
 export const clearAuthState = () => {
   if (typeof window === "undefined") return;
   window.localStorage.removeItem(AUTH_STORAGE_KEY);
+  window.localStorage.removeItem(AUTH_STORAGE_KEY_SESSION);
+  window.sessionStorage.removeItem(AUTH_STORAGE_KEY);
+  window.sessionStorage.removeItem(AUTH_STORAGE_KEY_SESSION);
 };
 
 export const getAuthToken = () => getAuthState()?.token;
