@@ -46,51 +46,51 @@ const getAvatarUrl = (record: Record<string, unknown>) => {
 
 export const authProvider: AuthProvider = {
   login: async (params) => {
-    if ("provider" in params) {
-      const { provider, code, state } = params as {
-        provider?: string;
-        code?: string;
-        state?: string;
-      };
+    const { provider, code, state } = params as {
+      provider?: string;
+      code?: string;
+      state?: string;
+      email?: string;
+      password?: string;
+    };
+
+    // 1) OAuth callback handling (even if provider未传，但state可匹配之前存的)
+    if (code && state) {
       const baseUrl = getPocketBaseUrl();
-
-      if (code && state) {
-        const stored = consumeOAuthState(state);
-        const resolvedProvider = provider || stored?.provider;
-        if (!resolvedProvider) {
-          throw new Error("Missing OAuth provider");
-        }
-
-        const response = await fetch(
-          `${baseUrl}/api/collections/sales/auth-with-oauth2`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              provider: resolvedProvider,
-              code,
-              codeVerifier: stored?.codeVerifier,
-              redirectUrl: stored?.redirectUrl,
-              state,
-            }),
-          },
-        );
-        if (!response.ok) {
-          const message = await response.text();
-          throw new Error(message || "OAuth login failed");
-        }
-        const data = (await response.json()) as {
-          token: string;
-          record: Record<string, unknown>;
-        };
-        setAuthState({ token: data.token, record: data.record });
-        return;
-      }
-
-      if (!provider) {
+      const stored = consumeOAuthState(state);
+      const resolvedProvider = provider || stored?.provider;
+      if (!resolvedProvider) {
         throw new Error("Missing OAuth provider");
       }
+      const response = await fetch(
+        `${baseUrl}/api/collections/sales/auth-with-oauth2`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            provider: resolvedProvider,
+            code,
+            codeVerifier: stored?.codeVerifier,
+            redirectUrl: stored?.redirectUrl,
+            state,
+          }),
+        },
+      );
+      if (!response.ok) {
+        const message = await response.text();
+        throw new Error(message || "OAuth login failed");
+      }
+      const data = (await response.json()) as {
+        token: string;
+        record: Record<string, unknown>;
+      };
+      setAuthState({ token: data.token, record: data.record });
+      return;
+    }
 
+    // 2) OAuth 发起
+    if (provider) {
+      const baseUrl = getPocketBaseUrl();
       const redirectUrl = `${window.location.origin}/login`;
       const providers = await fetchOAuthProviders(redirectUrl);
       const selected = providers.find((item) => item.name === provider);
@@ -124,7 +124,9 @@ export const authProvider: AuthProvider = {
       window.location.href = selected.authUrl;
       return;
     }
-    const { email, password } = params as { email: string; password: string };
+
+    // 3) 密码登录
+    const { email, password } = params as { email?: string; password?: string };
     const baseUrl = getPocketBaseUrl();
     const response = await fetch(
       `${baseUrl}/api/collections/sales/auth-with-password`,
