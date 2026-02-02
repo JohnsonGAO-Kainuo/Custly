@@ -206,6 +206,10 @@ export const authProvider: AuthProvider = {
     clearAuthState();
   },
   checkAuth: async () => {
+    // 已有有效 token 直接通过，避免初始化检查把新 OAuth 会话清掉
+    if (getAuthToken()) {
+      return;
+    }
     if (
       window.location.pathname === "/set-password" ||
       window.location.hash.includes("#/set-password")
