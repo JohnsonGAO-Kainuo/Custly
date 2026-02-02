@@ -91,7 +91,7 @@ export const authProvider: AuthProvider = {
         throw new Error("Missing OAuth provider");
       }
 
-      const redirectUrl = `${window.location.origin}/login`;
+      const redirectUrl = `${window.location.origin}/#/login`;
       const providers = await fetchOAuthProviders(redirectUrl);
       const selected = providers.find((item) => item.name === provider);
       if (!selected?.authUrl) {

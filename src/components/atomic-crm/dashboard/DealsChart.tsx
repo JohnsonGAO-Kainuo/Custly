@@ -76,7 +76,21 @@ export const DealsChart = memo(() => {
     return amountByMonth;
   }, [data]);
 
-  if (isPending) return null; // FIXME return skeleton instead
+  if (isPending) {
+    return (
+      <Card className="p-4 border-border/60 bg-card/70">
+        <div className="h-[340px] animate-pulse rounded-xl bg-muted" />
+      </Card>
+    );
+  }
+
+  if (!months.length) {
+    return (
+      <Card className="p-6 border-border/60 bg-card/70 text-sm text-muted-foreground">
+        {translate("crm.dashboard.pipeline.empty")}
+      </Card>
+    );
+  }
   const range = months.reduce(
     (acc, month) => {
       acc.min = Math.min(acc.min, month.lost);

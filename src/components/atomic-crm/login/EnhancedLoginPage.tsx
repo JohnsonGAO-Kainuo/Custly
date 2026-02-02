@@ -22,8 +22,8 @@ export const EnhancedLoginPage = () => {
   const { providers: pocketbaseProviders } = usePocketbaseOAuthProviders(
     isPocketbase,
     typeof window !== "undefined"
-      ? `${window.location.origin}/login`
-      : "/login",
+      ? `${window.location.origin}/#/login`
+      : "/#/login",
   );
   const supportsOAuth =
     backend === "supabase" || (isPocketbase && pocketbaseProviders.length > 0);
@@ -66,6 +66,20 @@ export const EnhancedLoginPage = () => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const state = params.get("state");
+    const oauthError = params.get("error");
+
+    if (oauthError) {
+      notify(
+        translate("marketing.auth.login.oauth_failed", {
+          provider: "OAuth",
+        }),
+        { type: "error" },
+      );
+      params.delete("error");
+      window.history.replaceState({}, "", `${window.location.pathname}`);
+      return;
+    }
+
     if (!code || !state) return;
 
     setIsLoading(true);

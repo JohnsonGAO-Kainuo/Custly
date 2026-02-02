@@ -101,7 +101,7 @@ export const fetchOAuthProviders = async (
   const resolvedRedirectUrl =
     redirectUrl ||
     (typeof window !== "undefined"
-      ? `${window.location.origin}/login`
+      ? `${window.location.origin}/#/login`
       : "");
   const response = await fetch(
     `${baseUrl}/api/collections/sales/auth-methods`,
@@ -121,10 +121,8 @@ export const fetchOAuthProviders = async (
       if (authUrl && resolvedRedirectUrl) {
         try {
           const url = new URL(authUrl);
-          const existingRedirect = url.searchParams.get("redirect_uri");
-          if (!existingRedirect) {
-            url.searchParams.set("redirect_uri", resolvedRedirectUrl);
-          }
+          // 强制把 redirect_uri 改成前端的 /login（或传入的 redirectUrl）
+          url.searchParams.set("redirect_uri", resolvedRedirectUrl);
           resolvedAuthUrl = url.toString();
         } catch {
           resolvedAuthUrl = authUrl;

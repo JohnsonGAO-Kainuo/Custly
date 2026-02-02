@@ -56,6 +56,7 @@ const crmEnglishMessages: TranslationMessages = {
           won: "Won",
           lost: "Lost",
         },
+        empty: "No deal data yet. Create your first deal to see the pipeline.",
       },
       latest_activity: "Latest Activity",
       tasks_empty: "Tasks added to your contacts will appear here.",

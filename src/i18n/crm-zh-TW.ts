@@ -341,6 +341,7 @@ export const crmChineseTraditionalMessages = {
           won: "已成交",
           lost: "已流失",
         },
+        empty: "暫無交易數據，請先建立一筆交易以查看管道。",
       },
       latest_activity: "最新動態",
       tasks_empty: "聯繫人相關的任務會顯示在這裡。",
