@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,6 +14,7 @@ export const EnhancedLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const login = useLogin();
   const notify = useNotify();
   const translate = useTranslate();
@@ -35,6 +36,7 @@ export const EnhancedLoginPage = () => {
     setIsLoading(true);
     try {
       await login({ email, password });
+      navigate("/", { replace: true });
     } catch (error) {
       notify(translate("marketing.auth.login.invalid_credentials"), {
         type: "error",
@@ -48,6 +50,7 @@ export const EnhancedLoginPage = () => {
     setIsLoading(true);
     try {
       await login({ provider });
+      navigate("/", { replace: true });
     } catch (error) {
       const providerLabel = provider === "github" ? "GitHub" : "Google";
       notify(
@@ -90,6 +93,7 @@ export const EnhancedLoginPage = () => {
         url.searchParams.delete("state");
         url.searchParams.delete("error");
         window.history.replaceState({}, "", url.toString());
+        navigate("/", { replace: true });
       })
       .catch(() => {
         notify(translate("marketing.auth.login.oauth_failed", { provider: "OAuth" }), {
@@ -100,6 +104,20 @@ export const EnhancedLoginPage = () => {
         setIsLoading(false);
       });
   }, [isPocketbase, login, notify, translate]);
+
+  // 如果已经有登录态，直接跳转到主页，避免停在登录页
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hasAuth =
+      window.localStorage.getItem("custly_pb_auth") ||
+      window.localStorage.getItem("custly_pb_auth_session") ||
+      window.sessionStorage.getItem("custly_pb_auth") ||
+      window.sessionStorage.getItem("custly_pb_auth_session") ||
+      window.sessionStorage.getItem("custly_oauth_debug");
+    if (hasAuth) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center p-6">
