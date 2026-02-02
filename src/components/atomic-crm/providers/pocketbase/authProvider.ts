@@ -76,14 +76,48 @@ export const authProvider: AuthProvider = {
           }),
         },
       );
-      if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "OAuth login failed");
-      }
-      const data = (await response.json()) as {
-        token: string;
-        record: Record<string, unknown>;
+
+      // --- Debug hook: capture raw body for troubleshooting (even在导航后也能取到) ---
+      const rawBody = await response.text();
+      const debugPayload = {
+        status: response.status,
+        ok: response.ok,
+        provider: resolvedProvider,
+        state,
+        stored,
+        rawBody,
       };
+      if (typeof window !== "undefined") {
+        (window as any).__custlyOAuthDebug = debugPayload;
+        try {
+          window.sessionStorage.setItem(
+            "custly_oauth_debug",
+            JSON.stringify(debugPayload),
+          );
+        } catch (err) {
+          // 最后兜底：至少在控制台留一份
+          // eslint-disable-next-line no-console
+          console.warn("custly_oauth_debug: sessionStorage write failed", err);
+        }
+        // 直接在控制台打一份，方便用户复制
+        // eslint-disable-next-line no-console
+        console.debug("custly_oauth_debug", debugPayload);
+      }
+
+      let data: { token: string; record: Record<string, unknown> };
+      try {
+        data = JSON.parse(rawBody) as {
+          token: string;
+          record: Record<string, unknown>;
+        };
+      } catch (e) {
+        throw new Error(rawBody || "OAuth login failed (no JSON)");
+      }
+
+      if (!response.ok) {
+        throw new Error(data?.["message"] || rawBody || "OAuth login failed");
+      }
+
       setAuthState({ token: data.token, record: data.record });
       return;
     }
