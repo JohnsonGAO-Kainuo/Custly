@@ -165,6 +165,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/providers/pocketbase/subscriptionService.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/providers/pocketbase/index.ts",
           "type": "registry:component"
         },
@@ -449,6 +453,18 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/legal/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/legal/TermsOfServicePage.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/legal/PrivacyPolicyPage.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/layout/TopToolbar.tsx",
           "type": "registry:component"
         },
@@ -706,6 +722,22 @@
         },
         {
           "path": "src/components/atomic-crm/companies/AutocompleteCompanyInput.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/billing/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/billing/SubscriptionGate.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/billing/Paywall.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/billing/BillingPage.tsx",
           "type": "registry:component"
         },
         {
