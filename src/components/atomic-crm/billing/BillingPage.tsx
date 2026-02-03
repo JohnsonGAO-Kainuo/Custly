@@ -239,7 +239,7 @@ export const BillingPage = () => {
         <p className="text-muted-foreground">
           {status?.hasActiveSubscription
             ? "Manage your subscription and billing"
-            : "Start your 14-day free trial. No credit card required for trial."}
+            : "Start your 14-day free trial today. Cancel anytime."}
         </p>
       </div>
 
@@ -324,25 +324,25 @@ export const BillingPage = () => {
           <div>
             <h4 className="font-medium mb-1">What's included in the free trial?</h4>
             <p className="text-sm text-muted-foreground">
-              You get full access to all features for 14 days. No credit card required to start.
+              You get full access to all features for 14 days. A credit card is required to start your trial, but you won't be charged until the trial ends.
             </p>
           </div>
           <div>
             <h4 className="font-medium mb-1">Can I cancel anytime?</h4>
             <p className="text-sm text-muted-foreground">
-              Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period.
+              Yes, you can cancel your subscription at any time through the Stripe Customer Portal. You'll continue to have access until the end of your billing period.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-medium mb-1">How do I manage my subscription?</h4>
+            <p className="text-sm text-muted-foreground">
+              Click the "Manage Subscription" button above to access the Stripe Customer Portal where you can update payment methods, view invoices, change plans, or cancel your subscription.
             </p>
           </div>
           <div>
             <h4 className="font-medium mb-1">What payment methods do you accept?</h4>
             <p className="text-sm text-muted-foreground">
               We accept all major credit cards through Stripe's secure payment processing.
-            </p>
-          </div>
-          <div>
-            <h4 className="font-medium mb-1">Is there a refund policy?</h4>
-            <p className="text-sm text-muted-foreground">
-              We offer a 30-day money-back guarantee for all plans. If you're not satisfied, contact us for a full refund.
             </p>
           </div>
         </CardContent>
