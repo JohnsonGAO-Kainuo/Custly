@@ -12,17 +12,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Check,
-  Lock,
+  CreditCard,
   Crown,
   Zap,
   Shield,
   Users,
   BarChart3,
   Clock,
+  Loader2,
 } from "lucide-react";
 import {
   createCheckoutSession,
-  startFreeTrial,
   PRICING,
 } from "../providers/pocketbase/subscriptionService";
 
@@ -37,28 +37,11 @@ const features = [
 export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => {
   const notify = useNotify();
   const [isLoading, setIsLoading] = useState(false);
-
-  const handleStartTrial = async () => {
-    setIsLoading(true);
-    try {
-      const success = await startFreeTrial();
-      if (success) {
-        notify("Your 14-day free trial has started!", { type: "success" });
-        onTrialStarted?.();
-        // Reload the page to reflect the new subscription status
-        window.location.reload();
-      } else {
-        notify("Failed to start trial. You may already have a subscription.", { type: "error" });
-      }
-    } catch (error) {
-      notify("Failed to start trial", { type: "error" });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const handleSelectPlan = async (plan: "monthly" | "yearly" | "lifetime") => {
     setIsLoading(true);
+    setLoadingPlan(plan);
     try {
       const result = await createCheckoutSession(plan);
       if (result.url) {
@@ -70,26 +53,25 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
       notify("Failed to start checkout", { type: "error" });
     } finally {
       setIsLoading(false);
+      setLoadingPlan(null);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full">
-        <CardHeader className="text-center">
+    <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+      <Card className="max-w-3xl w-full my-8">
+        <CardHeader className="text-center pb-2">
           <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-            <Lock className="h-8 w-8 text-primary" />
+            <CreditCard className="h-8 w-8 text-primary" />
           </div>
-          <CardTitle className="text-2xl">
-            Start Your Free Trial
-          </CardTitle>
+          <CardTitle className="text-2xl">Choose Your Plan</CardTitle>
           <CardDescription className="text-base">
-            Get full access to Custly CRM for 14 days. No credit card required.
+            Start with a 14-day free trial. Cancel anytime.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Features List */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 py-4 border-y">
             {features.map((feature, index) => (
               <div key={index} className="flex items-center gap-2 text-sm">
                 <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
@@ -98,60 +80,125 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="space-y-3">
-            <Button
-              className="w-full h-12 text-lg"
-              onClick={handleStartTrial}
-              disabled={isLoading}
+          {/* Pricing Cards */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {/* Monthly */}
+            <Card 
+              className={`relative cursor-pointer transition-all hover:shadow-md ${loadingPlan === 'monthly' ? 'ring-2 ring-primary' : ''}`}
+              onClick={() => !isLoading && handleSelectPlan("monthly")}
             >
-              <Zap className="h-5 w-5 mr-2" />
-              Start 14-Day Free Trial
-            </Button>
-            
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or subscribe now
-                </span>
-              </div>
-            </div>
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-lg">Monthly</CardTitle>
+                <div className="mt-2">
+                  <span className="text-4xl font-bold">${PRICING.monthly.price}</span>
+                  <span className="text-muted-foreground">/mo</span>
+                </div>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Flexible month-to-month
+                </p>
+                <Button 
+                  className="w-full" 
+                  variant="outline"
+                  disabled={isLoading}
+                >
+                  {loadingPlan === 'monthly' ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Start Free Trial"
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  14 days free, then $20/mo
+                </p>
+              </CardContent>
+            </Card>
 
-            <div className="grid grid-cols-3 gap-3">
-              <Button
-                variant="outline"
-                className="flex flex-col h-auto py-3"
-                onClick={() => handleSelectPlan("monthly")}
-                disabled={isLoading}
-              >
-                <span className="font-bold">${PRICING.monthly.price}</span>
-                <span className="text-xs text-muted-foreground">/month</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex flex-col h-auto py-3 border-primary relative"
-                onClick={() => handleSelectPlan("yearly")}
-                disabled={isLoading}
-              >
-                <Badge className="absolute -top-2 text-xs" variant="default">
-                  Save 30%
-                </Badge>
-                <span className="font-bold">${PRICING.yearly.price}</span>
-                <span className="text-xs text-muted-foreground">/year</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="flex flex-col h-auto py-3"
-                onClick={() => handleSelectPlan("lifetime")}
-                disabled={isLoading}
-              >
-                <Crown className="h-4 w-4 text-yellow-500 mb-1" />
-                <span className="font-bold">${PRICING.lifetime.price}</span>
-                <span className="text-xs text-muted-foreground">lifetime</span>
-              </Button>
+            {/* Yearly - Most Popular */}
+            <Card 
+              className={`relative cursor-pointer transition-all hover:shadow-md border-primary ${loadingPlan === 'yearly' ? 'ring-2 ring-primary' : ''}`}
+              onClick={() => !isLoading && handleSelectPlan("yearly")}
+            >
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
+                Save 30%
+              </Badge>
+              <CardHeader className="text-center pb-2 pt-6">
+                <CardTitle className="text-lg">Yearly</CardTitle>
+                <div className="mt-2">
+                  <span className="text-4xl font-bold">${PRICING.yearly.price}</span>
+                  <span className="text-muted-foreground">/yr</span>
+                </div>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Best value for teams
+                </p>
+                <Button 
+                  className="w-full"
+                  disabled={isLoading}
+                >
+                  {loadingPlan === 'yearly' ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Zap className="h-4 w-4 mr-2" />
+                      Start Free Trial
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  14 days free, then $168/yr
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Lifetime */}
+            <Card 
+              className={`relative cursor-pointer transition-all hover:shadow-md ${loadingPlan === 'lifetime' ? 'ring-2 ring-primary' : ''}`}
+              onClick={() => !isLoading && handleSelectPlan("lifetime")}
+            >
+              <CardHeader className="text-center pb-2">
+                <div className="flex items-center justify-center gap-2">
+                  <Crown className="h-5 w-5 text-yellow-500" />
+                  <CardTitle className="text-lg">Lifetime</CardTitle>
+                </div>
+                <div className="mt-2">
+                  <span className="text-4xl font-bold">${PRICING.lifetime.price}</span>
+                  <span className="text-muted-foreground"> once</span>
+                </div>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Pay once, use forever
+                </p>
+                <Button 
+                  className="w-full" 
+                  variant="outline"
+                  disabled={isLoading}
+                >
+                  {loadingPlan === 'lifetime' ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Buy Now"
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground mt-2">
+                  No subscription, lifetime access
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Trust indicators */}
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground pt-2">
+            <div className="flex items-center gap-1">
+              <Shield className="h-4 w-4" />
+              <span>Secure payment</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Check className="h-4 w-4" />
+              <span>Cancel anytime</span>
             </div>
           </div>
 
