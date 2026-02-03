@@ -187,6 +187,26 @@ export const authProvider: AuthProvider = {
 
     // 3) 密码登录
     const { email, password } = params as { email?: string; password?: string };
+    
+    // Debug: log login params
+    // eslint-disable-next-line no-console
+    console.log("[authProvider.login] Password login attempt:", { 
+      email, 
+      hasPassword: !!password, 
+      allParams: Object.keys(params || {})
+    });
+    
+    // Skip if no credentials provided (this may happen during OAuth flows)
+    if (!email && !password) {
+      // eslint-disable-next-line no-console
+      console.log("[authProvider.login] No email/password provided, skipping password login");
+      return;
+    }
+    
+    if (!email || !password) {
+      throw new Error("Email and password are required");
+    }
+    
     const baseUrl = getPocketBaseUrl();
     const response = await fetch(
       `${baseUrl}/api/collections/sales/auth-with-password`,
