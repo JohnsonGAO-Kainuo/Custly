@@ -36,6 +36,11 @@ export namespace getIsInitialized {
   export let _is_initialized_cache: boolean | null = null;
 }
 
+// Helper to clear initialization cache (call after successful login)
+export function clearInitializedCache() {
+  getIsInitialized._is_initialized_cache = null;
+}
+
 const getAvatarUrl = (record: Record<string, unknown>) => {
   const avatar = record.avatar;
   if (!avatar || typeof avatar !== "string") return undefined;
@@ -120,6 +125,8 @@ export const authProvider: AuthProvider = {
 
       try {
         setAuthState({ token: data.token, record: data.record });
+        // Clear initialization cache after successful login so canAccess re-checks
+        clearInitializedCache();
         if (typeof window !== "undefined") {
           const persisted = window.localStorage.getItem("custly_pb_auth");
           // eslint-disable-next-line no-console
@@ -201,9 +208,13 @@ export const authProvider: AuthProvider = {
       record: Record<string, unknown>;
     };
     setAuthState({ token: data.token, record: data.record });
+    // Clear initialization cache after successful login so canAccess re-checks
+    clearInitializedCache();
   },
   logout: async () => {
     clearAuthState();
+    // Clear initialization cache on logout
+    clearInitializedCache();
   },
   checkAuth: async () => {
     // 已有有效 token 直接通过，避免初始化检查把新 OAuth 会话清掉
@@ -263,11 +274,18 @@ export const authProvider: AuthProvider = {
     };
   },
   canAccess: async (params) => {
+    // First check if user has valid auth state (already logged in)
+    const state = getAuthState();
+    if (state?.record && state?.token) {
+      // User is logged in, check role-based access
+      const role = state.record.administrator ? "admin" : "user";
+      return canAccess(role, params);
+    }
+    
+    // No auth state, check if system is initialized
     const isInitialized = await getIsInitialized();
     if (!isInitialized) return false;
-    const state = getAuthState();
-    if (!state?.record) return false;
-    const role = state.record.administrator ? "admin" : "user";
-    return canAccess(role, params);
+    
+    return false;
   },
 };

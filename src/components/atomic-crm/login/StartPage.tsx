@@ -1,15 +1,31 @@
 import { Navigate } from "react-router-dom";
 
-// 最简单的登录态探测：PocketBase 的 auth 状态或已解析的 oauth debug
+// 检测是否有有效的登录态（必须有token）
 const hasPocketBaseAuth = () => {
   if (typeof window === "undefined") return false;
-  return (
-    window.localStorage.getItem("custly_pb_auth") ||
-    window.localStorage.getItem("custly_pb_auth_session") ||
-    window.sessionStorage.getItem("custly_pb_auth") ||
-    window.sessionStorage.getItem("custly_pb_auth_session") ||
-    window.sessionStorage.getItem("custly_oauth_debug")
-  );
+  
+  // 只检查真正的 auth 状态，不依赖 debug 信息
+  const authKeys = [
+    "custly_pb_auth",
+    "custly_pb_auth_session",
+  ];
+  
+  for (const key of authKeys) {
+    const raw = window.localStorage.getItem(key) || window.sessionStorage.getItem(key);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        // 确保有有效的 token 和 record
+        if (parsed?.token && parsed?.record) {
+          return true;
+        }
+      } catch {
+        // 无效的 JSON，忽略
+      }
+    }
+  }
+  
+  return false;
 };
 
 // Supabase/Fakerest 可以在需要时扩展，这里只要能把已登录用户带进主应用即可

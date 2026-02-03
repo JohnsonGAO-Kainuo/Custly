@@ -167,14 +167,14 @@ const collectionsToEnsure = [
       {
         name: "first_name",
         type: "text",
-        required: true,
-        options: { min: 1, max: 80 },
+        required: false, // Changed to false for OAuth support (OAuth may not provide names)
+        options: { min: 0, max: 80 },
       },
       {
         name: "last_name",
         type: "text",
-        required: true,
-        options: { min: 1, max: 80 },
+        required: false, // Changed to false for OAuth support
+        options: { min: 0, max: 80 },
       },
       { name: "administrator", type: "bool", required: false },
       { name: "disabled", type: "bool", required: false },

@@ -70,15 +70,25 @@ export const EnhancedLoginPage = () => {
     const code = params.get("code");
     const state = params.get("state");
     const oauthError = params.get("error");
+    const errorDescription = params.get("error_description");
+
+    // Debug: log OAuth callback params
+    if (code || state || oauthError) {
+      // eslint-disable-next-line no-console
+      console.log("[OAuth Callback]", { code: code?.substring(0, 20) + "...", state, oauthError, errorDescription });
+    }
 
     if (oauthError) {
+      // eslint-disable-next-line no-console
+      console.error("[OAuth Error]", oauthError, errorDescription);
       notify(
-        translate("marketing.auth.login.oauth_failed", {
+        errorDescription || translate("marketing.auth.login.oauth_failed", {
           provider: "OAuth",
         }),
         { type: "error" },
       );
       params.delete("error");
+      params.delete("error_description");
       window.history.replaceState({}, "", `${window.location.pathname}`);
       return;
     }
@@ -86,8 +96,13 @@ export const EnhancedLoginPage = () => {
     if (!code || !state) return;
 
     setIsLoading(true);
+    // eslint-disable-next-line no-console
+    console.log("[OAuth] Starting login with code and state...");
+    
     login({ code, state })
       .then(() => {
+        // eslint-disable-next-line no-console
+        console.log("[OAuth] Login successful!");
         const url = new URL(window.location.href);
         url.searchParams.delete("code");
         url.searchParams.delete("state");
@@ -95,26 +110,41 @@ export const EnhancedLoginPage = () => {
         window.history.replaceState({}, "", url.toString());
         navigate("/", { replace: true });
       })
-      .catch(() => {
-        notify(translate("marketing.auth.login.oauth_failed", { provider: "OAuth" }), {
-          type: "error",
-        });
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error("[OAuth] Login failed:", error);
+        const errorMessage = error?.message || error?.toString() || "Unknown error";
+        notify(errorMessage, { type: "error" });
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [isPocketbase, login, notify, translate]);
+  }, [isPocketbase, login, notify, translate, navigate]);
 
-  // 如果已经有登录态，直接跳转到主页，避免停在登录页
+  // 如果已经有有效登录态，直接跳转到主页
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const hasAuth =
-      window.localStorage.getItem("custly_pb_auth") ||
-      window.localStorage.getItem("custly_pb_auth_session") ||
-      window.sessionStorage.getItem("custly_pb_auth") ||
-      window.sessionStorage.getItem("custly_pb_auth_session") ||
-      window.sessionStorage.getItem("custly_oauth_debug");
-    if (hasAuth) {
+    
+    // 只检查真正的 auth 状态（必须有 token 和 record）
+    const checkValidAuth = () => {
+      const authKeys = ["custly_pb_auth", "custly_pb_auth_session"];
+      for (const key of authKeys) {
+        const raw = window.localStorage.getItem(key) || window.sessionStorage.getItem(key);
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (parsed?.token && parsed?.record) {
+              return true;
+            }
+          } catch {
+            // 无效 JSON
+          }
+        }
+      }
+      return false;
+    };
+    
+    if (checkValidAuth()) {
       navigate("/", { replace: true });
     }
   }, [navigate]);
