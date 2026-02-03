@@ -267,12 +267,19 @@ const requestJson = async <T>(
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
-  const response = await fetch(`${baseUrl}${path}`, {
+  
+  const url = `${baseUrl}${path}`;
+  // eslint-disable-next-line no-console
+  console.log("[requestJson] Fetching:", { url, method: options.method || "GET", hasBody: !!options.body });
+  
+  const response = await fetch(url, {
     ...options,
     headers,
   });
   if (!response.ok) {
     const message = await response.text();
+    // eslint-disable-next-line no-console
+    console.error("[requestJson] Error response:", { status: response.status, message, url });
     const err = new Error(message || "PocketBase request failed") as Error & {
       status?: number;
     };
@@ -498,17 +505,21 @@ const baseDataProvider: DataProvider = {
 const dataProviderWithCustomMethods: CrmDataProvider = {
   ...baseDataProvider,
   async signUp({ email, password, first_name, last_name }: SignUpData) {
+    const body = {
+      email,
+      password,
+      passwordConfirm: password,
+      first_name,
+      last_name,
+    };
+    // eslint-disable-next-line no-console
+    console.log("[signUp] Sending request with body:", { ...body, password: "***", passwordConfirm: "***" });
+    
     const response = await requestJson<Record<string, any>>(
       "/api/collections/sales/records",
       {
         method: "POST",
-        body: JSON.stringify({
-          email,
-          password,
-          passwordConfirm: password,
-          first_name,
-          last_name,
-        }),
+        body: JSON.stringify(body),
       },
     );
 
