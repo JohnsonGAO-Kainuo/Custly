@@ -1,9 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // Stripe Price IDs
 const PRICE_IDS = {
@@ -99,8 +97,9 @@ export default async function handler(
       sessionId: session.id,
       url: session.url,
     });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error creating checkout session:", error);
-    return res.status(500).json({ error: "Failed to create checkout session" });
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    return res.status(500).json({ error: "Failed to create checkout session", details: errorMessage });
   }
 }

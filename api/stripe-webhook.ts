@@ -1,9 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2024-11-20.acacia",
-});
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
 const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;

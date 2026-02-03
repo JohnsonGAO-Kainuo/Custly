@@ -81,6 +81,18 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/subscription/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/subscription/SubscriptionGuard.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/components/atomic-crm/subscription/SubscriptionContext.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/simple-list/SimpleListLoading.tsx",
           "type": "registry:component"
         },
