@@ -388,47 +388,34 @@ const marketingEnglishMessages: TranslationMessages = {
       },
       period: {
         month: "/month",
+        year: "/year",
+        lifetime: "one-time",
       },
       most_popular: "Most Popular",
+      save: "Save",
+      features: {
+        unlimited_contacts: "Unlimited contacts & companies",
+        deal_pipeline: "Deal pipeline management",
+        activity_timeline: "Activity timeline & notes",
+        templates: "Templates & automation",
+        import_export: "Data import/export",
+        email_support: "Email support",
+        priority_support: "Priority support",
+        lifetime_updates: "Lifetime updates included",
+        no_recurring: "No recurring fees",
+      },
       plans: {
-        starter: {
-          name: "Starter",
-          description: "Perfect for small teams getting started",
-          features: {
-            contacts: "Up to 1,000 contacts",
-            basic_crm: "Basic CRM features",
-            email_support: "Email support",
-            storage_5: "5 GB storage",
-            mobile_access: "Mobile app access",
-          },
+        monthly: {
+          name: "Monthly",
+          description: "Flexible month-to-month billing",
         },
-        professional: {
-          name: "Professional",
-          description: "For growing businesses that need more power",
-          features: {
-            contacts: "Up to 10,000 contacts",
-            advanced_crm: "Advanced CRM features",
-            priority_support: "Priority support",
-            storage_50: "50 GB storage",
-            api_access: "API access",
-            custom_fields: "Custom fields",
-            advanced_analytics: "Advanced analytics",
-          },
+        yearly: {
+          name: "Yearly",
+          description: "Best value with annual billing",
         },
-        enterprise: {
-          name: "Enterprise",
-          price: "Custom",
-          description: "For large organizations with complex needs",
-          features: {
-            contacts: "Unlimited contacts",
-            full_suite: "Full CRM suite",
-            dedicated_support: "24/7 dedicated support",
-            storage_unlimited: "Unlimited storage",
-            advanced_api: "Advanced API access",
-            custom_integrations: "Custom integrations",
-            advanced_security: "Advanced security",
-            sla: "SLA guarantee",
-          },
+        lifetime: {
+          name: "Lifetime",
+          description: "Pay once, use forever",
         },
       },
       cta: {

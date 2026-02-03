@@ -12,46 +12,47 @@ export const PricingPage = () => {
 
   const plans = [
     {
-      price: "$29",
-      key: "starter",
+      price: "$20",
+      key: "monthly",
       periodKey: "marketing.pricing_page.period.month",
       featureKeys: [
-        "contacts",
-        "basic_crm",
+        "unlimited_contacts",
+        "deal_pipeline",
+        "activity_timeline",
+        "templates",
+        "import_export",
         "email_support",
-        "storage_5",
-        "mobile_access",
       ],
       popular: false
     },
     {
-      price: "$79",
-      key: "professional",
-      periodKey: "marketing.pricing_page.period.month",
+      price: "$168",
+      key: "yearly",
+      periodKey: "marketing.pricing_page.period.year",
+      savings: "30%",
       featureKeys: [
-        "contacts",
-        "advanced_crm",
+        "unlimited_contacts",
+        "deal_pipeline",
+        "activity_timeline",
+        "templates",
+        "import_export",
         "priority_support",
-        "storage_50",
-        "api_access",
-        "custom_fields",
-        "advanced_analytics",
       ],
       popular: true
     },
     {
-      key: "enterprise",
-      priceKey: "marketing.pricing_page.plans.enterprise.price",
-      periodKey: "",
+      price: "$399",
+      key: "lifetime",
+      periodKey: "marketing.pricing_page.period.lifetime",
       featureKeys: [
-        "contacts",
-        "full_suite",
-        "dedicated_support",
-        "storage_unlimited",
-        "advanced_api",
-        "custom_integrations",
-        "advanced_security",
-        "sla",
+        "unlimited_contacts",
+        "deal_pipeline",
+        "activity_timeline",
+        "templates",
+        "import_export",
+        "priority_support",
+        "lifetime_updates",
+        "no_recurring",
       ],
       popular: false
     }
@@ -136,8 +137,7 @@ export const PricingPage = () => {
             const planDescription = translate(
               `marketing.pricing_page.plans.${plan.key}.description`,
             );
-            const priceLabel =
-              plan.price ?? translate(plan.priceKey ?? "");
+            const priceLabel = plan.price;
             const periodLabel = plan.periodKey
               ? translate(plan.periodKey)
               : "";
@@ -152,7 +152,7 @@ export const PricingPage = () => {
                 {plan.popular && (
                   <div className="absolute top-3 left-1/2 -translate-x-1/2">
                     <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                      {translate("marketing.pricing_page.most_popular")}
+                      {plan.savings ? `${translate("marketing.pricing_page.save")} ${plan.savings}` : translate("marketing.pricing_page.most_popular")}
                     </span>
                   </div>
                 )}
@@ -179,7 +179,7 @@ export const PricingPage = () => {
                         <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                         <span className="text-sm text-muted-foreground">
                           {translate(
-                            `marketing.pricing_page.plans.${plan.key}.features.${featureKey}`,
+                            `marketing.pricing_page.features.${featureKey}`,
                           )}
                         </span>
                       </li>
@@ -191,9 +191,7 @@ export const PricingPage = () => {
                     asChild
                   >
                     <Link to="/sign-up">
-                      {plan.key === "enterprise"
-                        ? translate("marketing.common.contact_sales")
-                        : translate("marketing.common.start_free_trial")}
+                      {translate("marketing.common.start_free_trial")}
                     </Link>
                   </Button>
                 </CardContent>

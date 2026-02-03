@@ -351,47 +351,34 @@ const marketingChineseMessages: TranslationMessages = {
       },
       period: {
         month: "/月",
+        year: "/年",
+        lifetime: "一次性",
       },
       most_popular: "最受欢迎",
+      save: "节省",
+      features: {
+        unlimited_contacts: "无限联系人和公司",
+        deal_pipeline: "商机管道管理",
+        activity_timeline: "活动时间线和笔记",
+        templates: "模板和自动化",
+        import_export: "数据导入/导出",
+        email_support: "邮件支持",
+        priority_support: "优先支持",
+        lifetime_updates: "终身免费更新",
+        no_recurring: "无需周期性付费",
+      },
       plans: {
-        starter: {
-          name: "入门版",
-          description: "适合刚开始的小团队",
-          features: {
-            contacts: "最多 1,000 位联系人",
-            basic_crm: "基础 CRM 功能",
-            email_support: "邮件支持",
-            storage_5: "5 GB 存储空间",
-            mobile_access: "移动应用访问",
-          },
+        monthly: {
+          name: "月付",
+          description: "灵活的按月计费",
         },
-        professional: {
-          name: "专业版",
-          description: "适合需要更多能力的成长型企业",
-          features: {
-            contacts: "最多 10,000 位联系人",
-            advanced_crm: "高级 CRM 功能",
-            priority_support: "优先支持",
-            storage_50: "50 GB 存储空间",
-            api_access: "API 访问",
-            custom_fields: "自定义字段",
-            advanced_analytics: "高级分析",
-          },
+        yearly: {
+          name: "年付",
+          description: "年付最划算",
         },
-        enterprise: {
-          name: "企业版",
-          price: "定制",
-          description: "适合需求复杂的大型组织",
-          features: {
-            contacts: "不限联系人数量",
-            full_suite: "完整 CRM 套件",
-            dedicated_support: "7x24 专属支持",
-            storage_unlimited: "无限存储",
-            advanced_api: "高级 API 访问",
-            custom_integrations: "定制集成",
-            advanced_security: "高级安全",
-            sla: "SLA 保障",
-          },
+        lifetime: {
+          name: "终身",
+          description: "一次付费，永久使用",
         },
       },
       cta: {

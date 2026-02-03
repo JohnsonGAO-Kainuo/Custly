@@ -351,47 +351,34 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
       },
       period: {
         month: "/月",
+        year: "/年",
+        lifetime: "一次性",
       },
       most_popular: "最受歡迎",
+      save: "節省",
+      features: {
+        unlimited_contacts: "無限聯繫人和公司",
+        deal_pipeline: "商機管道管理",
+        activity_timeline: "活動時間線和筆記",
+        templates: "模板和自動化",
+        import_export: "資料匯入/匯出",
+        email_support: "郵件支持",
+        priority_support: "優先支持",
+        lifetime_updates: "終身免費更新",
+        no_recurring: "無需週期性付費",
+      },
       plans: {
-        starter: {
-          name: "入門版",
-          description: "適合剛開始的小團隊",
-          features: {
-            contacts: "最多 1,000 位聯繫人",
-            basic_crm: "基礎 CRM 功能",
-            email_support: "郵件支持",
-            storage_5: "5 GB 存儲空間",
-            mobile_access: "行動應用存取",
-          },
+        monthly: {
+          name: "月付",
+          description: "靈活的按月計費",
         },
-        professional: {
-          name: "專業版",
-          description: "適合需要更多能力的成長型企業",
-          features: {
-            contacts: "最多 10,000 位聯繫人",
-            advanced_crm: "高級 CRM 功能",
-            priority_support: "優先支持",
-            storage_50: "50 GB 存儲空間",
-            api_access: "API 存取",
-            custom_fields: "自訂欄位",
-            advanced_analytics: "高級分析",
-          },
+        yearly: {
+          name: "年付",
+          description: "年付最划算",
         },
-        enterprise: {
-          name: "企業版",
-          price: "定制",
-          description: "適合需求複雜的大型組織",
-          features: {
-            contacts: "不限聯繫人數量",
-            full_suite: "完整 CRM 套件",
-            dedicated_support: "7x24 專屬支持",
-            storage_unlimited: "無限存儲",
-            advanced_api: "高級 API 存取",
-            custom_integrations: "定制整合",
-            advanced_security: "高級安全",
-            sla: "SLA 保障",
-          },
+        lifetime: {
+          name: "終身",
+          description: "一次付費，永久使用",
         },
       },
       cta: {
