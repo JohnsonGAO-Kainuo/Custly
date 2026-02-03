@@ -220,8 +220,38 @@ export const authProvider: AuthProvider = {
       },
     );
     if (!response.ok) {
-      const message = await response.text();
-      throw new Error(message || "Invalid credentials");
+      const rawBody = await response.text();
+      let errorCode = "invalid_credentials";
+      let errorMessage = "Invalid email or password";
+      
+      try {
+        const errorData = JSON.parse(rawBody) as { message?: string; data?: Record<string, unknown> };
+        const msg = (errorData.message || "").toLowerCase();
+        
+        // PocketBase returns "Failed to authenticate." for invalid credentials
+        // It doesn't distinguish between non-existent user and wrong password for security
+        if (msg.includes("failed to authenticate") || msg.includes("invalid")) {
+          errorCode = "invalid_credentials";
+          errorMessage = "Invalid email or password";
+        } else if (msg.includes("missing") && msg.includes("identity")) {
+          errorCode = "email_required";
+          errorMessage = "Email is required";
+        } else if (msg.includes("missing") && msg.includes("password")) {
+          errorCode = "password_required";
+          errorMessage = "Password is required";
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch {
+        // If we can't parse JSON, use the raw message
+        if (rawBody) {
+          errorMessage = rawBody;
+        }
+      }
+      
+      const error = new Error(errorMessage);
+      (error as any).code = errorCode;
+      throw error;
     }
     const data = (await response.json()) as {
       token: string;

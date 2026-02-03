@@ -36,11 +36,20 @@ export const EnhancedLoginPage = () => {
     setIsLoading(true);
     try {
       await login({ email, password });
+      notify(translate("marketing.auth.login.login_success"), { type: "success" });
       navigate("/", { replace: true });
-    } catch (error) {
-      notify(translate("marketing.auth.login.invalid_credentials"), {
-        type: "error",
-      });
+    } catch (error: any) {
+      // Try to get error code from the error object
+      const errorCode = error?.code || "invalid_credentials";
+      const translationKey = `marketing.auth.login.${errorCode}`;
+      
+      // Try translated message first, fallback to error message or default
+      let errorMessage = translate(translationKey, { _: "" });
+      if (!errorMessage || errorMessage === translationKey) {
+        errorMessage = error?.message || translate("marketing.auth.login.invalid_credentials");
+      }
+      
+      notify(errorMessage, { type: "error" });
     } finally {
       setIsLoading(false);
     }
