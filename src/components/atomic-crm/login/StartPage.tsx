@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 // 检测是否有有效的登录态（必须有token）
 const hasPocketBaseAuth = () => {
@@ -28,14 +28,15 @@ const hasPocketBaseAuth = () => {
   return false;
 };
 
-// Supabase/Fakerest 可以在需要时扩展，这里只要能把已登录用户带进主应用即可
-
+// StartPage: 用于处理初始路由重定向
+// 已登录用户 -> Dashboard (/)
+// 未登录用户 -> Landing Page
 export const StartPage = () => {
   const isAuthenticated = hasPocketBaseAuth();
 
-  // 已登录用户直接进入主应用（选一个资源路由，避免再回 Landing）
   if (isAuthenticated) {
-    return <Navigate to="/companies" replace />;
+    // 已登录用户进入 Dashboard
+    return <Navigate to="/" replace />;
   }
 
   // 未登录用户进入 Marketing Landing

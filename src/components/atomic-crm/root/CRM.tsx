@@ -208,7 +208,7 @@ export const CRM = ({
         {...rest}
       >
         <CustomRoutes noLayout>
-          {!isDemo ? <Route path="/" element={<StartPage />} /> : null}
+          <Route path="/start" element={<StartPage />} />
           <Route path={LandingPage.path} element={<LandingPage />} />
           <Route path={SignupPage.path} element={<SignupPage />} />
           <Route path={PricingPage.path} element={<PricingPage />} />
