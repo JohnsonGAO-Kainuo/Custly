@@ -364,7 +364,29 @@ const baseDataProvider: DataProvider = {
     const response = await requestJson<Record<string, any>>(
       `/api/collections/${normalized}/records/${params.id}`,
     );
-    return { data: mapRecordFiles(normalized, response) };
+    const data = mapRecordFiles(normalized, response);
+    
+    // For companies, calculate nb_contacts and nb_deals
+    if (normalized === "companies") {
+      try {
+        const [contactsRes, dealsRes] = await Promise.all([
+          requestJson<{ totalItems: number }>(
+            `/api/collections/contacts/records?page=1&perPage=1&filter=company_id="${params.id}"`,
+          ),
+          requestJson<{ totalItems: number }>(
+            `/api/collections/deals/records?page=1&perPage=1&filter=company_id="${params.id}"`,
+          ),
+        ]);
+        data.nb_contacts = contactsRes.totalItems;
+        data.nb_deals = dealsRes.totalItems;
+      } catch {
+        // Ignore errors, just don't add the counts
+        data.nb_contacts = 0;
+        data.nb_deals = 0;
+      }
+    }
+    
+    return { data };
   },
   getMany: async (resource, params) => {
     const normalized = normalizeResource(resource);
