@@ -53,17 +53,28 @@ export const SignupPage = () => {
     onError: (error: Error) => {
       // Parse the error message
       let errorMessage = error.message;
+      let shouldRedirectToLogin = false;
+      
       try {
         const parsed = JSON.parse(error.message);
         if (parsed.data?.email?.code === "validation_not_unique") {
           errorMessage = translate("marketing.auth.signup.email_exists");
+          shouldRedirectToLogin = true;
         } else if (parsed.message) {
           errorMessage = parsed.message;
         }
       } catch {
         // Use original message if parsing fails
       }
+      
       notify(errorMessage, { type: "error" });
+      
+      // If email exists, redirect to login after a short delay so user can see the message
+      if (shouldRedirectToLogin) {
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
     },
   });
 
