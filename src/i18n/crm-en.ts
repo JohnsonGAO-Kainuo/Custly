@@ -204,6 +204,7 @@ const crmEnglishMessages: TranslationMessages = {
     menu: {
       users: "Users",
       templates: "Templates",
+      billing: "Billing",
       profile: "My info",
     },
     filters: {

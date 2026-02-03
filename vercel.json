@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/stripe-webhook.ts": {
+      "maxDuration": 30
+    }
+  },
   "redirects": [
     {
       "source": "/demo",
@@ -12,6 +17,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    },
     {
       "source": "/pb/(.*)",
       "destination": "https://pb-custly.kainuotech.com/$1"

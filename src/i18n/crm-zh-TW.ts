@@ -488,6 +488,7 @@ export const crmChineseTraditionalMessages = {
     menu: {
       users: "用戶",
       templates: "模板",
+      billing: "訂閱與帳單",
       profile: "我的資訊",
     },
     filters: {

@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { LayoutGrid, Settings, User } from "lucide-react";
+import { LayoutGrid, Settings, User, CreditCard } from "lucide-react";
 import { CanAccess, useTranslate } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -134,6 +134,12 @@ const ConfigurationMenu = () => {
         <Link to="/templates" className="flex items-center gap-2">
           <LayoutGrid />
           {translate("crm.menu.templates")}
+        </Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem asChild onClick={onClose}>
+        <Link to="/billing" className="flex items-center gap-2">
+          <CreditCard />
+          {translate("crm.menu.billing")}
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild onClick={onClose}>
