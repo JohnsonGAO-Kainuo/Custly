@@ -37,17 +37,33 @@ export const SignupPage = () => {
       login({
         email: data.email,
         password: data.password,
-        redirectTo: "/contacts",
+        redirectTo: "/",
       }).then(() => {
-        notify(translate("marketing.auth.signup.success"));
+        notify(translate("marketing.auth.signup.success"), { type: "success" });
         // FIXME: We should probably provide a hook for that in the ra-core package
         queryClient.invalidateQueries({
           queryKey: ["auth", "canAccess"],
         });
+      }).catch((err) => {
+        // Registration succeeded but login failed - still show success and redirect to login
+        notify(translate("marketing.auth.signup.success_please_login"), { type: "success" });
+        window.location.href = "/login";
       });
     },
-    onError: (error) => {
-      notify(error.message);
+    onError: (error: Error) => {
+      // Parse the error message
+      let errorMessage = error.message;
+      try {
+        const parsed = JSON.parse(error.message);
+        if (parsed.data?.email?.code === "validation_not_unique") {
+          errorMessage = translate("marketing.auth.signup.email_exists");
+        } else if (parsed.message) {
+          errorMessage = parsed.message;
+        }
+      } catch {
+        // Use original message if parsing fails
+      }
+      notify(errorMessage, { type: "error" });
     },
   });
 

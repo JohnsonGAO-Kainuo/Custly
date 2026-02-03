@@ -518,6 +518,7 @@ const marketingChineseMessages: TranslationMessages = {
         sign_up: "注册",
         invalid_credentials: "邮箱或密码错误",
         oauth_failed: "使用 %{provider} 登录失败",
+        login_success: "欢迎回来！",
       },
       signup: {
         title_new: "创建账号",
@@ -538,6 +539,10 @@ const marketingChineseMessages: TranslationMessages = {
         have_account: "已有账号？",
         sign_in: "登录",
         success: "初始用户创建成功",
+        success_please_login: "账号创建成功！请登录。",
+        email_exists: "该邮箱已注册，请直接登录。",
+        registration_failed: "注册失败，请稍后再试。",
+        login_after_signup_failed: "账号已创建，但自动登录失败，请手动登录。",
       },
       reset_request: {
         title: "重置密码",

@@ -26,6 +26,10 @@ export type OAuthProviderInfo = {
 };
 
 export const getPocketBaseUrl = () => {
+  // In production, use /pb proxy; in development, use env var or localhost
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+    return "/pb";
+  }
   return (
     import.meta.env.VITE_POCKETBASE_URL?.trim() || "http://127.0.0.1:8090"
   );

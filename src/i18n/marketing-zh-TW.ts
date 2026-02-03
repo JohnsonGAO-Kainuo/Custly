@@ -518,6 +518,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         sign_up: "註冊",
         invalid_credentials: "郵箱或密碼錯誤",
         oauth_failed: "使用 %{provider} 登錄失敗",
+        login_success: "歡迎回來！",
       },
       signup: {
         title_new: "創建帳號",
@@ -538,6 +539,10 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         have_account: "已有帳號？",
         sign_in: "登錄",
         success: "初始用戶創建成功",
+        success_please_login: "帳號創建成功！請登錄。",
+        email_exists: "該郵箱已註冊，請直接登錄。",
+        registration_failed: "註冊失敗，請稍後再試。",
+        login_after_signup_failed: "帳號已創建，但自動登錄失敗，請手動登錄。",
       },
       reset_request: {
         title: "重置密碼",

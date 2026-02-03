@@ -556,6 +556,7 @@ const marketingEnglishMessages: TranslationMessages = {
         sign_up: "Sign up",
         invalid_credentials: "Invalid email or password",
         oauth_failed: "Failed to sign in with %{provider}",
+        login_success: "Welcome back!",
       },
       signup: {
         title_new: "Create your account",
@@ -577,6 +578,10 @@ const marketingEnglishMessages: TranslationMessages = {
         have_account: "Already have an account?",
         sign_in: "Sign in",
         success: "Initial user successfully created",
+        success_please_login: "Account created successfully! Please sign in.",
+        email_exists: "This email is already registered. Please sign in instead.",
+        registration_failed: "Registration failed. Please try again.",
+        login_after_signup_failed: "Account created but auto-login failed. Please sign in manually.",
       },
       reset_request: {
         title: "Reset your password",
