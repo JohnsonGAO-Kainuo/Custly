@@ -273,7 +273,11 @@ const requestJson = async <T>(
   });
   if (!response.ok) {
     const message = await response.text();
-    throw new Error(message || "PocketBase request failed");
+    const err = new Error(message || "PocketBase request failed") as Error & {
+      status?: number;
+    };
+    err.status = response.status;
+    throw err;
   }
   if (response.status === 204) {
     return {} as T;
@@ -323,10 +327,26 @@ const baseDataProvider: DataProvider = {
     });
     if (sort) search.set("sort", sort);
     if (filter) search.set("filter", filter);
-    const response = await requestJson<{
-      items: Record<string, any>[];
-      totalItems: number;
-    }>(`/api/collections/${normalized}/records?${search.toString()}`);
+    const doFetch = async (withSort: boolean) => {
+      const qs = new URLSearchParams(search);
+      if (!withSort) qs.delete("sort");
+      return requestJson<{
+        items: Record<string, any>[];
+        totalItems: number;
+      }>(`/api/collections/${normalized}/records?${qs.toString()}`);
+    };
+
+    let response;
+    try {
+      response = await doFetch(true);
+    } catch (e: any) {
+      if (sort && e?.status === 400) {
+        // 退化：无效排序字段时再试一次不带 sort
+        response = await doFetch(false);
+      } else {
+        throw e;
+      }
+    }
     return {
       data: response.items.map((record) => mapRecordFiles(normalized, record)),
       total: response.totalItems,
@@ -375,10 +395,26 @@ const baseDataProvider: DataProvider = {
       filter,
     });
     if (sort) search.set("sort", sort);
-    const response = await requestJson<{
-      items: Record<string, any>[];
-      totalItems: number;
-    }>(`/api/collections/${normalized}/records?${search.toString()}`);
+
+    const doFetch = async (withSort: boolean) => {
+      const qs = new URLSearchParams(search);
+      if (!withSort) qs.delete("sort");
+      return requestJson<{
+        items: Record<string, any>[];
+        totalItems: number;
+      }>(`/api/collections/${normalized}/records?${qs.toString()}`);
+    };
+
+    let response;
+    try {
+      response = await doFetch(true);
+    } catch (e: any) {
+      if (sort && e?.status === 400) {
+        response = await doFetch(false);
+      } else {
+        throw e;
+      }
+    }
     return {
       data: response.items.map((record) => mapRecordFiles(normalized, record)),
       total: response.totalItems,
