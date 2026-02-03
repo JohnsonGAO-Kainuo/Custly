@@ -443,6 +443,7 @@ export const LandingPage = () => {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 };
