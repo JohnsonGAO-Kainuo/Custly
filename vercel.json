@@ -13,6 +13,10 @@
   ],
   "rewrites": [
     {
+      "source": "/pb/(.*)",
+      "destination": "https://pb-custly.kainuotech.com/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
