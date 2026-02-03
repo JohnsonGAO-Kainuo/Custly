@@ -290,6 +290,7 @@ const crmEnglishMessages: TranslationMessages = {
     },
     deals: {
       count: "%{smart_count} deal |||| %{smart_count} deals",
+      none: "No Deals",
       label: "deal |||| deals",
       empty_title: "No deals found",
       empty_subtitle: "It seems your deal list is empty.",

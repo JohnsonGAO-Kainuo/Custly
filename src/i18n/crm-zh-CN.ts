@@ -573,8 +573,7 @@ export const crmChineseMessages = {
       },
     },
     deals: {
-      count: "%{smart_count} 笔交易",
-      label: "交易",
+      count: "%{smart_count} 笔交易",      none: "暂无交易",      label: "交易",
       empty_title: "暂无交易",
       empty_subtitle: "你的交易列表目前为空。",
       empty_contacts_subtitle: "你的联系人列表目前为空。",

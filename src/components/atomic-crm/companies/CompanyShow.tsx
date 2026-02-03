@@ -80,55 +80,43 @@ const CompanyShowContent = () => {
                       })
                     : translate("crm.contacts.none")}
                 </TabsTrigger>
-                {record.nb_deals ? (
-                  <TabsTrigger value="deals">
-                    {translate("crm.deals.count", {
-                      smart_count: record.nb_deals,
-                      _: `${record.nb_deals} deals`,
-                    })}
-                  </TabsTrigger>
-                ) : null}
+                <TabsTrigger value="deals">
+                  {record.nb_deals
+                    ? translate("crm.deals.count", {
+                        smart_count: record.nb_deals,
+                        _: `${record.nb_deals} deals`,
+                      })
+                    : translate("crm.deals.none")}
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="activity" className="pt-2">
                 <ActivityLog companyId={record.id} context="company" />
               </TabsContent>
               <TabsContent value="contacts">
-                {record.nb_contacts ? (
-                  <ReferenceManyField
-                    reference="contacts_summary"
-                    target="company_id"
-                    sort={{ field: "last_name", order: "ASC" }}
-                  >
-                    <div className="flex flex-col gap-4">
-                      <div className="flex flex-row justify-end space-x-2 mt-1">
-                        {!!record.nb_contacts && (
-                          <SortButton
-                            fields={["last_name", "first_name", "last_seen"]}
-                          />
-                        )}
-                        <CreateRelatedContactButton />
-                      </div>
-                      <ContactsIterator />
-                    </div>
-                  </ReferenceManyField>
-                ) : (
+                <ReferenceManyField
+                  reference="contacts_summary"
+                  target="company_id"
+                  sort={{ field: "last_name", order: "ASC" }}
+                >
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-row justify-end space-x-2 mt-1">
+                      <SortButton
+                        fields={["last_name", "first_name", "last_seen"]}
+                      />
                       <CreateRelatedContactButton />
                     </div>
+                    <ContactsIterator />
                   </div>
-                )}
+                </ReferenceManyField>
               </TabsContent>
               <TabsContent value="deals">
-                {record.nb_deals ? (
-                  <ReferenceManyField
-                    reference="deals"
-                    target="company_id"
-                    sort={{ field: "name", order: "ASC" }}
-                  >
-                    <DealsIterator />
-                  </ReferenceManyField>
-                ) : null}
+                <ReferenceManyField
+                  reference="deals"
+                  target="company_id"
+                  sort={{ field: "name", order: "ASC" }}
+                >
+                  <DealsIterator />
+                </ReferenceManyField>
               </TabsContent>
             </Tabs>
           </CardContent>
