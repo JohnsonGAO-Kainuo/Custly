@@ -17,7 +17,15 @@ async function getPocketBaseAdminToken(): Promise<string> {
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to authenticate with PocketBase");
+    const errorText = await response.text();
+    console.error("PocketBase auth failed:", {
+      status: response.status,
+      error: errorText,
+      url: POCKETBASE_URL,
+      email: POCKETBASE_ADMIN_EMAIL,
+      hasPassword: !!POCKETBASE_ADMIN_PASSWORD,
+    });
+    throw new Error(`Failed to authenticate with PocketBase: ${response.status} ${errorText}`);
   }
   const data = await response.json();
   return data.token;

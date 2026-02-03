@@ -31,8 +31,9 @@ export default async function handler(
       return res.status(400).json({ error: "Missing stripeCustomerId" });
     }
 
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
+    // Use production domain or fallback to localhost
+    const baseUrl = process.env.NODE_ENV === "production"
+      ? "https://custly-crm.kainuotech.com"
       : "http://localhost:5173";
 
     const session = await stripe.billingPortal.sessions.create({
