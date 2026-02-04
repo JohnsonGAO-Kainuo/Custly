@@ -55,9 +55,6 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
     <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <Card className="max-w-3xl w-full my-8">
         <CardHeader className="text-center pb-2">
-          <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-            <Shield className="h-8 w-8 text-primary" />
-          </div>
           <CardTitle className="text-2xl">Choose Your Plan</CardTitle>
           <CardDescription className="text-base">
             Start with a 14-day free trial. Cancel anytime.
