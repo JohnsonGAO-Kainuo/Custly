@@ -12,13 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   Check,
-  CreditCard,
-  Crown,
-  Zap,
   Shield,
-  Users,
-  BarChart3,
-  Clock,
   Loader2,
 } from "lucide-react";
 import {
@@ -27,11 +21,11 @@ import {
 } from "../providers/pocketbase/subscriptionService";
 
 const features = [
-  { icon: Users, text: "Unlimited contacts & companies" },
-  { icon: BarChart3, text: "Deal pipeline management" },
-  { icon: Clock, text: "Activity timeline" },
-  { icon: Zap, text: "Templates & automation" },
-  { icon: Shield, text: "Data import/export" },
+  "Unlimited contacts & companies",
+  "Deal pipeline management",
+  "Activity timeline",
+  "Templates & automation",
+  "Data import/export",
 ];
 
 export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => {
@@ -62,7 +56,7 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
       <Card className="max-w-3xl w-full my-8">
         <CardHeader className="text-center pb-2">
           <div className="mx-auto mb-4 h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-            <CreditCard className="h-8 w-8 text-primary" />
+            <Shield className="h-8 w-8 text-primary" />
           </div>
           <CardTitle className="text-2xl">Choose Your Plan</CardTitle>
           <CardDescription className="text-base">
@@ -75,13 +69,13 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
             {features.map((feature, index) => (
               <div key={index} className="flex items-center gap-2 text-sm">
                 <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                <span>{feature.text}</span>
+                <span>{feature}</span>
               </div>
             ))}
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
             {/* Monthly */}
             <Card 
               className={`relative cursor-pointer transition-all hover:shadow-md ${loadingPlan === 'monthly' ? 'ring-2 ring-primary' : ''}`}
@@ -89,15 +83,24 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
             >
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-lg">Monthly</CardTitle>
-                <div className="mt-2">
+                <div className="mt-4">
                   <span className="text-4xl font-bold">${PRICING.monthly.price}</span>
                   <span className="text-muted-foreground">/mo</span>
                 </div>
               </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Flexible month-to-month
-                </p>
+              <CardContent className="pt-4">
+                <ul className="space-y-2 mb-6">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span>14-day free trial</span>
+                  </li>
+                </ul>
                 <Button 
                   className="w-full" 
                   variant="outline"
@@ -109,31 +112,38 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                     "Start Free Trial"
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2">
-                  14 days free, then $20/mo
-                </p>
               </CardContent>
             </Card>
 
             {/* Yearly - Most Popular */}
             <Card 
-              className={`relative cursor-pointer transition-all hover:shadow-md border-primary ${loadingPlan === 'yearly' ? 'ring-2 ring-primary' : ''}`}
+              className={`relative cursor-pointer transition-all hover:shadow-md border-primary shadow-lg ${loadingPlan === 'yearly' ? 'ring-2 ring-primary' : ''}`}
               onClick={() => !isLoading && handleSelectPlan("yearly")}
             >
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                Save 30%
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary">
+                Most Popular
               </Badge>
               <CardHeader className="text-center pb-2 pt-6">
                 <CardTitle className="text-lg">Yearly</CardTitle>
-                <div className="mt-2">
+                <div className="mt-4">
                   <span className="text-4xl font-bold">${PRICING.yearly.price}</span>
                   <span className="text-muted-foreground">/yr</span>
                 </div>
+                <p className="text-sm text-muted-foreground mt-1">~$14/month</p>
               </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Best value for teams
-                </p>
+              <CardContent className="pt-4">
+                <ul className="space-y-2 mb-6">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span>14-day free trial</span>
+                  </li>
+                </ul>
                 <Button 
                   className="w-full"
                   disabled={isLoading}
@@ -141,15 +151,9 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                   {loadingPlan === 'yearly' ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <>
-                      <Zap className="h-4 w-4 mr-2" />
-                      Start Free Trial
-                    </>
+                    "Start Free Trial"
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2">
-                  14 days free, then $168/yr
-                </p>
               </CardContent>
             </Card>
 
@@ -159,19 +163,25 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
               onClick={() => !isLoading && handleSelectPlan("lifetime")}
             >
               <CardHeader className="text-center pb-2">
-                <div className="flex items-center justify-center gap-2">
-                  <Crown className="h-5 w-5 text-yellow-500" />
-                  <CardTitle className="text-lg">Lifetime</CardTitle>
-                </div>
-                <div className="mt-2">
+                <CardTitle className="text-lg">Lifetime</CardTitle>
+                <div className="mt-4">
                   <span className="text-4xl font-bold">${PRICING.lifetime.price}</span>
                   <span className="text-muted-foreground"> once</span>
                 </div>
               </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
-                  Pay once, use forever
-                </p>
+              <CardContent className="pt-4">
+                <ul className="space-y-2 mb-6">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-center gap-2 text-sm">
+                      <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                  <li className="flex items-center gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                    <span>No subscription needed</span>
+                  </li>
+                </ul>
                 <Button 
                   className="w-full" 
                   variant="outline"
@@ -183,9 +193,6 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                     "Buy Now"
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground mt-2">
-                  No subscription, lifetime access
-                </p>
               </CardContent>
             </Card>
           </div>
