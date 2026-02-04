@@ -3,6 +3,7 @@ import { matchPath, useLocation, Link } from "react-router";
 import type { ReactNode } from "react";
 import { CreateButton } from "@/components/admin/create-button";
 import { Progress } from "@/components/ui/progress";
+import { TrendingUp } from "lucide-react";
 
 import useAppBarHeight from "../misc/useAppBarHeight";
 import type { Contact } from "../types";
@@ -31,10 +32,9 @@ export const DealEmpty = ({ children }: { children?: ReactNode }) => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img
-        src="./img/empty.svg"
-        alt={translate("crm.deals.empty_title")}
-      />
+      <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+        <TrendingUp className="w-12 h-12 text-primary/60" />
+      </div>
       {contacts && contacts.length > 0 ? (
         <>
           <div className="flex flex-col items-center gap-0">

@@ -1,4 +1,5 @@
 import { CreateButton } from "@/components/admin/create-button";
+import { Users } from "lucide-react";
 
 import useAppBarHeight from "../misc/useAppBarHeight";
 import { ContactImportButton } from "./ContactImportButton";
@@ -12,7 +13,9 @@ export const ContactEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img src="./img/empty.svg" alt="No contacts found" />
+      <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+        <Users className="w-12 h-12 text-primary/60" />
+      </div>
       <div className="flex flex-col gap-0 items-center">
         <h6 className="text-lg font-bold">No contacts found</h6>
         <p className="text-sm text-muted-foreground text-center mb-4">

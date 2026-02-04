@@ -1,5 +1,6 @@
 import { useTranslate } from "ra-core";
 import { CreateButton } from "@/components/admin/create-button";
+import { Building2 } from "lucide-react";
 
 import useAppBarHeight from "../misc/useAppBarHeight";
 
@@ -13,10 +14,9 @@ export const CompanyEmpty = () => {
         height: `calc(100dvh - ${appbarHeight}px)`,
       }}
     >
-      <img
-        src="./img/empty.svg"
-        alt={translate("crm.companies.empty_title")}
-      />
+      <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+        <Building2 className="w-12 h-12 text-primary/60" />
+      </div>
       <div className="flex flex-col gap-0 items-center">
         <h6 className="text-lg font-bold">
           {translate("crm.companies.empty_title")}
