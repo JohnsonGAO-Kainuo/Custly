@@ -110,15 +110,36 @@ export const BillingPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
+  const [isActivating, setIsActivating] = useState(false);
+
   useEffect(() => {
     loadSubscriptionStatus();
     
     // Check for success/canceled query params
     const hash = window.location.hash;
     if (hash.includes("success=true")) {
-      notify("Subscription activated successfully!", { type: "success" });
-      // Clean up URL
-      window.history.replaceState({}, "", window.location.pathname + "#/billing");
+      setIsActivating(true);
+      // Poll until subscription is active (webhook may take a few seconds)
+      let attempts = 0;
+      const maxAttempts = 15;
+      const pollInterval = setInterval(async () => {
+        attempts++;
+        const result = await getSubscriptionStatus();
+        if (result.hasActiveSubscription || attempts >= maxAttempts) {
+          clearInterval(pollInterval);
+          setStatus(result);
+          setIsActivating(false);
+          setIsLoading(false);
+          if (result.hasActiveSubscription) {
+            notify("Subscription activated successfully!", { type: "success" });
+          } else {
+            notify("Subscription is being activated. Please refresh in a moment.", { type: "info" });
+          }
+          // Clean up URL
+          window.history.replaceState({}, "", window.location.pathname + "#/billing");
+        }
+      }, 2000);
+      return () => clearInterval(pollInterval);
     } else if (hash.includes("canceled=true")) {
       notify("Checkout was canceled", { type: "info" });
       window.history.replaceState({}, "", window.location.pathname + "#/billing");
@@ -211,6 +232,15 @@ export const BillingPage = () => {
         return null;
     }
   };
+
+  if (isActivating) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <p className="text-muted-foreground">Activating your subscription...</p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (

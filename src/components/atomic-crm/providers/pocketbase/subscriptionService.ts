@@ -33,13 +33,6 @@ export const PRICE_IDS = {
   lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
 } as const;
 
-// Payment links
-export const PAYMENT_LINKS = {
-  monthly: "https://buy.stripe.com/28E14oggL7iY7QR4JrcV20a",
-  yearly: "https://buy.stripe.com/00w5kE7KfgTy2wxb7PcV20b",
-  lifetime: "https://buy.stripe.com/3cIeVe2pV1YE6MN2BjcV20c",
-} as const;
-
 // Pricing info
 export const PRICING = {
   monthly: {
@@ -120,7 +113,8 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
 
     const now = new Date();
     const isLifetime = subscription.status === "lifetime";
-    const isTrialing = subscription.status === "trialing";
+    const isTrialing = subscription.status === "trialing" &&
+      (!subscription.trial_end || new Date(subscription.trial_end) > now);
     const isActive = subscription.status === "active";
     const hasActiveSubscription = isLifetime || isTrialing || isActive;
 
@@ -227,52 +221,4 @@ export async function openCustomerPortal(): Promise<{ url: string | null; error?
   }
 }
 
-/**
- * Start 14-day free trial for new user
- */
-export async function startFreeTrial(): Promise<boolean> {
-  const baseUrl = getPocketBaseUrl();
-  const token = getAuthToken();
-  const authState = getAuthState();
 
-  if (!token || !authState?.record?.id) {
-    return false;
-  }
-
-  // Check if user already has a subscription
-  const status = await getSubscriptionStatus();
-  if (status.subscription) {
-    return false; // Already has a subscription
-  }
-
-  try {
-    const now = new Date();
-    const trialEnd = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000); // 14 days
-
-    const response = await fetch(
-      `${baseUrl}/api/collections/subscriptions/records`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          sales_id: authState.record.id,
-          status: "trialing",
-          plan_type: "monthly", // Default to monthly after trial
-          trial_start: now.toISOString(),
-          trial_end: trialEnd.toISOString(),
-          current_period_start: now.toISOString(),
-          current_period_end: trialEnd.toISOString(),
-          cancel_at_period_end: false,
-        }),
-      }
-    );
-
-    return response.ok;
-  } catch (error) {
-    console.error("Error starting free trial:", error);
-    return false;
-  }
-}

@@ -78,10 +78,36 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     const handleFocus = () => {
       fetchSubscriptionStatus();
     };
+    const handleHashChange = () => {
+      fetchSubscriptionStatus();
+    };
 
     window.addEventListener("focus", handleFocus);
-    return () => window.removeEventListener("focus", handleFocus);
+    window.addEventListener("hashchange", handleHashChange);
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("hashchange", handleHashChange);
+    };
   }, [fetchSubscriptionStatus]);
+
+  // Poll for subscription activation after payment redirect
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.includes("success=true")) return;
+    if (status.hasActiveSubscription) return;
+
+    let attempts = 0;
+    const maxAttempts = 15;
+    const interval = setInterval(async () => {
+      attempts++;
+      await fetchSubscriptionStatus();
+      if (attempts >= maxAttempts) {
+        clearInterval(interval);
+      }
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [status.hasActiveSubscription, fetchSubscriptionStatus]);
 
   const value: SubscriptionContextValue = {
     ...status,
