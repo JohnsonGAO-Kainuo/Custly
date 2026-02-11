@@ -1,4 +1,4 @@
-import { datatype, lorem, random } from "faker/locale/en_US";
+import { datatype, random } from "faker/locale/en_US";
 
 import { defaultTaskTypes } from "../../../root/defaultConfiguration";
 import type { Task } from "../../../types";
@@ -35,6 +35,34 @@ export const type: TaskType[] = [
   "None",
 ];
 
+const taskTexts = [
+  "Send follow-up email with pricing details",
+  "Schedule a product demo call",
+  "Prepare proposal document",
+  "Review contract terms with legal",
+  "Send thank-you note after meeting",
+  "Follow up on outstanding invoice",
+  "Share case study and testimonials",
+  "Coordinate with technical team on requirements",
+  "Confirm meeting time for next week",
+  "Send onboarding materials to new contact",
+  "Update CRM with latest call notes",
+  "Check in on project progress",
+  "Arrange lunch meeting to discuss partnership",
+  "Prepare quarterly business review slides",
+  "Discuss renewal options before contract expires",
+  "Introduce contact to customer success manager",
+  "Send product roadmap update",
+  "Follow up on demo feedback",
+  "Request referral from satisfied customer",
+  "Schedule annual review meeting",
+  "Ship product samples to prospect",
+  "Send holiday greeting to key accounts",
+  "Verify contact information is up to date",
+  "Draft custom solution proposal",
+  "Follow up on support ticket resolution",
+];
+
 export const generateTasks = (db: Db) => {
   return Array.from(Array(400).keys()).map<Task>((id) => {
     const contact = random.arrayElement(db.contacts);
@@ -43,7 +71,7 @@ export const generateTasks = (db: Db) => {
       id,
       contact_id: contact.id,
       type: random.arrayElement(defaultTaskTypes),
-      text: lorem.sentence(),
+      text: random.arrayElement(taskTexts),
       due_date: randomDate(
         datatype.boolean() ? new Date() : new Date(contact.first_seen),
         new Date(Date.now() + 100 * 24 * 60 * 60 * 1000),

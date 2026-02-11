@@ -26,3 +26,17 @@ export const randomDate = (minDate?: Date, maxDate?: Date) => {
 
 export const randomFloat = (min: number, max: number) =>
   parseFloat(faker.datatype.number({ min, max, precision: 0.01 }).toFixed(2));
+
+export const randomSentences = (
+  templates: string[],
+  count: number,
+): string => {
+  const selected: string[] = [];
+  const available = [...templates];
+  for (let i = 0; i < count && available.length > 0; i++) {
+    const idx = faker.datatype.number(available.length - 1);
+    selected.push(available[idx]);
+    available.splice(idx, 1);
+  }
+  return selected.join("\n\n");
+};

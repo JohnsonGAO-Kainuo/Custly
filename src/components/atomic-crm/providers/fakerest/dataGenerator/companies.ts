@@ -3,7 +3,6 @@ import {
   company,
   datatype,
   internet,
-  lorem,
   phone,
   random,
 } from "faker/locale/en_US";
@@ -24,7 +23,7 @@ export const generateCompanies = (db: Db, size = 55): Required<Company>[] => {
       id,
       name: name,
       logo: {
-        title: lorem.text(1),
+        title: name,
         src: `./logos/${id}.png`,
       } as RAFile,
       sector: random.arrayElement(defaultCompanySectors),
@@ -43,7 +42,18 @@ export const generateCompanies = (db: Db, size = 55): Required<Company>[] => {
       // at least 1/3rd of companies for Jane Doe
       sales_id: datatype.number(2) === 0 ? 0 : random.arrayElement(db.sales).id,
       created_at: randomDate().toISOString(),
-      description: lorem.paragraph(),
+      description: random.arrayElement([
+        "Leading provider of enterprise software solutions with a focus on digital transformation.",
+        "Innovative technology company specializing in cloud infrastructure and DevOps services.",
+        "Full-service digital agency offering web development, design, and marketing solutions.",
+        "Global consulting firm helping businesses optimize operations and drive growth.",
+        "Fast-growing startup disrupting the industry with AI-powered analytics platform.",
+        "Established manufacturer with over 20 years of experience in precision engineering.",
+        "Financial services company providing investment management and advisory services.",
+        "Healthcare technology firm developing solutions for patient care and hospital management.",
+        "E-commerce platform connecting retailers with customers across multiple channels.",
+        "Telecommunications company offering networking, security, and communications services.",
+      ]),
       revenue: random.arrayElement(["$1M", "$10M", "$100M", "$1B"]),
       tax_identifier: random.alphaNumeric(10),
       country: random.arrayElement(["USA", "France", "UK"]),
