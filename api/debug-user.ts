@@ -6,7 +6,7 @@ const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
 
 async function getPocketBaseAdminToken(): Promise<string> {
   const response = await fetch(
-    `${POCKETBASE_URL}/api/admins/auth-with-password`,
+    `${POCKETBASE_URL}/api/collections/_superusers/auth-with-password`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

@@ -1,6 +1,13 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Stripe from "stripe";
 
+// Disable Vercel's default body parsing so we can get the raw body for Stripe signature verification
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
@@ -16,7 +23,7 @@ const PRICE_IDS = {
 
 async function getPocketBaseAdminToken(): Promise<string> {
   const response = await fetch(
-    `${POCKETBASE_URL}/api/admins/auth-with-password`,
+    `${POCKETBASE_URL}/api/collections/_superusers/auth-with-password`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -27,7 +34,9 @@ async function getPocketBaseAdminToken(): Promise<string> {
     }
   );
   if (!response.ok) {
-    throw new Error("Failed to authenticate with PocketBase");
+    const errorText = await response.text();
+    console.error("PocketBase auth failed:", response.status, errorText);
+    throw new Error(`Failed to authenticate with PocketBase: ${response.status}`);
   }
   const data = await response.json();
   return data.token;
@@ -284,6 +293,16 @@ async function handleChargeRefunded(
   }
 }
 
+// Read raw body from request stream for Stripe signature verification
+async function getRawBody(req: VercelRequest): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    req.on("data", (chunk: Buffer) => chunks.push(chunk));
+    req.on("end", () => resolve(Buffer.concat(chunks)));
+    req.on("error", reject);
+  });
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -296,12 +315,19 @@ export default async function handler(
   const sig = req.headers["stripe-signature"] as string;
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
+  if (!sig) {
+    return res.status(400).json({ error: "Missing stripe-signature header" });
+  }
+
+  if (!webhookSecret || webhookSecret.startsWith("whsec_placeholder")) {
+    console.error("STRIPE_WEBHOOK_SECRET not configured");
+    return res.status(500).json({ error: "Webhook secret not configured" });
+  }
+
   let event: Stripe.Event;
 
   try {
-    // Get raw body for signature verification
-    const rawBody =
-      typeof req.body === "string" ? req.body : JSON.stringify(req.body);
+    const rawBody = await getRawBody(req);
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
     console.error("Webhook signature verification failed:", err);
