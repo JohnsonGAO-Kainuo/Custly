@@ -10,8 +10,6 @@ const PRICE_IDS = {
   lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
 };
 
-const TRIAL_DAYS = 14;
-
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -84,7 +82,6 @@ export default async function handler(
         },
       ];
       sessionConfig.subscription_data = {
-        trial_period_days: TRIAL_DAYS,
         metadata: {
           salesId,
           plan,

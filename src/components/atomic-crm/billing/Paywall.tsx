@@ -55,9 +55,9 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
     <div className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <Card className="max-w-3xl w-full my-8">
         <CardHeader className="text-center pb-2">
-          <CardTitle className="text-2xl">Choose Your Plan</CardTitle>
+          <CardTitle className="text-2xl">Your Free Trial Has Ended</CardTitle>
           <CardDescription className="text-base">
-            Start with a 14-day free trial. Cancel anytime.
+            Choose a plan to continue using Custly. Cancel anytime.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -93,10 +93,6 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                       <span>{feature}</span>
                     </li>
                   ))}
-                  <li className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span>14-day free trial</span>
-                  </li>
                 </ul>
                 <Button 
                   className="w-full" 
@@ -106,7 +102,7 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                   {loadingPlan === 'monthly' ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    "Start Free Trial"
+                    "Subscribe Now"
                   )}
                 </Button>
               </CardContent>
@@ -136,10 +132,6 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                       <span>{feature}</span>
                     </li>
                   ))}
-                  <li className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
-                    <span>14-day free trial</span>
-                  </li>
                 </ul>
                 <Button 
                   className="w-full"
@@ -148,7 +140,7 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
                   {loadingPlan === 'yearly' ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    "Start Free Trial"
+                    "Subscribe Now"
                   )}
                 </Button>
               </CardContent>

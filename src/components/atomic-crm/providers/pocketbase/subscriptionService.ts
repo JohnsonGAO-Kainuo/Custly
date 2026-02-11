@@ -101,6 +101,28 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
     const subscription: Subscription | null = data.items?.[0] || null;
 
     if (!subscription) {
+      // No Stripe subscription — check if account is within free trial period
+      const TRIAL_DAYS = 14;
+      const accountCreated = authState.record?.created
+        ? new Date(authState.record.created)
+        : null;
+
+      if (accountCreated) {
+        const now = new Date();
+        const trialEnd = new Date(accountCreated.getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
+        const daysRemaining = Math.max(0, Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)));
+        const isInTrial = now < trialEnd;
+
+        return {
+          hasActiveSubscription: isInTrial,
+          isTrialing: isInTrial,
+          isLifetime: false,
+          subscription: null,
+          daysRemaining: isInTrial ? daysRemaining : 0,
+          canUseCRM: isInTrial,
+        };
+      }
+
       return {
         hasActiveSubscription: false,
         isTrialing: false,

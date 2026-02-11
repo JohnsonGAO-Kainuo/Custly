@@ -62,11 +62,11 @@ export const TrialBanner = () => {
   return (
     <div className={`${bgColor} ${textColor} px-4 py-2 text-center text-sm`}>
       {daysRemaining === 0 ? (
-        <span>Your trial ends today! <a href="/billing" className="underline font-medium">Upgrade now</a> to keep using Custly.</span>
+        <span>Your trial ends today! <a href="/#/billing" className="underline font-medium">Choose a plan</a> to keep using Custly.</span>
       ) : daysRemaining === 1 ? (
-        <span>Your trial ends tomorrow! <a href="/billing" className="underline font-medium">Upgrade now</a> to keep using Custly.</span>
+        <span>Your trial ends tomorrow! <a href="/#/billing" className="underline font-medium">Choose a plan</a> to keep using Custly.</span>
       ) : (
-        <span>{daysRemaining} days left in your free trial. <a href="/billing" className="underline font-medium">View plans</a></span>
+        <span>{daysRemaining} days left in your free trial. <a href="/#/billing" className="underline font-medium">View plans</a></span>
       )}
     </div>
   );

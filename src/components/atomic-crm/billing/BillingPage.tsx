@@ -84,12 +84,6 @@ const PricingCard = ({
               <span>{feature.text}</span>
             </li>
           ))}
-          {plan !== "monthly" && (
-            <li className="flex items-center gap-2 text-sm">
-              <Check className="h-4 w-4 text-green-500" />
-              <span>14-day free trial</span>
-            </li>
-          )}
         </ul>
         <Button
           className="w-full"
@@ -269,7 +263,7 @@ export const BillingPage = () => {
         <p className="text-muted-foreground">
           {status?.hasActiveSubscription
             ? "Manage your subscription and billing"
-            : "Start your 14-day free trial today. Cancel anytime."}
+            : "Choose a plan to continue using Custly. Cancel anytime."}
         </p>
       </div>
 
@@ -354,7 +348,7 @@ export const BillingPage = () => {
           <div>
             <h4 className="font-medium mb-1">What's included in the free trial?</h4>
             <p className="text-sm text-muted-foreground">
-              You get full access to all features for 14 days. A credit card is required to start your trial, but you won't be charged until the trial ends.
+              You get full access to all features for 14 days — no credit card required. When your trial ends, choose a plan to continue.
             </p>
           </div>
           <div>
