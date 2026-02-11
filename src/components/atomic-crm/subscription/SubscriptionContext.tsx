@@ -40,8 +40,19 @@ const SubscriptionContext = createContext<SubscriptionContextValue>(defaultConte
 
 export const useSubscription = () => useContext(SubscriptionContext);
 
+// Detect demo mode from URL
+const isDemoMode = () => {
+  if (typeof window === "undefined") return false;
+  const searchParams = new URLSearchParams(window.location.search);
+  return (
+    window.location.pathname.startsWith("/demo") ||
+    searchParams.get("demo") === "1"
+  );
+};
+
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   const { data: identity, isLoading: identityLoading } = useGetIdentity();
+  const isDemo = isDemoMode();
   const [status, setStatus] = useState<SubscriptionStatus>({
     hasActiveSubscription: false,
     isTrialing: false,
@@ -50,12 +61,14 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     daysRemaining: null,
     canUseCRM: false,
   });
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!isDemo);
 
   // Check if current user is an admin
   const isAdmin = identity?.email ? ADMIN_EMAILS.includes(identity.email as string) : false;
 
   const fetchSubscriptionStatus = useCallback(async () => {
+    // Skip subscription check in demo mode
+    if (isDemo) return;
     if (identityLoading) return;
     
     setIsLoading(true);
@@ -67,7 +80,7 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [identityLoading]);
+  }, [identityLoading, isDemo]);
 
   useEffect(() => {
     fetchSubscriptionStatus();
@@ -111,10 +124,10 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
 
   const value: SubscriptionContextValue = {
     ...status,
-    // Admin users can always use CRM
-    canUseCRM: isAdmin || status.canUseCRM,
-    isLoading: isLoading || identityLoading,
-    isAdmin,
+    // Demo mode and admin users can always use CRM
+    canUseCRM: isDemo || isAdmin || status.canUseCRM,
+    isLoading: isDemo ? false : isLoading || identityLoading,
+    isAdmin: isAdmin || isDemo,
     refresh: fetchSubscriptionStatus,
   };
 
