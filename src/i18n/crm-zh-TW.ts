@@ -484,10 +484,12 @@ export const crmChineseTraditionalMessages = {
       companies: "公司",
       deals: "交易",
       templates: "模板",
+      messages: "消息",
     },
     menu: {
       users: "用戶",
       templates: "模板",
+      messages: "消息",
       billing: "訂閱與帳單",
       profile: "我的資訊",
     },
