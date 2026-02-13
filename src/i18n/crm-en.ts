@@ -200,12 +200,10 @@ const crmEnglishMessages: TranslationMessages = {
       companies: "Companies",
       deals: "Deals",
       templates: "Templates",
-      messages: "Messages",
     },
     menu: {
       users: "Users",
       templates: "Templates",
-      messages: "Messages",
       billing: "Billing",
       profile: "My info",
     },

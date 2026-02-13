@@ -30,7 +30,6 @@ import { PoliciesPage } from "../login/PoliciesPage";
 import { PocketbaseForgotPasswordPage } from "../login/PocketbaseForgotPasswordPage";
 import { PocketbaseResetPasswordPage } from "../login/PocketbaseResetPasswordPage";
 import { BillingPage } from "../billing";
-import { MessagesPage } from "../messages/MessagesPage";
 import {
   authProvider as defaultAuthProvider,
   dataProvider as defaultDataProvider,
@@ -255,7 +254,6 @@ export const CRM = ({
             element={<TemplateCenterPage />}
           />
           <Route path="/billing" element={<BillingPage />} />
-          <Route path="/messages" element={<MessagesPage />} />
         </CustomRoutes>
         <Resource name="deals" {...deals} />
         <Resource name="contacts" {...contacts} />

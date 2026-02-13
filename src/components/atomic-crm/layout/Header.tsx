@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { LayoutGrid, Settings, User, CreditCard, MessageSquare } from "lucide-react";
+import { LayoutGrid, Settings, User, CreditCard } from "lucide-react";
 import { CanAccess, useTranslate } from "ra-core";
 import { Link, matchPath, useLocation } from "react-router";
 import { RefreshButton } from "@/components/admin/refresh-button";
@@ -26,8 +26,6 @@ const Header = () => {
     currentPath = "/deals";
   } else if (matchPath("/templates/*", location.pathname)) {
     currentPath = "/templates";
-  } else if (matchPath("/messages/*", location.pathname)) {
-    currentPath = "/messages";
   } else {
     currentPath = false;
   }
@@ -73,11 +71,6 @@ const Header = () => {
                   label={translate("crm.nav.templates")}
                   to="/templates"
                   isActive={currentPath === "/templates"}
-                />
-                <NavigationTab
-                  label={translate("crm.nav.messages")}
-                  to="/messages"
-                  isActive={currentPath === "/messages"}
                 />
               </nav>
             </div>
@@ -141,12 +134,6 @@ const ConfigurationMenu = () => {
         <Link to="/templates" className="flex items-center gap-2">
           <LayoutGrid />
           {translate("crm.menu.templates")}
-        </Link>
-      </DropdownMenuItem>
-      <DropdownMenuItem asChild onClick={onClose}>
-        <Link to="/messages" className="flex items-center gap-2">
-          <MessageSquare />
-          {translate("crm.menu.messages")}
         </Link>
       </DropdownMenuItem>
       <DropdownMenuItem asChild onClick={onClose}>
