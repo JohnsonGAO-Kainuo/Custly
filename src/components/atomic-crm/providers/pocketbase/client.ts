@@ -175,7 +175,9 @@ export const fetchOAuthProviders = async (
       ? `${window.location.origin}/login`
       : "");
   // Pass redirectUrl to PocketBase so it generates correct authUrl with proper redirect_uri
-  const apiUrl = new URL(`${baseUrl}/api/collections/sales/auth-methods`);
+  // Use window.location.origin as base so relative paths like "/pb" resolve correctly
+  const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost";
+  const apiUrl = new URL(`${baseUrl}/api/collections/sales/auth-methods`, origin);
   if (resolvedRedirectUrl) {
     apiUrl.searchParams.set("redirectUrl", resolvedRedirectUrl);
   }

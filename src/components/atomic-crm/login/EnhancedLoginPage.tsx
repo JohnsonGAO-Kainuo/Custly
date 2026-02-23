@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,15 +131,22 @@ export const EnhancedLoginPage = () => {
   }, [isPocketbase, login, notify, translate, navigate]);
 
   // 如果是从根路径 / 被 React Admin 重定向过来的，跳转到 Landing Page
+  // React Admin 通过 router state (nextPathname) 传递重定向信息，不是 URL search params
+  const location = useLocation();
   useEffect(() => {
     if (typeof window === "undefined") return;
+    // 如果正在处理 OAuth 回调，不要重定向
     const params = new URLSearchParams(window.location.search);
-    const redirectTo = params.get("redirectTo");
+    if (params.get("code") || params.get("state") || params.get("error")) return;
+    // 检查 React Admin 的 router state 和 URL search params
+    const redirectFromState = (location.state as any)?.nextPathname;
+    const redirectFromParams = params.get("redirectTo");
+    const redirectTo = redirectFromState || redirectFromParams;
     if (redirectTo === "/" || redirectTo === "%2F") {
       navigate("/landing", { replace: true });
       return;
     }
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   // 如果已经有有效登录态，直接跳转到主页
   useEffect(() => {
