@@ -201,7 +201,7 @@ export const CRM = ({
         authProvider={resolvedAuthProvider}
         store={localStorageStore(undefined, "CRM")}
         layout={Layout}
-        loginPage={EnhancedLoginPage}
+        loginPage={LandingPage}
         i18nProvider={i18nProvider}
         dashboard={Dashboard}
         requireAuth={requireAuth}
@@ -210,7 +210,7 @@ export const CRM = ({
       >
         <CustomRoutes noLayout>
           <Route path="/start" element={<StartPage />} />
-          <Route path={LandingPage.path} element={<LandingPage />} />
+          <Route path={EnhancedLoginPage.path} element={<EnhancedLoginPage />} />
           <Route path={SignupPage.path} element={<SignupPage />} />
           <Route path={PricingPage.path} element={<PricingPage />} />
           <Route path={FeaturesPage.path} element={<FeaturesPage />} />

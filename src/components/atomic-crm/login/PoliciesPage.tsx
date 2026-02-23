@@ -23,7 +23,7 @@ export const PoliciesPage = () => {
           <div className="max-w-5xl mx-auto px-6">
             <div className="flex items-center justify-between h-16">
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/landing">
+                <Link to="/">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   {translate("marketing.common.back_to_home")}
                 </Link>

@@ -83,7 +83,7 @@ export const FeaturesPage = () => {
         <div className="border-b border-border/40 bg-card/30 backdrop-blur-sm">
           <div className="container mx-auto px-6">
             <div className="flex items-center justify-between h-16">
-              <Link to="/landing" className="flex items-center hover:opacity-80 transition-opacity">
+              <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
                 <img src="/logo.svg" alt="Custly" className="h-14 w-auto" />
               </Link>
               <nav className="hidden md:flex gap-1">
@@ -129,7 +129,7 @@ export const FeaturesPage = () => {
       {/* Hero Section */}
       <div className="container mx-auto px-6 py-20">
         <Button variant="ghost" size="sm" asChild className="mb-8">
-          <Link to="/landing">
+          <Link to="/">
             <ArrowLeft className="mr-2 h-4 w-4" />
             {translate("marketing.common.back_to_home")}
           </Link>

@@ -40,5 +40,5 @@ export const StartPage = () => {
   }
 
   // 未登录用户进入 Marketing Landing
-  return <Navigate to="/landing" replace />;
+  return <Navigate to="/" replace />;
 };

@@ -68,7 +68,7 @@ export const LandingPage = () => {
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
-              <Link to="/landing" className="flex items-center gap-3 group">
+              <Link to="/" className="flex items-center gap-3 group">
                 <img src="/logo.svg" alt="Custly" className="h-14 w-auto" />
               </Link>
 
@@ -370,7 +370,7 @@ export const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-3 gap-8 py-10">
             <div className="space-y-4">
-              <Link to="/landing" className="flex items-center gap-2">
+              <Link to="/" className="flex items-center gap-2">
                 <img src="/logo.svg" alt="Custly" className="h-14 w-auto brightness-0 invert" />
               </Link>
               <p className="text-sm text-primary-foreground/70 max-w-xs">
@@ -553,4 +553,4 @@ const FooterLink = ({
   );
 };
 
-LandingPage.path = "/landing";
+LandingPage.path = "/";
