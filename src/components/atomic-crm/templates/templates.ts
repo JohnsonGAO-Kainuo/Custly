@@ -288,7 +288,21 @@ export const deleteCustomTemplateLocal = (id: string) => {
 export const isDemoMode = () => {
   if (typeof window === "undefined") return false;
   const params = new URLSearchParams(window.location.search);
-  return (
-    window.location.pathname.startsWith("/demo") || params.get("demo") === "1"
-  );
+  const fromUrl =
+    window.location.pathname.startsWith("/demo") || params.get("demo") === "1";
+
+  if (fromUrl) {
+    try {
+      sessionStorage.setItem("custly_demo", "1");
+    } catch {
+      // ignore
+    }
+    return true;
+  }
+
+  try {
+    return sessionStorage.getItem("custly_demo") === "1";
+  } catch {
+    return false;
+  }
 };

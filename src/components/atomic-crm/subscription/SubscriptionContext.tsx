@@ -40,14 +40,31 @@ const SubscriptionContext = createContext<SubscriptionContextValue>(defaultConte
 
 export const useSubscription = () => useContext(SubscriptionContext);
 
-// Detect demo mode from URL
+// Detect demo mode from URL or sessionStorage (persists across navigation)
 const isDemoMode = () => {
   if (typeof window === "undefined") return false;
+
   const searchParams = new URLSearchParams(window.location.search);
-  return (
+  const fromUrl =
     window.location.pathname.startsWith("/demo") ||
-    searchParams.get("demo") === "1"
-  );
+    searchParams.get("demo") === "1";
+
+  // Once detected, persist in sessionStorage so it survives URL changes
+  if (fromUrl) {
+    try {
+      sessionStorage.setItem("custly_demo", "1");
+    } catch {
+      // ignore
+    }
+    return true;
+  }
+
+  // Fallback: check sessionStorage in case ?demo=1 was stripped from URL
+  try {
+    return sessionStorage.getItem("custly_demo") === "1";
+  } catch {
+    return false;
+  }
 };
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
