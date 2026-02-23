@@ -136,7 +136,7 @@ export const SignupPage = () => {
         {/* Back to Landing */}
         <div className="flex items-center justify-between mb-6">
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/">
+            <Link to="/landing">
               <ArrowLeft className="mr-2 h-4 w-4" />
               {translate("marketing.common.back_to_home")}
             </Link>

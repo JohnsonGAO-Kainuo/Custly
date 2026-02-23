@@ -445,6 +445,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/login/LoginGateway.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/login/LocaleMenuButton.tsx",
           "type": "registry:component"
         },

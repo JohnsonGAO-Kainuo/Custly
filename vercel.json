@@ -6,11 +6,6 @@
   },
   "redirects": [
     {
-      "source": "/landing",
-      "destination": "/",
-      "permanent": true
-    },
-    {
       "source": "/demo",
       "destination": "/?demo=1",
       "permanent": false

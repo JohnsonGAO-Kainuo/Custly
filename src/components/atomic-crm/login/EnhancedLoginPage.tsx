@@ -130,6 +130,17 @@ export const EnhancedLoginPage = () => {
       });
   }, [isPocketbase, login, notify, translate, navigate]);
 
+  // 如果是从根路径 / 被 React Admin 重定向过来的，跳转到 Landing Page
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const redirectTo = params.get("redirectTo");
+    if (redirectTo === "/" || redirectTo === "%2F") {
+      navigate("/landing", { replace: true });
+      return;
+    }
+  }, [navigate]);
+
   // 如果已经有有效登录态，直接跳转到主页
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -165,7 +176,7 @@ export const EnhancedLoginPage = () => {
         {/* Back to Landing */}
         <div className="flex items-center justify-between mb-6">
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/">
+            <Link to="/landing">
               <ArrowLeft className="mr-2 h-4 w-4" />
               {translate("marketing.common.back_to_home")}
             </Link>
