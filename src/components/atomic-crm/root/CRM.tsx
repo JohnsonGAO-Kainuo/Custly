@@ -19,6 +19,7 @@ import deals from "../deals";
 import { Layout } from "../layout/Layout";
 import { SignupPage } from "../login/SignupPage";
 import { LandingPage } from "../login/LandingPage";
+import { LoginGateway } from "../login/LoginGateway";
 import { StartPage } from "../login/StartPage";
 import { EnhancedLoginPage } from "../login/EnhancedLoginPage";
 import { PricingPage } from "../login/PricingPage";
@@ -201,7 +202,7 @@ export const CRM = ({
         authProvider={resolvedAuthProvider}
         store={localStorageStore(undefined, "CRM")}
         layout={Layout}
-        loginPage={LandingPage}
+        loginPage={LoginGateway}
         i18nProvider={i18nProvider}
         dashboard={Dashboard}
         requireAuth={requireAuth}
