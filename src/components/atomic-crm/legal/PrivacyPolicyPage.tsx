@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export const PrivacyPolicyPage = () => {
   const lastUpdated = "February 4, 2026";
   const companyName = "Kainuo Innovision Tech Co., Limited";
-  const contactEmail = "support@custlycrm.com";
+  const contactEmail = "support@kainuotech.com";
 
   return (
     <div className="min-h-screen bg-background">
