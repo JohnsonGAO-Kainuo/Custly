@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 export const TermsOfServicePage = () => {
   const lastUpdated = "February 4, 2026";
   const companyName = "Kainuo Innovision Tech Co., Limited";
-  const contactEmail = "support@kainuotech.com";
+  const contactEmail = "support@custlycrm.com";
 
   return (
     <div className="min-h-screen bg-background">

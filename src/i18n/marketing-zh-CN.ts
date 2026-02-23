@@ -212,7 +212,7 @@ const marketingChineseMessages: TranslationMessages = {
           },
           contact: {
             title: "联系",
-            body: "如有疑问，请发送邮件至 contact@kainuotech.com。",
+            body: "如有疑问，请发送邮件至 contact@custlycrm.com。",
           },
         },
       },
@@ -234,7 +234,7 @@ const marketingChineseMessages: TranslationMessages = {
           },
           contact: {
             title: "联系",
-            body: "对条款有疑问请联系 contact@kainuotech.com。",
+            body: "对条款有疑问请联系 contact@custlycrm.com。",
           },
         },
       },
@@ -256,7 +256,7 @@ const marketingChineseMessages: TranslationMessages = {
           },
           contact: {
             title: "联系",
-            body: "合规问题请联系 contact@kainuotech.com。",
+            body: "合规问题请联系 contact@custlycrm.com。",
           },
         },
       },

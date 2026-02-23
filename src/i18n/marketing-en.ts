@@ -239,7 +239,7 @@ const marketingEnglishMessages: TranslationMessages = {
           contact: {
             title: "Contact",
             body:
-              "If you have questions, reach out at contact@kainuotech.com.",
+              "If you have questions, reach out at contact@custlycrm.com.",
           },
         },
       },
@@ -266,7 +266,7 @@ const marketingEnglishMessages: TranslationMessages = {
           contact: {
             title: "Contact",
             body:
-              "Questions about these terms? Email contact@kainuotech.com.",
+              "Questions about these terms? Email contact@custlycrm.com.",
           },
         },
       },
@@ -293,7 +293,7 @@ const marketingEnglishMessages: TranslationMessages = {
           contact: {
             title: "Contact",
             body:
-              "Reach out at contact@kainuotech.com for compliance requests.",
+              "Reach out at contact@custlycrm.com for compliance requests.",
           },
         },
       },

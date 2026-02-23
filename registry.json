@@ -397,6 +397,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/messages/MessagesPage.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/login/usePocketbaseOAuthProviders.ts",
           "type": "registry:component"
         },

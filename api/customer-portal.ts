@@ -33,7 +33,7 @@ export default async function handler(
 
     // Use production domain or fallback to localhost
     const baseUrl = process.env.NODE_ENV === "production"
-      ? "https://custly-crm.kainuotech.com"
+      ? "https://custlycrm.com"
       : "http://localhost:5173";
 
     const session = await stripe.billingPortal.sessions.create({

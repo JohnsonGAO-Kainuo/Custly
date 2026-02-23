@@ -409,7 +409,7 @@ export const LandingPage = () => {
                 <FooterLink as={Link} to="/sign-up">
                   {translate("marketing.landing.footer.links.sign_up")}
                 </FooterLink>
-                <FooterLink as="a" href="mailto:contact@kainuotech.com">
+                <FooterLink as="a" href="mailto:contact@custlycrm.com">
                   {translate("marketing.landing.footer.links.contact")}
                 </FooterLink>
               </ul>
