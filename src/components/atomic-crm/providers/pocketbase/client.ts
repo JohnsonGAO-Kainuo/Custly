@@ -174,9 +174,12 @@ export const fetchOAuthProviders = async (
     (typeof window !== "undefined"
       ? `${window.location.origin}/login`
       : "");
-  const response = await fetch(
-    `${baseUrl}/api/collections/sales/auth-methods`,
-  );
+  // Pass redirectUrl to PocketBase so it generates correct authUrl with proper redirect_uri
+  const apiUrl = new URL(`${baseUrl}/api/collections/sales/auth-methods`);
+  if (resolvedRedirectUrl) {
+    apiUrl.searchParams.set("redirectUrl", resolvedRedirectUrl);
+  }
+  const response = await fetch(apiUrl.toString());
   if (!response.ok) {
     return [];
   }
@@ -189,11 +192,14 @@ export const fetchOAuthProviders = async (
       const authUrl = String(provider?.authUrl ?? provider?.authURL ?? "");
       let resolvedAuthUrl = authUrl;
 
+      // Ensure redirect_uri is set correctly even if PocketBase didn't include it
       if (authUrl && resolvedRedirectUrl) {
         try {
           const url = new URL(authUrl);
-          // 强制把 redirect_uri 改成前端的 /login（或传入的 redirectUrl）
-          url.searchParams.set("redirect_uri", resolvedRedirectUrl);
+          const currentRedirect = url.searchParams.get("redirect_uri");
+          if (!currentRedirect) {
+            url.searchParams.set("redirect_uri", resolvedRedirectUrl);
+          }
           resolvedAuthUrl = url.toString();
         } catch {
           resolvedAuthUrl = authUrl;
