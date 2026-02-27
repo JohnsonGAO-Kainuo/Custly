@@ -329,7 +329,7 @@ export const LandingPage = () => {
             <div className="space-y-6">
               <FAQItem question={translate("marketing.landing.faq.items.data_quality")} />
               <FAQItem question={translate("marketing.landing.faq.items.free")} />
-              <FAQItem question={translate("marketing.landing.faq.items.integrations")} />
+              <FAQItem question={translate("marketing.landing.faq.items.trial")} />
               <FAQItem question={translate("marketing.landing.faq.items.built_for")} />
             </div>
           </div>
@@ -356,9 +356,9 @@ export const LandingPage = () => {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild className="min-w-[160px]">
-                <Link to="/login">
+                <a href="mailto:contact@kainuotech.com">
                   {translate("marketing.landing.cta.secondary")}
-                </Link>
+                </a>
               </Button>
             </div>
           </div>

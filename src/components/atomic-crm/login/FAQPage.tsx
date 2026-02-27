@@ -141,7 +141,7 @@ export const FAQPage = () => {
             </CardHeader>
             <CardContent className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" asChild>
-                <a href="mailto:support@custly.com">
+                <a href="mailto:contact@kainuotech.com">
                   {translate("marketing.faq_page.contact.primary")}
                 </a>
               </Button>

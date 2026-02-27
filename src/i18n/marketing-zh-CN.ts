@@ -160,7 +160,7 @@ const marketingChineseMessages: TranslationMessages = {
         items: {
           data_quality: "如何确保数据质量？",
           free: "Custly 是免费的吗？",
-          integrations: "支持哪些集成？",
+          trial: "购买前可以试用吗？",
           built_for: "Custly 适合哪些团队？",
         },
       },
@@ -168,7 +168,7 @@ const marketingChineseMessages: TranslationMessages = {
         kicker: "节省时间，思考更清晰。",
         title: "免费试用 Custly",
         primary: "注册",
-        secondary: "联系销售",
+        secondary: "联系我们",
       },
       footer: {
         tagline: "沉静、现代的 CRM，让客户信息更有条理、更易执行。",

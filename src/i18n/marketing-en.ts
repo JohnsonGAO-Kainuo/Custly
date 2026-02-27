@@ -181,7 +181,7 @@ const marketingEnglishMessages: TranslationMessages = {
         items: {
           data_quality: "How do you ensure data quality?",
           free: "Is Custly free?",
-          integrations: "What integrations do you support?",
+          trial: "Can I try Custly before purchasing?",
           built_for: "Who is Custly built for?",
         },
       },
@@ -189,7 +189,7 @@ const marketingEnglishMessages: TranslationMessages = {
         kicker: "Save time, think better.",
         title: "Try Custly for free",
         primary: "Sign up",
-        secondary: "Talk to sales",
+        secondary: "Contact us",
       },
       footer: {
         tagline:
