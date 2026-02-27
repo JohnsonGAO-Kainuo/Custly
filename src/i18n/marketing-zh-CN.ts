@@ -138,8 +138,8 @@ const marketingChineseMessages: TranslationMessages = {
             description: "使用直观的看板可视化销售流程。",
           },
           email_integration: {
-            title: "邮件集成",
-            description: "自动捕获邮件，跟踪所有沟通记录。",
+            title: "邮件模板",
+            description: "创建可重用的邮件模板，保持客户沟通一致性。",
           },
           task_management: {
             title: "任务管理",
@@ -196,41 +196,41 @@ const marketingChineseMessages: TranslationMessages = {
     legal: {
       privacy: {
         title: "隐私政策",
-        subtitle: "本摘要说明 Custly 如何处理个人数据与账户信息。",
+        subtitle: "本页面说明 Custly 如何处理个人数据与账户信息。",
         sections: {
           overview: {
             title: "概览",
-            body: "Custly 只收集用于创建与运行工作区所需的最少信息。",
+            body: "Custly 仅收集提供服务所需的最少信息：你的姓名、邮箱地址，以及你选择存储的 CRM 数据（联系人、公司、交易、备注和任务）。",
           },
           data: {
             title: "我们存储的数据",
-            body: "账户资料、你上传的 CRM 记录，以及保障安全所需的系统日志。",
+            body: "我们存储你的账户资料、你创建的 CRM 记录，以及用于安全和故障排除的基本使用日志。我们不会将你的数据出售给第三方。付款由 Stripe 处理，我们不存储你的信用卡信息。",
           },
           rights: {
             title: "你的选择",
-            body: "你可以随时在管理端导出、更新或删除工作区数据。",
+            body: "你可以随时通过应用程序导出数据。你也可以联系我们请求删除账户，我们会从服务器上移除你的数据。",
           },
           contact: {
             title: "联系",
-            body: "如有疑问，请发送邮件至 contact@kainuotech.com。",
+            body: "如对隐私政策有疑问，请来信 contact@kainuotech.com。",
           },
         },
       },
       terms: {
         title: "服务条款",
-        subtitle: "这些条款说明使用 Custly 与演示环境的基本规则。",
+        subtitle: "这些条款说明使用 Custly 平台和服务的规则。",
         sections: {
           eligibility: {
             title: "适用对象",
-            body: "创建账户即表示你有权代表团队合法使用本服务。",
+            body: "创建账户即表示你已年满 18 岁，且有权代表自己或所属组织同意这些条款。",
           },
           usage: {
             title: "使用规范",
-            body: "请勿滥用平台、尝试绕过安全机制或上传违法内容。",
+            body: "请勿滥用平台、尝试绕过安全机制、上传违法内容或使用自动化工具爬取或过载服务。我们保留暂停违规账户的权利。",
           },
           changes: {
             title: "变更",
-            body: "我们会随着产品迭代更新功能，并通知重要变更。",
+            body: "我们可能会随产品迭代更新这些条款或修改服务。重大变更会通过邮件或应用内通知告知。变更后继续使用表示接受。",
           },
           contact: {
             title: "联系",
@@ -244,19 +244,19 @@ const marketingChineseMessages: TranslationMessages = {
         sections: {
           security: {
             title: "安全",
-            body: "核心操作采用权限控制与审计追踪。",
+            body: "所有连接使用 HTTPS。用户访问通过邮箱/密码认证及可选的 OAuth（Google、GitHub）保护。应用数据存储在安全的数据库中，访问权限限于授权服务。",
           },
           retention: {
             title: "数据保留",
-            body: "数据默认保留至工作区关闭或你提出删除请求。",
+            body: "你的数据在账户活跃期间持续保留。取消订阅后，数据在计费周期结束前仍可访问。你可以联系我们请求完全删除数据。",
           },
           transparency: {
             title: "透明度",
-            body: "我们会记录数据结构与运营实践的重要更新。",
+            body: "Custly 是开源项目，你可以随时在 GitHub 上查看源代码。我们会通知用户数据处理方式的重大变更。",
           },
           contact: {
             title: "联系",
-            body: "合规问题请联系 contact@kainuotech.com。",
+            body: "政策相关问题或数据请求，请联系 contact@kainuotech.com。",
           },
         },
       },
@@ -294,9 +294,9 @@ const marketingChineseMessages: TranslationMessages = {
             "创建、分配并跟踪任务，设置提醒与截止日期。",
         },
         email_integration: {
-          title: "邮件集成",
+          title: "邮件模板",
           description:
-            "与邮箱无缝集成，追踪对话并自动跟进。",
+            "创建和管理邮件模板，保持客户沟通的一致性。",
         },
         advanced_analytics: {
           title: "高级分析",
@@ -304,24 +304,24 @@ const marketingChineseMessages: TranslationMessages = {
             "全面仪表板与报告，实时洞察驱动决策。",
         },
         enterprise_security: {
-          title: "企业级安全",
+          title: "数据安全",
           description:
-            "银行级加密与合规保障，数据安全可靠。",
+            "所有连接采用 HTTPS 加密。支持邮箱/密码及 OAuth 安全认证。",
         },
         workflow_automation: {
-          title: "流程自动化",
+          title: "模板与工作流",
           description:
-            "自动化重复任务，简化流程，节省时间并减少错误。",
+            "使用可自定义模板简化销售流程，保持一致性。",
         },
         api_access: {
-          title: "API 访问",
+          title: "开源项目",
           description:
-            "强大的 REST API 便于自定义集成。",
+            "完全开源，代码在 GitHub 上公开。可查看源代码、贡献或自行部署。",
         },
         mobile_apps: {
-          title: "移动应用",
+          title: "响应式设计",
           description:
-            "iOS 与 Android 全功能应用，随时随地访问 CRM。",
+            "在任何设备的现代浏览器中使用 Custly，支持电脑、平板和手机。",
         },
         role_based_access: {
           title: "基于角色的权限",
@@ -332,12 +332,12 @@ const marketingChineseMessages: TranslationMessages = {
       cta: {
         title: "准备好开始了吗？",
         subtitle:
-          "加入数千家正在使用 Custly 的企业，提升客户关系并推动增长。",
+          "开始 14 天免费试用，体验 Custly 如何帮助你管理客户关系。",
         primary: "开始免费试用",
         secondary: "查看定价",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有权利。",
+        copyright: "© 2026 Custly。保留所有权利。",
         github: "GitHub",
         pricing: "定价",
         support: "支持",
@@ -386,7 +386,7 @@ const marketingChineseMessages: TranslationMessages = {
         link: "查看常见问题 →",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有权利。",
+        copyright: "© 2026 Custly。保留所有权利。",
         github: "GitHub",
         pricing: "定价",
         support: "支持",
@@ -402,87 +402,72 @@ const marketingChineseMessages: TranslationMessages = {
         what_is: {
           question: "什么是 Custly？",
           answer:
-            "Custly 是一款现代、易用的 CRM（客户关系管理）平台，帮助各种规模的企业管理客户关系、跟踪销售管道并增长收入。Custly 采用前沿技术，提供强大功能与直观界面。",
+            "Custly 是一款现代、轻量的 CRM 平台，专为小型团队和成长中的企业设计。它帮助你在一个简洁直观的界面中管理联系人、公司、交易、任务和备注。",
         },
         pricing: {
           question: "Custly 的价格是多少？",
           answer:
-            "Custly 提供三种方案：入门版 $29/月（最多 1,000 联系人）、专业版 $79/月（最多 10,000 联系人）、企业版为定制价格（不限联系人）。所有方案均含 14 天免费试用，无需信用卡。",
+            "Custly 提供三种方案：月付 $20/月、年付 $168/年（节省 30%）、终身 $399 一次性付款。所有方案功能完全相同，包含无限联系人和公司。每个新账号都享有 14 天免费试用，无需信用卡。",
         },
         trial: {
           question: "购买前可以试用吗？",
           answer:
-            "可以。所有方案都提供 14 天免费试用，无需填写付款信息。若不满意，可在试用期内随时取消且不会扣费。",
+            "可以！每个新账号都有 14 天免费试用，可使用所有功能，无需信用卡。你也可以随时通过互动式 Demo 体验，无需创建账号。",
         },
         payment_methods: {
           question: "支持哪些付款方式？",
           answer:
-            "支持 Visa、Mastercard、American Express 等主流信用卡，也支持 PayPal 和年度订阅的银行转账。企业客户可与销售团队协商付款条款。",
+            "我们通过 Stripe 支付处理商接受 Visa、Mastercard、American Express 等主流信用卡和借记卡。所有交易由 Stripe 安全处理。",
         },
         data_security: {
           question: "我的数据安全吗？",
           answer:
-            "当然。我们使用 AES-256 进行静态数据加密，传输采用 TLS 1.3。基础设施托管在通过 SOC 2 Type II 认证的云平台，并进行定期安全审计，符合 GDPR。",
+            "安全。所有数据通过 HTTPS 传输并安全存储。我们使用基于角色的访问控制，只有授权的团队成员才能查看或编辑数据。你的 CRM 数据属于你，可随时导出。",
         },
         data_import: {
           question: "可以导入现有数据吗？",
           answer:
-            "可以。支持从 CSV、Excel 导入，也可从 Salesforce、HubSpot、Pipedrive 等 CRM 迁移。大规模迁移可联系支持团队协助。",
+            "可以。Custly 支持从 CSV 文件导入联系人、公司和交易。你也可以随时将数据导出为标准格式。",
         },
         support: {
           question: "是否提供客户支持？",
           answer:
-            "提供。入门版提供邮件支持（24 小时响应）；专业版提供优先支持（4 小时响应）；企业版提供 7x24 专属支持、专属客户经理与 SLA。",
+            "提供。所有方案均包含邮件支持，你可以通过 contact@kainuotech.com 联系我们，我们会在工作日 24 小时内回复。",
         },
         cancel_subscription: {
           question: "可以随时取消订阅吗？",
           answer:
-            "可以随时取消。取消后可继续使用至当前计费周期结束；不提供按月退款，但可在取消前导出数据。",
+            "可以，你可以随时在账单页面取消订阅。取消后可继续使用至当前计费周期结束。取消前可导出所有数据。",
         },
-        integrations: {
-          question: "是否支持与其他工具集成？",
+        what_features: {
+          question: "包含哪些功能？",
           answer:
-            "支持与 Gmail、Outlook、Slack、Zapier 等工具集成。专业版与企业版提供 API 访问以进行自定义集成，可在集成页面查看完整列表。",
+            "所有方案均包含：无限联系人和公司、看板式交易管道管理、活动时间线和备注、任务管理、数据导入/导出、可自定义模板、团队协作功能。",
         },
-        mobile_app: {
-          question: "移动端包含哪些功能？",
+        difference_plans: {
+          question: "各方案有什么区别？",
           answer:
-            "iOS 与 Android 应用包含完整 CRM 功能：查看/编辑联系人、公司与交易；创建/完成任务；添加备注；查看分析。支持离线使用并在联网后同步。",
+            "三种方案功能完全相同，唯一的区别是计费方式：月付（$20/月）灵活弹性、年付（$168/年）节省 30%、终身（$399 一次性）无需再付费。选择最适合你预算的方案即可。",
         },
-        user_limits: {
-          question: "可添加多少用户？",
+        self_hosted: {
+          question: "Custly 是开源的吗？",
           answer:
-            "入门版包含 5 名用户，专业版包含 20 名用户，企业版不限用户。入门版与专业版可按 $10/人/月购买额外席位。",
+            "是的！Custly 是开源项目，代码在 GitHub 上公开。你可以查看源代码、贡献或自行部署。托管版本 custlycrm.com 提供自动更新的托管体验。",
         },
-        contact_limits: {
-          question: "超出联系人上限怎么办？",
+        data_ownership: {
+          question: "我的数据归谁所有？",
           answer:
-            "我们会在接近上限时通知你。你可以升级套餐或购买额外容量。我们不会锁定账号，但部分功能可能会受到限制直到升级。",
-        },
-        training: {
-          question: "是否提供培训与上手支持？",
-          answer:
-            "提供。所有方案可访问知识库与视频教程；专业版提供上手培训网络研讨会；企业版提供个性化培训与专属支持。",
-        },
-        customization: {
-          question: "可以按业务定制吗？",
-          answer:
-            "可以。所有方案支持自定义字段、标签与管道阶段；专业版与企业版支持高级定制（如自定义流程、自动化规则、品牌定制）。企业客户还可申请定制功能。",
-        },
-        uptime: {
-          question: "可用性保证是多少？",
-          answer:
-            "我们保证所有方案 99.9% 可用性；企业版提供 99.95% SLA，如未达标有赔付。维护安排在低峰期并提前通知。",
+            "归你所有。你的 CRM 数据完全属于你。你可以随时导出所有数据，删除账号后数据将从我们的服务器移除。",
         },
       },
       contact: {
         title: "还有疑问？",
-        subtitle: "我们的支持团队随时帮忙，联系我们后 24 小时内回复。",
+        subtitle: "我们随时为你提供帮助，发送邮件给我们，我们会尽快回复。",
         primary: "联系支持",
         secondary: "开始免费试用",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有权利。",
+        copyright: "© 2026 Custly。保留所有权利。",
         github: "GitHub",
         pricing: "定价",
         support: "支持",

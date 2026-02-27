@@ -25,13 +25,10 @@ export const FAQPage = () => {
     "data_import",
     "support",
     "cancel_subscription",
-    "integrations",
-    "mobile_app",
-    "user_limits",
-    "contact_limits",
-    "training",
-    "customization",
-    "uptime",
+    "what_features",
+    "difference_plans",
+    "self_hosted",
+    "data_ownership",
   ];
 
   return (

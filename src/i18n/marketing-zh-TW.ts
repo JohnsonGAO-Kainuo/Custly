@@ -138,8 +138,8 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
             description: "使用直觀的看板可視化銷售流程。",
           },
           email_integration: {
-            title: "郵件整合",
-            description: "自動捕獲郵件，追蹤所有溝通記錄。",
+            title: "郵件模板",
+            description: "建立可重用的郵件模板，保持客戶溝通一致性。",
           },
           task_management: {
             title: "任務管理",
@@ -196,41 +196,41 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
     legal: {
       privacy: {
         title: "隱私政策",
-        subtitle: "本摘要說明 Custly 如何處理個人資料與帳戶資訊。",
+        subtitle: "本頁面說明 Custly 如何處理個人資料與帳戶資訊。",
         sections: {
           overview: {
             title: "概覽",
-            body: "Custly 僅收集建立與運作工作區所需的最低資訊。",
+            body: "Custly 僅收集提供服務所需的最少資訊：你的姓名、郵箱地址，以及你選擇存儲的 CRM 資料（聯繫人、公司、交易、備註和任務）。",
           },
           data: {
             title: "我們儲存的資料",
-            body: "帳戶資料、你上傳的 CRM 紀錄，以及維護安全所需的系統日誌。",
+            body: "我們儲存你的帳戶資料、你建立的 CRM 記錄，以及用於安全和故障排除的基本使用日誌。我們不會將你的資料出售給第三方。付款由 Stripe 處理，我們不儲存你的信用卡資訊。",
           },
           rights: {
             title: "你的選擇",
-            body: "你可以隨時在管理端匯出、更新或刪除工作區資料。",
+            body: "你可以隨時透過應用程式匯出資料。你也可以聯繫我們請求刪除帳戶，我們會從伺服器上移除你的資料。",
           },
           contact: {
             title: "聯繫",
-            body: "如有疑問，請來信 contact@kainuotech.com。",
+            body: "如對隱私政策有疑問，請來信 contact@kainuotech.com。",
           },
         },
       },
       terms: {
         title: "服務條款",
-        subtitle: "這些條款說明使用 Custly 與示範環境的基本規則。",
+        subtitle: "這些條款說明使用 Custly 平台和服務的規則。",
         sections: {
           eligibility: {
             title: "適用對象",
-            body: "建立帳戶即表示你有權代表團隊合法使用本服務。",
+            body: "建立帳戶即表示你已年滿 18 歲，且有權代表自己或所屬組織同意這些條款。",
           },
           usage: {
             title: "使用規範",
-            body: "請勿濫用平台、嘗試繞過安全機制或上傳違法內容。",
+            body: "請勿濫用平台、嘗試繞過安全機制、上傳違法內容或使用自動化工具爬取或過載服務。我們保留暫停違規帳戶的權利。",
           },
           changes: {
             title: "變更",
-            body: "我們會隨著產品迭代更新功能，並通知重要變更。",
+            body: "我們可能會隨產品迭代更新這些條款或修改服務。重大變更會透過郵件或應用內通知告知。變更後繼續使用表示接受。",
           },
           contact: {
             title: "聯繫",
@@ -244,19 +244,19 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         sections: {
           security: {
             title: "安全",
-            body: "核心操作採用權限控管與稽核追蹤。",
+            body: "所有連接使用 HTTPS。用戶存取透過郵箱/密碼認證及可選的 OAuth（Google、GitHub）保護。應用資料存儲在安全的資料庫中，存取權限限於授權服務。",
           },
           retention: {
             title: "資料保留",
-            body: "資料預設保留至工作區關閉或你提出刪除請求。",
+            body: "你的資料在帳戶活躍期間持續保留。取消訂閱後，資料在計費週期結束前仍可存取。你可以聯繫我們請求完全刪除資料。",
           },
           transparency: {
             title: "透明度",
-            body: "我們會記錄資料結構與營運實務的重要更新。",
+            body: "Custly 是開源專案，你可以隨時在 GitHub 上查看原始碼。我們會通知用戶資料處理方式的重大變更。",
           },
           contact: {
             title: "聯繫",
-            body: "合規問題請聯繫 contact@kainuotech.com。",
+            body: "政策相關問題或資料請求，請聯繫 contact@kainuotech.com。",
           },
         },
       },
@@ -294,9 +294,9 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
             "建立、分配並追蹤任務，設定提醒與截止日期。",
         },
         email_integration: {
-          title: "郵件整合",
+          title: "郵件模板",
           description:
-            "與郵箱無縫整合，追蹤對話並自動跟進。",
+            "建立和管理郵件模板，保持客戶溝通的一致性。",
         },
         advanced_analytics: {
           title: "高級分析",
@@ -304,24 +304,24 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
             "全面儀表板與報告，即時洞察驅動決策。",
         },
         enterprise_security: {
-          title: "企業級安全",
+          title: "資料安全",
           description:
-            "銀行級加密與合規保障，數據安全可靠。",
+            "所有連接採用 HTTPS 加密。支援郵箱/密碼及 OAuth 安全認證。",
         },
         workflow_automation: {
-          title: "流程自動化",
+          title: "模板與工作流",
           description:
-            "自動化重複任務，簡化流程，節省時間並減少錯誤。",
+            "使用可自訂模板簡化銷售流程，保持一致性。",
         },
         api_access: {
-          title: "API 存取",
+          title: "開源項目",
           description:
-            "強大的 REST API 便於自訂整合。",
+            "完全開源，程式碼在 GitHub 上公開。可查看原始碼、貢獻或自行部署。",
         },
         mobile_apps: {
-          title: "行動應用",
+          title: "響應式設計",
           description:
-            "iOS 與 Android 全功能應用，隨時隨地存取 CRM。",
+            "在任何設備的現代瀏覽器中使用 Custly，支援電腦、平板和手機。",
         },
         role_based_access: {
           title: "基於角色的權限",
@@ -332,12 +332,12 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
       cta: {
         title: "準備好開始了嗎？",
         subtitle:
-          "加入數千家正在使用 Custly 的企業，提升客戶關係並推動增長。",
+          "開始 14 天免費試用，體驗 Custly 如何幫助你管理客戶關係。",
         primary: "開始免費試用",
         secondary: "查看定價",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有權利。",
+        copyright: "© 2026 Custly。保留所有權利。",
         github: "GitHub",
         pricing: "定價",
         support: "支持",
@@ -386,7 +386,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         link: "查看常見問題 →",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有權利。",
+        copyright: "© 2026 Custly。保留所有權利。",
         github: "GitHub",
         pricing: "定價",
         support: "支持",
@@ -402,87 +402,72 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         what_is: {
           question: "什麼是 Custly？",
           answer:
-            "Custly 是一款現代、易用的 CRM（客戶關係管理）平台，幫助各種規模的企業管理客戶關係、追蹤銷售管道並增長收入。Custly 採用前沿技術，提供強大功能與直觀介面。",
+            "Custly 是一款現代、輕量的 CRM 平台，專為小型團隊和成長中的企業設計。它幫助你在一個簡潔直觀的介面中管理聯繫人、公司、交易、任務和備註。",
         },
         pricing: {
           question: "Custly 的價格是多少？",
           answer:
-            "Custly 提供三種方案：入門版 $29/月（最多 1,000 聯繫人）、專業版 $79/月（最多 10,000 聯繫人）、企業版為定制價格（不限聯繫人）。所有方案均含 14 天免費試用，無需信用卡。",
+            "Custly 提供三種方案：月付 $20/月、年付 $168/年（節省 30%）、終身 $399 一次性付款。所有方案功能完全相同，包含無限聯繫人和公司。每個新帳號都享有 14 天免費試用，無需信用卡。",
         },
         trial: {
           question: "購買前可以試用嗎？",
           answer:
-            "可以。所有方案都提供 14 天免費試用，無需填寫付款資訊。若不滿意，可在試用期內隨時取消且不會扣費。",
+            "可以！每個新帳號都有 14 天免費試用，可使用所有功能，無需信用卡。你也可以隨時透過互動式 Demo 體驗，無需建立帳號。",
         },
         payment_methods: {
           question: "支援哪些付款方式？",
           answer:
-            "支援 Visa、Mastercard、American Express 等主流信用卡，也支援 PayPal 和年度訂閱的銀行轉帳。企業客戶可與銷售團隊協商付款條款。",
+            "我們透過 Stripe 支付處理商接受 Visa、Mastercard、American Express 等主流信用卡和借記卡。所有交易由 Stripe 安全處理。",
         },
         data_security: {
           question: "我的數據安全嗎？",
           answer:
-            "當然。我們使用 AES-256 進行靜態數據加密，傳輸採用 TLS 1.3。基礎設施託管在通過 SOC 2 Type II 認證的雲平台，並進行定期安全稽核，符合 GDPR。",
+            "安全。所有數據透過 HTTPS 傳輸並安全存儲。我們使用基於角色的存取控制，只有授權的團隊成員才能查看或編輯數據。你的 CRM 數據屬於你，可隨時匯出。",
         },
         data_import: {
           question: "可以導入現有數據嗎？",
           answer:
-            "可以。支援從 CSV、Excel 導入，也可從 Salesforce、HubSpot、Pipedrive 等 CRM 遷移。大規模遷移可聯繫支持團隊協助。",
+            "可以。Custly 支援從 CSV 檔案導入聯繫人、公司和交易。你也可以隨時將數據匯出為標準格式。",
         },
         support: {
           question: "是否提供客戶支持？",
           answer:
-            "提供。入門版提供郵件支持（24 小時回應）；專業版提供優先支持（4 小時回應）；企業版提供 7x24 專屬支持、專屬客戶經理與 SLA。",
+            "提供。所有方案均包含郵件支持，你可以透過 contact@kainuotech.com 聯繫我們，我們會在工作日 24 小時內回覆。",
         },
         cancel_subscription: {
           question: "可以隨時取消訂閱嗎？",
           answer:
-            "可以隨時取消。取消後可繼續使用至當前計費週期結束；不提供按月退款，但可在取消前導出數據。",
+            "可以，你可以隨時在帳單頁面取消訂閱。取消後可繼續使用至當前計費週期結束。取消前可匯出所有數據。",
         },
-        integrations: {
-          question: "是否支援與其他工具整合？",
+        what_features: {
+          question: "包含哪些功能？",
           answer:
-            "支援與 Gmail、Outlook、Slack、Zapier 等工具整合。專業版與企業版提供 API 存取以進行自訂整合，可在整合頁面查看完整列表。",
+            "所有方案均包含：無限聯繫人和公司、看板式交易管道管理、活動時間線和備註、任務管理、數據匯入/匯出、可自訂模板、團隊協作功能。",
         },
-        mobile_app: {
-          question: "行動端包含哪些功能？",
+        difference_plans: {
+          question: "各方案有什麼區別？",
           answer:
-            "iOS 與 Android 應用包含完整 CRM 功能：查看/編輯聯繫人、公司與交易；建立/完成任務；新增備註；查看分析。支援離線使用並在連網後同步。",
+            "三種方案功能完全相同，唯一的區別是計費方式：月付（$20/月）靈活彈性、年付（$168/年）節省 30%、終身（$399 一次性）無需再付費。選擇最適合你預算的方案即可。",
         },
-        user_limits: {
-          question: "可新增多少用戶？",
+        self_hosted: {
+          question: "Custly 是開源的嗎？",
           answer:
-            "入門版包含 5 名用戶，專業版包含 20 名用戶，企業版不限用戶。入門版與專業版可按 $10/人/月購買額外席位。",
+            "是的！Custly 是開源項目，程式碼在 GitHub 上公開。你可以查看原始碼、貢獻或自行部署。託管版本 custlycrm.com 提供自動更新的託管體驗。",
         },
-        contact_limits: {
-          question: "超出聯繫人上限怎麼辦？",
+        data_ownership: {
+          question: "我的數據歸誰所有？",
           answer:
-            "我們會在接近上限時通知你。你可以升級套餐或購買額外容量。我們不會鎖定帳號，但部分功能可能會受到限制直到升級。",
-        },
-        training: {
-          question: "是否提供培訓與上手支持？",
-          answer:
-            "提供。所有方案可存取知識庫與影片教學；專業版提供上手培訓網路研討會；企業版提供個性化培訓與專屬支持。",
-        },
-        customization: {
-          question: "可以按業務定制嗎？",
-          answer:
-            "可以。所有方案支援自訂欄位、標籤與管道階段；專業版與企業版支援高級定制（如自訂流程、自動化規則、品牌定制）。企業客戶還可申請定制功能。",
-        },
-        uptime: {
-          question: "可用性保證是多少？",
-          answer:
-            "我們保證所有方案 99.9% 可用性；企業版提供 99.95% SLA，如未達標有賠付。維護安排在低峰期並提前通知。",
+            "歸你所有。你的 CRM 數據完全屬於你。你可以隨時匯出所有數據，刪除帳號後數據將從我們的伺服器移除。",
         },
       },
       contact: {
         title: "還有疑問？",
-        subtitle: "我們的支持團隊隨時幫忙，聯繫我們後 24 小時內回覆。",
+        subtitle: "我們隨時為你提供幫助，發送郵件給我們，我們會盡快回覆。",
         primary: "聯繫支持",
         secondary: "開始免費試用",
       },
       footer: {
-        copyright: "© 2024 Custly。保留所有權利。",
+        copyright: "© 2026 Custly。保留所有權利。",
         github: "GitHub",
         pricing: "定價",
         support: "支持",

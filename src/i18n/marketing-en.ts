@@ -155,9 +155,9 @@ const marketingEnglishMessages: TranslationMessages = {
               "Visualize your sales pipeline with an intuitive Kanban board interface.",
           },
           email_integration: {
-            title: "Email Integration",
+            title: "Email Templates",
             description:
-              "Capture emails automatically and keep track of all communications.",
+              "Create reusable email templates for consistent customer communication.",
           },
           task_management: {
             title: "Task Management",
@@ -219,49 +219,49 @@ const marketingEnglishMessages: TranslationMessages = {
       privacy: {
         title: "Privacy Policy",
         subtitle:
-          "This summary explains how Custly handles personal data and account information.",
+          "This page explains how Custly handles personal data and account information.",
         sections: {
           overview: {
             title: "Overview",
             body:
-              "Custly collects the minimum information required to create and operate your workspace.",
+              "Custly collects the minimum information needed to provide the service: your name, email address, and the CRM data you choose to store (contacts, companies, deals, notes, and tasks).",
           },
           data: {
             title: "Data we store",
             body:
-              "Account profile data, CRM records you upload, and system logs needed to keep the service secure.",
+              "We store your account profile, the CRM records you create, and basic usage logs for security and troubleshooting. We do not sell your data to third parties. Payment processing is handled by Stripe — we do not store your credit card information.",
           },
           rights: {
             title: "Your choices",
             body:
-              "You can export, update, or delete your workspace data at any time through the admin console.",
+              "You can export your data at any time through the application. You may also request account deletion by contacting us, and we will remove your data from our servers.",
           },
           contact: {
             title: "Contact",
             body:
-              "If you have questions, reach out at contact@kainuotech.com.",
+              "If you have questions about this privacy policy, reach out at contact@kainuotech.com.",
           },
         },
       },
       terms: {
         title: "Terms of Service",
         subtitle:
-          "These terms describe the basic rules for using Custly and our demo environments.",
+          "These terms describe the rules for using the Custly platform and services.",
         sections: {
           eligibility: {
             title: "Eligibility",
             body:
-              "By creating an account you confirm you can legally use the service on behalf of your team.",
+              "By creating an account you confirm you are at least 18 years old and have the legal authority to agree to these terms on behalf of yourself or your organization.",
           },
           usage: {
             title: "Acceptable use",
             body:
-              "Do not misuse the platform, attempt to bypass security, or upload unlawful content.",
+              "You agree not to misuse the platform, attempt to bypass security measures, upload unlawful content, or use automated tools to scrape or overload the service. We reserve the right to suspend accounts that violate these terms.",
           },
           changes: {
             title: "Changes",
             body:
-              "We may update features as the product evolves and will communicate material changes.",
+              "We may update these terms or modify the service as it evolves. Material changes will be communicated via email or in-app notification. Continued use of the service after changes constitutes acceptance.",
           },
           contact: {
             title: "Contact",
@@ -278,22 +278,22 @@ const marketingEnglishMessages: TranslationMessages = {
           security: {
             title: "Security",
             body:
-              "Access is protected with role-based permissions and audit trails for core actions.",
+              "All connections use HTTPS. User access is protected with email/password authentication and optional OAuth (Google, GitHub). Application data is stored in a secured database with access limited to authorized services.",
           },
           retention: {
             title: "Data retention",
             body:
-              "Data is retained for as long as your workspace is active unless you request deletion.",
+              "Your data is retained for as long as your account is active. If you cancel your subscription, your data will remain accessible until the end of the billing period. You may request full data deletion by contacting us.",
           },
           transparency: {
             title: "Transparency",
             body:
-              "We document changes to data structures and operational practices as we iterate.",
+              "Custly is open source. You can review the source code on GitHub at any time. We will notify users of significant changes to data handling practices.",
           },
           contact: {
             title: "Contact",
             body:
-              "Reach out at contact@kainuotech.com for compliance requests.",
+              "For questions about our policies or to make a data-related request, email contact@kainuotech.com.",
           },
         },
       },
@@ -331,9 +331,9 @@ const marketingEnglishMessages: TranslationMessages = {
             "Create, assign, and track tasks. Set reminders and due dates to stay on top of your workflow.",
         },
         email_integration: {
-          title: "Email Integration",
+          title: "Email Templates",
           description:
-            "Seamlessly integrate with your email. Track conversations and automate follow-ups.",
+            "Create and manage email templates for consistent customer communication.",
         },
         advanced_analytics: {
           title: "Advanced Analytics",
@@ -341,24 +341,24 @@ const marketingEnglishMessages: TranslationMessages = {
             "Comprehensive dashboards and reports. Make data-driven decisions with real-time insights.",
         },
         enterprise_security: {
-          title: "Enterprise Security",
+          title: "Data Security",
           description:
-            "Bank-level encryption and compliance. Your data is protected with industry-leading security.",
+            "HTTPS encryption for all connections. Secure authentication with email/password and OAuth support.",
         },
         workflow_automation: {
-          title: "Workflow Automation",
+          title: "Templates & Workflows",
           description:
-            "Automate repetitive tasks and streamline your processes. Save time and reduce errors.",
+            "Use customizable templates to streamline your sales process and maintain consistency.",
         },
         api_access: {
-          title: "API Access",
+          title: "Open Source",
           description:
-            "Powerful REST API for custom integrations. Connect Custly with your existing tools.",
+            "Fully open source on GitHub. Inspect the code, contribute, or self-host your own instance.",
         },
         mobile_apps: {
-          title: "Mobile Apps",
+          title: "Responsive Design",
           description:
-            "Full-featured iOS and Android apps. Access your CRM anywhere, anytime.",
+            "Access Custly from any device with a modern browser. Works on desktop, tablet, and mobile.",
         },
         role_based_access: {
           title: "Role-Based Access",
@@ -369,12 +369,12 @@ const marketingEnglishMessages: TranslationMessages = {
       cta: {
         title: "Ready to get started?",
         subtitle:
-          "Join thousands of businesses already using Custly to grow their customer relationships.",
+          "Start your 14-day free trial and see how Custly can help you manage customer relationships.",
         primary: "Start free trial",
         secondary: "View pricing",
       },
       footer: {
-        copyright: "© 2024 Custly. All rights reserved.",
+        copyright: "© 2026 Custly. All rights reserved.",
         github: "GitHub",
         pricing: "Pricing",
         support: "Support",
@@ -423,7 +423,7 @@ const marketingEnglishMessages: TranslationMessages = {
         link: "View frequently asked questions →",
       },
       footer: {
-        copyright: "© 2024 Custly. All rights reserved.",
+        copyright: "© 2026 Custly. All rights reserved.",
         github: "GitHub",
         pricing: "Pricing",
         support: "Support",
@@ -439,88 +439,73 @@ const marketingEnglishMessages: TranslationMessages = {
         what_is: {
           question: "What is Custly?",
           answer:
-            "Custly is a modern, user-friendly CRM (Customer Relationship Management) platform designed to help businesses of all sizes manage their customer relationships, track sales pipelines, and grow their revenue. Built with cutting-edge technology, Custly provides powerful features in an intuitive interface.",
+            "Custly is a modern, lightweight CRM platform designed for small teams and growing businesses. It helps you manage contacts, companies, deals, tasks, and notes in one place with a clean, intuitive interface.",
         },
         pricing: {
           question: "How much does Custly cost?",
           answer:
-            "Custly offers three pricing tiers: Starter at $29/month (up to 1,000 contacts), Professional at $79/month (up to 10,000 contacts), and Enterprise with custom pricing (unlimited contacts). All plans include a 14-day free trial with no credit card required.",
+            "Custly offers three plans: Monthly at $20/month, Yearly at $168/year (save 30%), and Lifetime at $399 one-time payment. All plans include the same full feature set with unlimited contacts and companies. Every new account gets a 14-day free trial with no credit card required.",
         },
         trial: {
           question: "Can I try Custly before purchasing?",
           answer:
-            "Yes! All plans come with a 14-day free trial. You can explore all features without entering payment information. If you're not satisfied, you can cancel anytime during the trial period with no charges.",
+            "Yes! Every new account gets a 14-day free trial with full access to all features. No credit card is required to start. You can also try our interactive demo at any time without creating an account.",
         },
         payment_methods: {
           question: "What payment methods do you accept?",
           answer:
-            "We accept all major credit cards (Visa, Mastercard, American Express), PayPal, and bank transfers for annual subscriptions. Enterprise customers can arrange custom payment terms with our sales team.",
+            "We accept all major credit and debit cards (Visa, Mastercard, American Express) through Stripe, our payment processor. All transactions are securely handled by Stripe.",
         },
         data_security: {
           question: "Is my data secure?",
           answer:
-            "Absolutely. We use bank-level encryption (AES-256) for data at rest and TLS 1.3 for data in transit. Our infrastructure is hosted on enterprise-grade cloud providers with SOC 2 Type II certification. We perform regular security audits and are GDPR compliant.",
+            "Yes. Your data is transmitted over HTTPS and stored securely. We use role-based access controls so only authorized team members can view or edit data. Your CRM data belongs to you and can be exported at any time.",
         },
         data_import: {
           question: "Can I import my existing data?",
           answer:
-            "Yes! Custly supports importing data from CSV files, Excel spreadsheets, and can migrate data from other CRM platforms like Salesforce, HubSpot, and Pipedrive. Our support team can assist with large-scale migrations.",
+            "Yes. Custly supports importing contacts, companies, and deals from CSV files. You can also export your data at any time in standard formats.",
         },
         support: {
           question: "Do you offer customer support?",
           answer:
-            "Yes! Starter plans include email support with 24-hour response time. Professional plans get priority support with 4-hour response time. Enterprise customers receive 24/7 dedicated support with a personal account manager and guaranteed SLA.",
+            "Yes. All plans include email support. You can reach us at contact@kainuotech.com and we aim to respond within 24 hours on business days.",
         },
         cancel_subscription: {
           question: "Can I cancel my subscription anytime?",
           answer:
-            "Yes, you can cancel your subscription at any time. If you cancel, you'll retain access until the end of your current billing period. We don't offer refunds for partial months, but you can export all your data before canceling.",
+            "Yes, you can cancel your subscription at any time from the Billing page. After cancellation, you'll retain access until the end of your current billing period. You can export all your data before canceling.",
         },
-        integrations: {
-          question: "Does Custly integrate with other tools?",
+        what_features: {
+          question: "What features are included?",
           answer:
-            "Yes! Custly integrates with popular tools including Gmail, Outlook, Slack, Zapier, and more. Professional and Enterprise plans also include API access for custom integrations. Check our integrations page for the full list.",
+            "All plans include: unlimited contacts and companies, deal pipeline management with Kanban board, activity timeline and notes, task management, data import/export, customizable templates, and team collaboration features.",
         },
-        mobile_app: {
-          question: "What's included in the mobile app?",
+        difference_plans: {
+          question: "What's the difference between plans?",
           answer:
-            "Our mobile apps (iOS and Android) include full CRM functionality: view and edit contacts, companies, and deals; create and complete tasks; add notes; and access analytics. The apps work offline and sync when you're back online.",
+            "All three plans include the same features. The only difference is billing: Monthly ($20/mo) offers flexibility, Yearly ($168/yr) saves 30%, and Lifetime ($399 once) means no recurring payments ever. Choose what works best for your budget.",
         },
-        user_limits: {
-          question: "How many users can I have?",
+        self_hosted: {
+          question: "Is Custly open source?",
           answer:
-            "Starter plans include 5 users, Professional plans include 20 users, and Enterprise plans have unlimited users. Additional user seats can be purchased for Starter and Professional plans at $10/user/month.",
+            "Yes! Custly is open source and available on GitHub. You can view the source code, contribute, or self-host it. The hosted version at custlycrm.com provides a managed experience with automatic updates.",
         },
-        contact_limits: {
-          question: "What happens if I exceed my contact limit?",
+        data_ownership: {
+          question: "Who owns my data?",
           answer:
-            "We'll notify you when you approach your contact limit. You can either upgrade to the next plan or purchase additional contact capacity. We won't lock your account, but some features may be restricted until you upgrade.",
-        },
-        training: {
-          question: "Do you offer training and onboarding?",
-          answer:
-            "Yes! All plans include access to our extensive knowledge base and video tutorials. Professional plans get onboarding webinars, and Enterprise customers receive personalized training sessions and dedicated onboarding support.",
-        },
-        customization: {
-          question: "Can I customize Custly for my business?",
-          answer:
-            "Yes! All plans allow custom fields, tags, and pipeline stages. Professional and Enterprise plans include advanced customization like custom workflows, automation rules, and branding options. Enterprise customers can request custom features.",
-        },
-        uptime: {
-          question: "What's your uptime guarantee?",
-          answer:
-            "We maintain 99.9% uptime for all plans. Enterprise customers receive a 99.95% uptime SLA with financial penalties if we fail to meet it. We perform maintenance during off-peak hours and notify users in advance.",
+            "You do. Your CRM data belongs entirely to you. You can export all your data at any time, and if you delete your account, your data will be removed from our servers.",
         },
       },
       contact: {
         title: "Still have questions?",
         subtitle:
-          "Our support team is here to help. Get in touch and we'll respond within 24 hours.",
+          "We're here to help. Send us an email and we'll get back to you as soon as possible.",
         primary: "Contact support",
         secondary: "Start free trial",
       },
       footer: {
-        copyright: "© 2024 Custly. All rights reserved.",
+        copyright: "© 2026 Custly. All rights reserved.",
         github: "GitHub",
         pricing: "Pricing",
         support: "Support",

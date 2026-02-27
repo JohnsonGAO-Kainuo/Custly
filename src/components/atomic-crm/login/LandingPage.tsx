@@ -60,7 +60,7 @@ export const LandingPage = () => {
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative bg-background">
       <MarketingBackdrop />
       <div className="relative z-10">
         {/* Navigation Header */}
