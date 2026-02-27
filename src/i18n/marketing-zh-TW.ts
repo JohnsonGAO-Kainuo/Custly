@@ -19,7 +19,6 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
       start_free_trial: "開始免費試用",
       view_pricing: "查看定價",
       contact_sales: "聯繫銷售",
-      talk_to_sales: "聯繫銷售",
       contact_support: "聯繫支持",
       support: "支持",
     },

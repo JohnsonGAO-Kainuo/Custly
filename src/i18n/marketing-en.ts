@@ -19,7 +19,6 @@ const marketingEnglishMessages: TranslationMessages = {
       start_free_trial: "Start free trial",
       view_pricing: "View pricing",
       contact_sales: "Contact sales",
-      talk_to_sales: "Talk to sales",
       contact_support: "Contact support",
       support: "Support",
     },
