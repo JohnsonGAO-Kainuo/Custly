@@ -56,7 +56,7 @@ export default async function handler(
       : "http://localhost:5173";
 
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ["card"],
+      payment_method_types: ["card", "alipay"],
       customer_email: email,
       client_reference_id: salesId,
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
