@@ -55,8 +55,13 @@ export default async function handler(
       ? "https://custlycrm.com"
       : "http://localhost:5173";
 
+    // For subscriptions, only card is supported. For one-time payments, add Alipay
+    const paymentMethods = plan === "lifetime" 
+      ? ["card", "alipay"]
+      : ["card"];
+
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: ["card", "alipay"],
+      payment_method_types: paymentMethods,
       customer_email: email,
       client_reference_id: salesId,
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
