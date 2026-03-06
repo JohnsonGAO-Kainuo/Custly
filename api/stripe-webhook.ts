@@ -14,27 +14,32 @@ const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuote
 const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;
 const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
 
-// Stripe Price IDs (all currencies)
-const PRICE_IDS = {
-  // USD
-  "price_1SwmpqJTqJOgtjP4lrV1AlqF": { plan: "monthly" as const },
-  "price_1SwmqAJTqJOgtjP4sfzuJ4Vi": { plan: "yearly" as const },
-  "price_1SwmqMJTqJOgtjP48FPNkAM5": { plan: "lifetime" as const },
-  // HKD
-  "price_1T7rQSJTqJOgtjP4Llsv59Bq": { plan: "monthly" as const },
-  "price_1T7rQSJTqJOgtjP4LM6coUl7": { plan: "yearly" as const },
-  "price_1T7rQSJTqJOgtjP4peRkIycs": { plan: "lifetime" as const },
-  // CNY
-  "price_1T7rQTJTqJOgtjP4lRfPtTJZ": { plan: "monthly" as const },
-  "price_1T7rQTJTqJOgtjP4sC9lfWko": { plan: "yearly" as const },
-  "price_1T7rQSJTqJOgtjP4V9PkyPFc": { plan: "lifetime" as const },
+// Stripe Price IDs — new multi-currency prices + old ones for backward compatibility
+const PRICE_IDS: Record<string, { plan: "monthly" | "yearly" | "lifetime" }> = {
+  // New multi-currency prices (with currency_options: USD/HKD/CNY)
+  "price_1T7rhPJTqJOgtjP4dIDUZYtn": { plan: "monthly" },
+  "price_1T7riQJTqJOgtjP4lV1UxJlB": { plan: "yearly" },
+  "price_1T7rjDJTqJOgtjP4OqKwRmtj": { plan: "lifetime" },
+  // Legacy USD prices (backward compat for any in-flight sessions)
+  "price_1SwmpqJTqJOgtjP4lrV1AlqF": { plan: "monthly" },
+  "price_1SwmqAJTqJOgtjP4sfzuJ4Vi": { plan: "yearly" },
+  "price_1SwmqMJTqJOgtjP48FPNkAM5": { plan: "lifetime" },
+  // Legacy separate HKD prices
+  "price_1T7rQSJTqJOgtjP4Llsv59Bq": { plan: "monthly" },
+  "price_1T7rQSJTqJOgtjP4LM6coUl7": { plan: "yearly" },
+  "price_1T7rQSJTqJOgtjP4peRkIycs": { plan: "lifetime" },
+  // Legacy separate CNY prices
+  "price_1T7rQTJTqJOgtjP4lRfPtTJZ": { plan: "monthly" },
+  "price_1T7rQTJTqJOgtjP4sC9lfWko": { plan: "yearly" },
+  "price_1T7rQSJTqJOgtjP4V9PkyPFc": { plan: "lifetime" },
 };
 
-// Lifetime price IDs for checkout session handling
+// All lifetime price IDs (new + legacy)
 const LIFETIME_PRICE_IDS = [
-  "price_1SwmqMJTqJOgtjP48FPNkAM5",
-  "price_1T7rQSJTqJOgtjP4peRkIycs",
-  "price_1T7rQSJTqJOgtjP4V9PkyPFc",
+  "price_1T7rjDJTqJOgtjP4OqKwRmtj",  // new multi-currency
+  "price_1SwmqMJTqJOgtjP48FPNkAM5",   // legacy USD
+  "price_1T7rQSJTqJOgtjP4peRkIycs",   // legacy HKD
+  "price_1T7rQSJTqJOgtjP4V9PkyPFc",   // legacy CNY
 ];
 
 async function getPocketBaseAdminToken(): Promise<string> {

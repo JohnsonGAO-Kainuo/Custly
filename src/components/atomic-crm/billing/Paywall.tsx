@@ -18,12 +18,7 @@ import {
 import {
   createCheckoutSession,
   PRICING,
-  getDefaultCurrency,
-  saveCurrency,
-  formatPrice,
-  type Currency,
 } from "../providers/pocketbase/subscriptionService";
-import { CurrencySelector } from "./CurrencySelector";
 
 const features = [
   "Unlimited contacts & companies",
@@ -37,20 +32,12 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
   const notify = useNotify();
   const [isLoading, setIsLoading] = useState(false);
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
-  const [currency, setCurrency] = useState<Currency>(getDefaultCurrency());
-
-  const handleCurrencyChange = (c: Currency) => {
-    setCurrency(c);
-    saveCurrency(c);
-  };
-
-  const currentPricing = PRICING[currency];
 
   const handleSelectPlan = async (plan: "monthly" | "yearly" | "lifetime") => {
     setIsLoading(true);
     setLoadingPlan(plan);
     try {
-      const result = await createCheckoutSession(plan, currency);
+      const result = await createCheckoutSession(plan);
       if (result.url) {
         window.location.href = result.url;
       } else {
@@ -85,9 +72,6 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
           </div>
 
           {/* Pricing Cards */}
-          <div className="flex justify-center mb-4">
-            <CurrencySelector value={currency} onChange={handleCurrencyChange} />
-          </div>
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             {/* Monthly */}
             <Card 
@@ -97,7 +81,7 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-lg">Monthly</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{formatPrice(currentPricing.monthly.price, currentPricing.monthly.symbol)}</span>
+                  <span className="text-4xl font-bold">${PRICING.monthly.price}</span>
                   <span className="text-muted-foreground">/mo</span>
                 </div>
               </CardHeader>
@@ -135,11 +119,11 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
               <CardHeader className="text-center pb-2 pt-6">
                 <CardTitle className="text-lg">Yearly</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{formatPrice(currentPricing.yearly.price, currentPricing.yearly.symbol)}</span>
+                  <span className="text-4xl font-bold">${PRICING.yearly.price}</span>
                   <span className="text-muted-foreground">/yr</span>
                 </div>
-                {currentPricing.yearly.savings && (
-                  <p className="text-sm text-primary mt-1">{currentPricing.yearly.savings}</p>
+                {PRICING.yearly.savings && (
+                  <p className="text-sm text-primary mt-1">{PRICING.yearly.savings}</p>
                 )}
               </CardHeader>
               <CardContent className="pt-4">
@@ -172,7 +156,7 @@ export const Paywall = ({ onTrialStarted }: { onTrialStarted?: () => void }) => 
               <CardHeader className="text-center pb-2">
                 <CardTitle className="text-lg">Lifetime</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{formatPrice(currentPricing.lifetime.price, currentPricing.lifetime.symbol)}</span>
+                  <span className="text-4xl font-bold">${PRICING.lifetime.price}</span>
                   <span className="text-muted-foreground"> once</span>
                 </div>
               </CardHeader>

@@ -3,28 +3,12 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-type Currency = "usd" | "hkd" | "cny";
-
-// Stripe Price IDs by currency
-const PRICE_IDS: Record<Currency, { monthly: string; yearly: string; lifetime: string }> = {
-  usd: {
-    monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
-    yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
-    lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
-  },
-  hkd: {
-    monthly: "price_1T7rQSJTqJOgtjP4Llsv59Bq",
-    yearly: "price_1T7rQSJTqJOgtjP4LM6coUl7",
-    lifetime: "price_1T7rQSJTqJOgtjP4peRkIycs",
-  },
-  cny: {
-    monthly: "price_1T7rQTJTqJOgtjP4lRfPtTJZ",
-    yearly: "price_1T7rQTJTqJOgtjP4sC9lfWko",
-    lifetime: "price_1T7rQSJTqJOgtjP4V9PkyPFc",
-  },
-};
-
-const VALID_CURRENCIES: Currency[] = ["usd", "hkd", "cny"];
+// Multi-currency Price IDs (Stripe auto-detects currency by customer IP via currency_options)
+const PRICE_IDS = {
+  monthly: "price_1T7rhPJTqJOgtjP4dIDUZYtn",
+  yearly: "price_1T7riQJTqJOgtjP4lV1UxJlB",
+  lifetime: "price_1T7rjDJTqJOgtjP4OqKwRmtj",
+} as const;
 
 export default async function handler(
   req: VercelRequest,
@@ -49,9 +33,8 @@ export default async function handler(
   }
 
   try {
-    const { plan, currency: rawCurrency, salesId, email, successUrl, cancelUrl } = req.body as {
+    const { plan, salesId, email, successUrl, cancelUrl } = req.body as {
       plan: "monthly" | "yearly" | "lifetime";
-      currency?: string;
       salesId: string;
       email: string;
       successUrl?: string;
@@ -62,13 +45,9 @@ export default async function handler(
       return res.status(400).json({ error: "Missing required fields: plan, salesId, email" });
     }
 
-    const currency: Currency = VALID_CURRENCIES.includes(rawCurrency as Currency)
-      ? (rawCurrency as Currency)
-      : "usd";
-
-    const priceId = PRICE_IDS[currency]?.[plan];
+    const priceId = PRICE_IDS[plan];
     if (!priceId) {
-      return res.status(400).json({ error: "Invalid plan type or currency" });
+      return res.status(400).json({ error: "Invalid plan type" });
     }
 
     // Use production domain or fallback to localhost
@@ -76,13 +55,9 @@ export default async function handler(
       ? "https://custlycrm.com"
       : "http://localhost:5173";
 
-    // For subscriptions, only card is supported. For one-time payments, add Alipay
-    const paymentMethods = plan === "lifetime" 
-      ? ["card", "alipay"]
-      : ["card"];
-
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
-      payment_method_types: paymentMethods,
+      // Let Stripe auto-detect payment methods based on currency and customer location
+      automatic_payment_methods: { enabled: true },
       customer_email: email,
       client_reference_id: salesId,
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
@@ -103,7 +78,7 @@ export default async function handler(
         },
       ];
     } else {
-      // Subscription with 14-day trial
+      // Subscription for monthly/yearly
       sessionConfig.mode = "subscription";
       sessionConfig.line_items = [
         {

@@ -60,10 +60,13 @@ export const TermsOfServicePage = () => {
             </p>
             <h3>4.2 Subscription Plans</h3>
             <ul>
-              <li><strong>Monthly Plan:</strong> Billed monthly (e.g. $20 USD / HK$158 HKD / ¥148 CNY)</li>
-              <li><strong>Yearly Plan:</strong> Billed annually with ~30% savings (e.g. $168 USD / HK$1,288 HKD / ¥1,188 CNY)</li>
-              <li><strong>Lifetime Plan:</strong> One-time payment for perpetual access (e.g. $399 USD / HK$3,088 HKD / ¥2,888 CNY)</li>
+              <li><strong>Monthly Plan:</strong> Billed monthly ($20 USD, with equivalent pricing in other currencies)</li>
+              <li><strong>Yearly Plan:</strong> Billed annually with ~30% savings ($168 USD, with equivalent pricing in other currencies)</li>
+              <li><strong>Lifetime Plan:</strong> One-time payment for perpetual access ($399 USD, with equivalent pricing in other currencies)</li>
             </ul>
+            <p className="text-sm text-muted-foreground mt-2">
+              Prices are automatically shown in your local currency at checkout. We currently support USD, HKD, and CNY.
+            </p>
             <h3>4.3 Payment Processing</h3>
             <p>
               Payments are processed securely through Stripe. By providing payment information, 

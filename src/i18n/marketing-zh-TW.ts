@@ -406,7 +406,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         pricing: {
           question: "Custly 的價格是多少？",
           answer:
-            "Custly 提供三種方案：月付、年付（節省約 30%）、終身（一次性付款）。支援美元（USD）、港幣（HKD）和人民幣（CNY）三種貨幣，你可以在定價頁面自由切換。所有方案功能完全相同，包含無限聯繫人和公司。每個新帳號都享有 14 天免費試用，無需信用卡。",
+            "Custly 提供三種方案：月付（$20/月）、年付（$168/年，節省約 30%）、終身（$399 一次性付款）。結帳時會自動顯示你當地的貨幣價格。所有方案功能完全相同，包含無限聯繫人和公司。每個新帳號都享有 14 天免費試用，無需信用卡。",
         },
         trial: {
           question: "購買前可以試用嗎？",
@@ -416,7 +416,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         payment_methods: {
           question: "支援哪些付款方式？",
           answer:
-            "我們透過 Stripe 支付處理商接受 Visa、Mastercard、American Express 等主流信用卡和借記卡，終身方案還支援支付寶。支援美元、港幣和人民幣三種貨幣。所有交易由 Stripe 安全處理。",
+            "我們透過 Stripe 支付處理商接受 Visa、Mastercard、American Express 等主流信用卡和借記卡、支付寶及其他本地支付方式。結帳時會自動顯示你當地的貨幣價格。所有交易由 Stripe 安全處理。",
         },
         data_security: {
           question: "我的數據安全嗎？",
@@ -446,7 +446,7 @@ const marketingChineseTraditionalMessages: TranslationMessages = {
         difference_plans: {
           question: "各方案有什麼區別？",
           answer:
-            "三種方案功能完全相同，唯一的區別是計費方式：月付靈活彈性、年付節省約 30%、終身一次性付款無需再付費。支援美元、港幣和人民幣三種貨幣，選擇最適合你的方案即可。",
+            "三種方案功能完全相同，唯一的區別是計費方式：月付靈活彈性、年付節省約 30%、終身一次性付款無需再付費。結帳時會自動顯示你當地的貨幣價格。",
         },
         self_hosted: {
           question: "Custly 是開源的嗎？",
