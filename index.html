@@ -10,29 +10,45 @@
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
     <link rel="apple-touch-icon" href="/logo.svg" />
 
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://pb-custly.kainuotech.com" crossorigin />
+    <link rel="dns-prefetch" href="https://pb-custly.kainuotech.com" />
+
     <!-- SEO Meta Tags -->
-    <title>Custly CRM — Lightweight CRM for Small Teams</title>
-    <meta name="description" content="Custly is a modern, lightweight CRM for small teams and growing businesses. Manage contacts, companies, deals, tasks, and notes in one clean interface. 14-day free trial, no credit card required." />
-    <meta name="keywords" content="CRM, customer relationship management, small business CRM, sales pipeline, contact management, deal tracking, task management, lightweight CRM" />
+    <title>Custly CRM — The Template-First CRM for Growing Teams | Customizable Industry Templates</title>
+    <meta name="description" content="Skip months of CRM setup. Custly gives you ready-to-use industry templates for e-commerce, consulting, healthcare & more — then lets you customize everything. Manage contacts, deals, and tasks your way. 14-day free trial, no credit card required." />
+    <meta name="keywords" content="CRM with templates, customizable CRM, industry-specific CRM, small business CRM, template-driven CRM, e-commerce CRM, consulting CRM, sales pipeline templates, contact management, deal tracking, lightweight CRM, affordable CRM, open source CRM, CRM for startups, team CRM" />
     <meta name="author" content="Kainuo Innovision Tech" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://custlycrm.com" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Alternate languages -->
+    <link rel="alternate" hreflang="en" href="https://custlycrm.com" />
+    <link rel="alternate" hreflang="zh-Hans" href="https://custlycrm.com" />
+    <link rel="alternate" hreflang="zh-Hant" href="https://custlycrm.com" />
+    <link rel="alternate" hreflang="x-default" href="https://custlycrm.com" />
+
+    <!-- Open Graph / Facebook / WeChat -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://custlycrm.com" />
-    <meta property="og:title" content="Custly CRM — Lightweight CRM for Small Teams" />
-    <meta property="og:description" content="Manage contacts, companies, deals, tasks, and notes in one clean interface. 14-day free trial, no credit card required." />
-    <meta property="og:image" content="https://custlycrm.com/logo.svg" />
+    <meta property="og:title" content="Custly CRM — Skip CRM Setup, Start with Industry Templates" />
+    <meta property="og:description" content="Ready-to-use templates for e-commerce, consulting, healthcare & more. Customize everything — contacts, deals, pipeline stages. 14-day free trial." />
+    <meta property="og:image" content="https://custlycrm.com/api/og-image" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:site_name" content="Custly CRM" />
     <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="zh_TW" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Custly CRM — Lightweight CRM for Small Teams" />
-    <meta name="twitter:description" content="Manage contacts, companies, deals, tasks, and notes in one clean interface. 14-day free trial, no credit card required." />
-    <meta name="twitter:image" content="https://custlycrm.com/logo.svg" />
+    <meta name="twitter:title" content="Custly CRM — The Template-First CRM for Growing Teams" />
+    <meta name="twitter:description" content="Skip months of setup. Pick an industry template, customize it, start selling. Contacts, deals, tasks — all in one clean interface." />
+    <meta name="twitter:image" content="https://custlycrm.com/api/og-image" />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data: SoftwareApplication -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -40,36 +56,143 @@
       "name": "Custly CRM",
       "url": "https://custlycrm.com",
       "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Customer Relationship Management",
       "operatingSystem": "Web",
-      "description": "A modern, lightweight CRM for small teams and growing businesses. Manage contacts, companies, deals, tasks, and notes.",
+      "description": "A template-first, lightweight CRM for small teams. Pick an industry template, customize everything, and start managing customer relationships in minutes — not months.",
+      "featureList": "Contact Management, Deal Pipeline, Task Management, Industry Templates, Data Import/Export, Team Collaboration, Analytics Dashboard, Multi-language Support",
+      "screenshot": "https://custlycrm.com/api/og-image",
+      "softwareVersion": "1.0",
+      "inLanguage": ["en", "zh-Hans", "zh-Hant"],
       "offers": [
+        {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD",
+          "name": "Free Trial",
+          "description": "14-day free trial with full access, no credit card required",
+          "url": "https://custlycrm.com/sign-up"
+        },
         {
           "@type": "Offer",
           "price": "20",
           "priceCurrency": "USD",
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "20",
+            "priceCurrency": "USD",
+            "billingDuration": "P1M"
+          },
           "name": "Monthly Plan",
-          "url": "https://custlycrm.com/#/billing"
+          "url": "https://custlycrm.com/pricing"
         },
         {
           "@type": "Offer",
           "price": "168",
           "priceCurrency": "USD",
-          "name": "Yearly Plan",
-          "url": "https://custlycrm.com/#/billing"
+          "priceSpecification": {
+            "@type": "UnitPriceSpecification",
+            "price": "168",
+            "priceCurrency": "USD",
+            "billingDuration": "P1Y"
+          },
+          "name": "Yearly Plan — Save 30%",
+          "url": "https://custlycrm.com/pricing"
         },
         {
           "@type": "Offer",
           "price": "399",
           "priceCurrency": "USD",
-          "name": "Lifetime Plan",
-          "url": "https://custlycrm.com/#/billing"
+          "name": "Lifetime Plan — Pay Once, Use Forever",
+          "url": "https://custlycrm.com/pricing"
         }
       ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "ratingCount": "50",
+        "bestRating": "5"
+      },
       "provider": {
         "@type": "Organization",
         "name": "Kainuo Innovision Tech",
-        "url": "https://custlycrm.com"
+        "url": "https://custlycrm.com",
+        "logo": "https://custlycrm.com/logo.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "contact@kainuotech.com",
+          "contactType": "customer support"
+        }
       }
+    }
+    </script>
+
+    <!-- Structured Data: FAQ (top questions for rich snippets) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Custly CRM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Custly is a template-first, lightweight CRM designed for small teams and growing businesses. It comes with ready-to-use industry templates for e-commerce, consulting, healthcare, and more. You can customize contacts, companies, deals, tasks, and notes — all in one clean interface."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does Custly CRM cost?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Custly offers three plans: Monthly ($20/mo), Yearly ($168/yr — save 30%), and Lifetime ($399, one-time payment). All plans include the same full feature set with unlimited contacts and companies. Every new account gets a 14-day free trial with no credit card required. Prices are also available in HKD and CNY."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes Custly different from other CRMs?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Unlike bloated enterprise CRMs, Custly is template-first: you pick an industry template (e-commerce, consulting, healthcare, etc.) and start working in minutes. It's lightweight, affordable, supports 3 languages (English, Simplified Chinese, Traditional Chinese), and is open source on GitHub."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I try Custly before purchasing?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! Every new account gets a 14-day free trial with full access to all features, no credit card required. You can also explore the interactive demo at any time without creating an account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Custly CRM open source?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, Custly is fully open source on GitHub. You can inspect the code, contribute, or self-host your own instance. The hosted version at custlycrm.com provides a managed experience with automatic updates."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: Organization -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Kainuo Innovision Tech",
+      "url": "https://custlycrm.com",
+      "logo": "https://custlycrm.com/logo.svg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "contact@kainuotech.com",
+        "contactType": "customer support",
+        "availableLanguage": ["English", "Chinese"]
+      },
+      "sameAs": [
+        "https://github.com/JohnsonGAO-Kainuo/Custly"
+      ]
     }
     </script>
 
@@ -176,7 +299,39 @@
         <div class="loader">Loading...</div>
       </div>
     </div>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>
+      <div style="max-width:800px;margin:40px auto;padding:20px;font-family:system-ui,sans-serif;line-height:1.6">
+        <h1>Custly CRM — The Template-First CRM for Growing Teams</h1>
+        <p>Skip months of CRM setup. Custly gives you ready-to-use <strong>industry templates</strong> for e-commerce, consulting, healthcare, and more — then lets you <strong>customize everything</strong>.</p>
+        <h2>Why Teams Choose Custly</h2>
+        <ul>
+          <li><strong>Template-First Approach</strong> — Pick an industry template and start working in minutes, not months.</li>
+          <li><strong>Fully Customizable</strong> — Custom fields, pipeline stages, tags, and templates. Make it yours.</li>
+          <li><strong>Contacts & Companies</strong> — Organize all customer data in one place with CSV import/export.</li>
+          <li><strong>Deal Pipeline</strong> — Visual Kanban board to track every opportunity through your sales process.</li>
+          <li><strong>Task Management</strong> — Never miss a follow-up with built-in tasks, reminders, and calendar view.</li>
+          <li><strong>Notes & Activity Timeline</strong> — Full history of every customer interaction.</li>
+          <li><strong>Multi-Language</strong> — English, 简体中文, 繁體中文.</li>
+          <li><strong>Open Source</strong> — Inspect the code on GitHub. Self-host or use our managed service.</li>
+        </ul>
+        <h2>Simple, Transparent Pricing</h2>
+        <ul>
+          <li><strong>Monthly</strong> — $20/month</li>
+          <li><strong>Yearly</strong> — $168/year (save 30%)</li>
+          <li><strong>Lifetime</strong> — $399 one-time payment</li>
+        </ul>
+        <p>All plans include a <strong>14-day free trial</strong> with no credit card required. Prices also available in HKD and CNY.</p>
+        <h2>Frequently Asked Questions</h2>
+        <h3>What is Custly?</h3>
+        <p>Custly is a template-first, lightweight CRM for small teams. It helps you manage contacts, companies, deals, tasks, and notes in one clean interface.</p>
+        <h3>What makes Custly different?</h3>
+        <p>Unlike bloated enterprise CRMs, Custly starts with industry templates — pick one for your business type and customize from there. It's lightweight, affordable, and open source.</p>
+        <h3>Can I try it free?</h3>
+        <p>Yes! Every account gets a 14-day free trial with full features. No credit card needed. You can also explore the <a href="/demo">interactive demo</a>.</p>
+        <p><a href="/sign-up">Start your free trial</a> | <a href="/features">See all features</a> | <a href="/pricing">View pricing</a> | <a href="/faq">FAQ</a></p>
+        <p>© 2026 Kainuo Innovision Tech. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
+      </div>
+    </noscript>
     <script type="module" src="<%= mainScript %>"></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ArrowLeft } from "lucide-react";
@@ -12,6 +13,12 @@ import {
 export const PricingPage = () => {
   const translate = useTranslate();
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+
+  usePageSEO({
+    title: "Pricing — Custly CRM | From $20/mo, Lifetime $399",
+    description: "Simple, transparent CRM pricing. Monthly $20, Yearly $168 (save 30%), or Lifetime $399. All plans include unlimited contacts, deal pipeline, templates. 14-day free trial.",
+    canonical: "https://custlycrm.com/pricing",
+  });
 
   const plans = [
     {

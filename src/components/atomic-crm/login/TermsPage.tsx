@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { LocaleMenuButton } from "./LocaleMenuButton";
 import { MarketingBackdrop } from "./MarketingBackdrop";
@@ -14,6 +15,12 @@ const LegalSection = ({ title, body }: { title: string; body: string }) => (
 
 export const TermsPage = () => {
   const translate = useTranslate();
+
+  usePageSEO({
+    title: "Terms of Service — Custly CRM",
+    description: "Terms and conditions for using the Custly CRM platform. Eligibility, acceptable use, service modifications, and contact information.",
+    canonical: "https://custlycrm.com/terms",
+  });
 
   return (
     <div className="relative min-h-screen bg-background">

@@ -1,6 +1,7 @@
 import { useState, type ElementType } from "react";
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { LocaleMenuButton } from "./LocaleMenuButton";
 import { MarketingBackdrop } from "./MarketingBackdrop";
@@ -58,6 +59,12 @@ const GitHubIconButton = () => {
 export const LandingPage = () => {
   const translate = useTranslate();
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+
+  usePageSEO({
+    title: "Custly CRM — The Template-First CRM for Growing Teams",
+    description: "Skip months of CRM setup. Pick an industry template for e-commerce, consulting, healthcare & more. Customize contacts, deals, tasks. 14-day free trial, no credit card.",
+    canonical: "https://custlycrm.com/landing",
+  });
 
   return (
     <div className="relative bg-background">

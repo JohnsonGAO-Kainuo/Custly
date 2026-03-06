@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { LocaleMenuButton } from "./LocaleMenuButton";
 import { MarketingBackdrop } from "./MarketingBackdrop";
@@ -14,6 +15,12 @@ const LegalSection = ({ title, body }: { title: string; body: string }) => (
 
 export const PrivacyPage = () => {
   const translate = useTranslate();
+
+  usePageSEO({
+    title: "Privacy Policy — Custly CRM",
+    description: "How Custly handles your personal data. We collect minimum information, never sell your data, and you can export or delete at any time.",
+    canonical: "https://custlycrm.com/privacy",
+  });
 
   return (
     <div className="relative min-h-screen bg-background">

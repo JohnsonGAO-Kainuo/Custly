@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -15,6 +16,12 @@ import { MarketingBackdrop } from "./MarketingBackdrop";
 export const FAQPage = () => {
   const translate = useTranslate();
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+
+  usePageSEO({
+    title: "FAQ — Custly CRM | Pricing, Features, Data Security & More",
+    description: "Answers to common questions about Custly CRM: pricing plans, free trial, payment methods, data security, import/export, open source, and support.",
+    canonical: "https://custlycrm.com/faq",
+  });
 
   const faqKeys = [
     "what_is",

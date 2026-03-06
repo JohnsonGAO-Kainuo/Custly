@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { useTranslate } from "ra-core";
+import { usePageSEO } from "@/hooks/usePageSEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LocaleMenuButton } from "./LocaleMenuButton";
@@ -23,6 +24,12 @@ import {
 export const FeaturesPage = () => {
   const translate = useTranslate();
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+
+  usePageSEO({
+    title: "Features — Custly CRM | Contacts, Deals, Templates & Analytics",
+    description: "Explore Custly's full feature set: contact management, deal pipeline Kanban, industry templates, task tracking, analytics dashboard, CSV import/export, and more.",
+    canonical: "https://custlycrm.com/features",
+  });
 
   const features = [
     {

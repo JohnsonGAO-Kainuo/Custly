@@ -1,19 +1,29 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
+
+# Block API and internal app routes
 Disallow: /api/
-Disallow: /#/contacts
-Disallow: /#/companies
-Disallow: /#/deals
-Disallow: /#/tasks
-Disallow: /#/settings
-Disallow: /#/billing
+Disallow: /pb/
+Disallow: /contacts
+Disallow: /companies
+Disallow: /deals
+Disallow: /tasks
+Disallow: /settings
+Disallow: /billing
 
 # Allow marketing pages
 Allow: /
-Allow: /#/features
-Allow: /#/pricing
-Allow: /#/faq
-Allow: /#/terms
-Allow: /#/privacy
+Allow: /landing
+Allow: /features
+Allow: /pricing
+Allow: /faq
+Allow: /sign-up
+Allow: /terms
+Allow: /privacy
+Allow: /policies
+Allow: /demo
+
+# Crawl delay (be polite)
+Crawl-delay: 1
 
 Sitemap: https://custlycrm.com/sitemap.xml
