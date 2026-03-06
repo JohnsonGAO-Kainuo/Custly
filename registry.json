@@ -749,10 +749,6 @@
           "type": "registry:component"
         },
         {
-          "path": "src/components/atomic-crm/billing/CurrencySelector.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "src/components/atomic-crm/billing/BillingPage.tsx",
           "type": "registry:component"
         },

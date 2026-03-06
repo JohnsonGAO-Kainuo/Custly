@@ -56,8 +56,8 @@ export default async function handler(
       : "http://localhost:5173";
 
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
-      // Let Stripe auto-detect payment methods based on currency and customer location
-      automatic_payment_methods: { enabled: true },
+      // Don't specify payment_method_types — Stripe auto-selects based on
+      // currency, customer location, and Dashboard settings
       customer_email: email,
       client_reference_id: salesId,
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
