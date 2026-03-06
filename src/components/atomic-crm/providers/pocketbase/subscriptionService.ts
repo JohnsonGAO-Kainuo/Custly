@@ -184,6 +184,9 @@ export async function createCheckoutSession(
   }
 
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
+
     const response = await fetch("/api/create-checkout", {
       method: "POST",
       headers: {
@@ -194,7 +197,10 @@ export async function createCheckoutSession(
         salesId: authState.record.id,
         email: authState.record.email,
       }),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       const error = await response.json();
@@ -205,7 +211,10 @@ export async function createCheckoutSession(
     return { url: data.url };
   } catch (error) {
     console.error("Error creating checkout session:", error);
-    return { url: null, error: "Failed to create checkout session" };
+    if (error instanceof DOMException && error.name === "AbortError") {
+      return { url: null, error: "Request timed out. Please check your network connection and try again." };
+    }
+    return { url: null, error: "Failed to create checkout session. Please check your network connection." };
   }
 }
 
