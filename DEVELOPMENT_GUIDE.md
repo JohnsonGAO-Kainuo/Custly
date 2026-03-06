@@ -1,116 +1,157 @@
-# Custly 开发指南（合并版）
+# Custly 开发指南
 
-**项目名称**: Custly  
-**基于**: marmelab/atomic-crm (MIT)  
-**更新时间**: 2026-01-24  
-**当前状态**: UI/多语言/营销页已完成 | PocketBase 后端已落地 | 找回密码已接入（需 SMTP）
-
----
-
-## 1) 只看这几个目录（最小关注范围）
-
-- `src/components/atomic-crm/login`：营销页/登录/注册/找回密码
-- `src/components/atomic-crm/providers/pocketbase`：PocketBase 接口
-- `src/components/atomic-crm/root/CRM.tsx`：路由入口
-- `src/i18n`：多语言文案
-
-> 其它目录先不用管，等需要时我会告诉你看哪里。
+**项目名称**: Custly CRM  
+**公司**: Kainuo Innovision Tech Co., Limited  
+**域名**: https://custlycrm.com  
+**基于**: [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) (MIT)  
+**更新时间**: 2026-02  
+**当前状态**: ✅ 所有核心功能已完成，正式上线运行
 
 ---
 
-## 2) 当前关键决策（结合现状）
+## 1) 技术栈
 
-- **品牌名**: Custly（内部目录名 `atomic-crm` 暂时不改，避免路径大改）
-- **后端**: 以 PocketBase 为主，Supabase 暂时保留但不使用
-- **登录方式**: 目前以邮箱登录为主；PocketBase 支持邮箱找回密码
-- **部署建议**: 先本地验证 → 迁移到 Pockethost（更稳定，成本低）
+| 层 | 技术 |
+|----|------|
+| **前端框架** | Vite + React + React Admin v5 |
+| **UI 组件** | shadcn/ui + Radix UI |
+| **后端** | PocketBase（`https://pb-custly.kainuotech.com`） |
+| **支付** | Stripe（Live mode，HKD 结算，多币种 currency_options） |
+| **部署** | Vercel（前端）+ 自托管 PocketBase |
+| **认证** | Email/密码 + OAuth（Google/GitHub），通过 PocketBase |
+| **国际化** | EN / zh-CN / zh-TW（polyglot） |
 
 ---
 
-## 3) 本地运行（PocketBase）
+## 2) 目录结构（关键目录）
 
-### 启动 PocketBase
-```bash
-/Users/johnson/Documents/pocketbase_0.36.1_darwin_arm64/pocketbase serve --http=127.0.0.1:8090
 ```
+src/
+  components/atomic-crm/
+    login/          # 营销页、登录、注册、找回密码
+    root/CRM.tsx    # 路由入口
+    providers/
+      pocketbase/   # PocketBase 数据提供器 & 认证
+      fakerest/     # Demo 模式数据
+    subscription/   # 订阅上下文、服务、计费页面
+    templates/      # 模板中心
+  i18n/             # 多语言文案（marketing-*.ts / crm-*.ts）
+api/
+  create-checkout.ts   # Stripe Checkout 会话
+  stripe-webhook.ts    # Stripe Webhook 处理
+  customer-portal.ts   # Stripe 客户门户
+scripts/               # 仅 5 个活跃脚本（见 package.json）
+_archive/              # 已归档文件（gitignored）
+```
+
+> 注：内部目录名 `atomic-crm` 保留，避免大范围路径重构。
+
+---
+
+## 3) 本地开发
 
 ### 启动前端
 ```bash
-npm run dev
+npm install
+npm run dev        # 正常模式（需要 PocketBase）
+npm run dev:demo   # Demo 模式（无需后端）
 ```
 
-默认地址通常是 `http://127.0.0.1:5173`（如改端口以实际为准）。
+### 环境变量（`.env.development`）
+```
+VITE_BACKEND=pocketbase
+VITE_POCKETBASE_URL=http://127.0.0.1:8090
+```
 
-### 环境变量（已在 `.env.development`）
-- `VITE_BACKEND=pocketbase`
-- `VITE_POCKETBASE_URL=http://127.0.0.1:8090`
-
----
-
-## 4) PocketBase 当前状态（已完成）
-
-### 集合
-`/sales /tags /companies /contacts /deals /tasks /contactNotes /dealNotes`
-
-### 权限规则
-- **管理员**可看全部
-- **普通用户**仅可看/改自己数据（按 `sales_id` 限制）
-
-### Demo 数据
-已写入（可直接体验）：
-- sales 6
-- tags 6
-- companies 55
-- contacts 500
-- deals 50
-- tasks 400
-- contactNotes 1200
-- dealNotes 300
-
-### 找回密码
-- 已接入前端页面与 API
-- 邮件模板已改为：`/reset-password?token=...`
-- **需要 SMTP 才能真正发邮件**
+### PocketBase 初始化
+```bash
+POCKETBASE_URL=http://127.0.0.1:8090 \
+POCKETBASE_ADMIN_EMAIL=you@example.com \
+POCKETBASE_ADMIN_PASSWORD=yourpassword \
+npm run pocketbase:init
+```
 
 ---
 
-## 5) 近期变更摘要（已合并 UI/更新日志）
+## 4) 支付系统（Stripe）
 
-- **UI 重构**：墨绿色主题、组件样式统一、营销页视觉升级
-- **营销页**：Landing / Features / Pricing / FAQ 独立路由
-- **多语言**：English / 简体 / 繁体（营销与认证文案已覆盖）
-- **登录体验**：加入多语言切换、玻璃拟态卡片
-- **PocketBase**：数据提供器、权限规则、密码找回流程完成
+### 价格 ID（多币种 currency_options：USD + HKD + CNY）
+| 计划 | Price ID | 默认价格 |
+|------|----------|---------|
+| 月付 | `price_1T7rhPJTqJOgtjP4dIDUZYtn` | $20/月 |
+| 年付 | `price_1T7riQJTqJOgtjP4lV1UxJlB` | $168/年 |
+| 终身 | `price_1T7rjDJTqJOgtjP4OqKwRmtj` | $399 一次性 |
+
+### Payment Links
+- 月付: `https://buy.stripe.com/bJe28s2pV5aQ5IJfo5cV20r`
+- 年付: `https://buy.stripe.com/8x24gA3tZ1YEeff2BjcV20s`
+- 终身: `https://buy.stripe.com/9B6fZi7Kfbzegnnek1cV20t`
+
+### Webhook
+- URL: `https://custlycrm.com/api/stripe-webhook`
+- 事件: `checkout.session.completed`, `customer.subscription.*`, `invoice.payment_failed`, `charge.refunded`
+
+### 试用
+- 14 天免费试用（从账户创建时间计算，前端逻辑）
+- 无需信用卡
 
 ---
 
-## 6) 下一步要做什么（最重要的）
+## 5) 部署
 
-1) **配置 SMTP**：让找回密码邮件可用
-2) **部署到 Pockethost**：稳定环境 + 替换 `APP_URL`
-3) **完善派生字段**：如 `company_name / nb_tasks / nb_deals`
-4) **行业模板数据**：电商 + 心理咨询
+### Vercel（前端）
+- 自动从 `main` 分支部署
+- 环境变量在 Vercel Dashboard 设置
+- `vercel.json` 配置 SPA 重写、API 路由、PocketBase 代理
+
+### PocketBase（后端）
+- 自托管在 `pb-custly.kainuotech.com`
+- CORS 允许: `https://custlycrm.com` + `http://localhost:5173`
+
+---
+
+## 6) 功能完成状态
+
+| 功能 | 状态 |
+|------|------|
+| 联系人 CRUD + CSV 导入/导出 | ✅ |
+| 公司管理 + 关联联系人 | ✅ |
+| 交易 Kanban + 阶段管理 | ✅ |
+| 任务管理 + 日历视图 | ✅ |
+| 备注系统 + 附件 | ✅ |
+| 活动日志 | ✅ |
+| 用户认证（Email + OAuth） | ✅ |
+| 多语言（EN/zh-CN/zh-TW） | ✅ |
+| 模板中心 | ✅ |
+| 墨绿色 UI 重设计 | ✅ |
+| PocketBase 完整迁移 | ✅ |
+| Stripe 支付（多币种） | ✅ |
+| Alipay 支持（终身计划） | ✅ |
+| SEO 优化 | ✅ |
+| 营销页（Landing/Features/Pricing/FAQ） | ✅ |
 
 ---
 
 ## 7) 常见问题
 
-### 找回密码没邮件
-- 未配置 SMTP（PocketBase 后台 Settings → Mail）
-
 ### 登录后看不到数据
-- 记录必须带 `sales_id`，并且要和登录用户匹配
+PocketBase 记录必须带 `sales_id`，并与登录用户匹配。
 
-### 为什么还有 `users` 集合
-- PocketBase 默认系统集合，当前不使用
+### Demo 模式
+访问 `?demo=true` 参数或使用 `npm run dev:demo`，使用 fakerest 数据。
+
+### 内部目录名为什么是 atomic-crm
+保留原项目结构避免大范围重构。品牌名已全部改为 Custly。
 
 ---
 
-## 8) 文档说明（已合并）
+## 8) 归档说明
 
-以下文档已合并到本文件：
-- `UI_REFACTOR_LOG.md`
-- `UPDATES.md`
-- `requirements/atomic-crm-prd.md`（仅保留关键方向即可）
-
-本文件为唯一“当前真实状态”说明。
+以下内容已移至 `_archive/`（gitignored）：
+- `doc/` — 上游 Astro 文档站
+- `supabase/` — 旧后端（已迁移到 PocketBase）
+- `design-reference/` — Figma 导出参考图
+- `hkstp-ideation/` — 路演/商业计划材料
+- `test-data/` — 测试 CSV 数据
+- `requirements/` — 旧版 PRD
+- 13 个未使用的修复脚本

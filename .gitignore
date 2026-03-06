@@ -39,3 +39,6 @@ dist/
 public/r/
 .vercel
 .env*.local
+
+# Archived files (not part of active project)
+_archive/

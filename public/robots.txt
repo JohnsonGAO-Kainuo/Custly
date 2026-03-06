@@ -1,3 +1,19 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /api/
+Disallow: /#/contacts
+Disallow: /#/companies
+Disallow: /#/deals
+Disallow: /#/tasks
+Disallow: /#/settings
+Disallow: /#/billing
+
+# Allow marketing pages
+Allow: /
+Allow: /#/features
+Allow: /#/pricing
+Allow: /#/faq
+Allow: /#/terms
+Allow: /#/privacy
+
+Sitemap: https://custlycrm.com/sitemap.xml

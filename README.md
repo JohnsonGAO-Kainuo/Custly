@@ -1,149 +1,80 @@
-# Custly
+# Custly CRM
 
-A full-featured CRM built with React, shadcn-admin-kit, and PocketBase (default). Supabase is still supported as an optional backend.
+A modern, lightweight CRM for small teams and growing businesses. Built with React, shadcn/ui, and PocketBase.
 
-> 基于 [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) 开源项目
+> Based on [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm) (MIT License)
 
-https://github.com/user-attachments/assets/0d7554b5-49ef-41c6-bcc9-a76214fc5c99
+🌐 **Live**: [custlycrm.com](https://custlycrm.com)
 
 ## Features
 
-- 📇 **Organize Contacts**: Keep all your contacts in one easily accessible place.
-- ⏰ **Create Tasks & Set Reminders**: Never miss a follow-up or deadline.
-- 📝 **Take Notes**: Capture important details and insights effortlessly.
-- ✉️ **Capture Emails**: CC Atomic CRM to automatically save communications as notes.
-- 📊 **Manage Deals**: Visualize and track your sales pipeline in a Kanban board.
-- 🔄 **Import & Export Data**: Easily transfer contacts in and out of the system.
-- 🔐 **Authentication**: Email/password + OAuth (GitHub/Google) with PocketBase or Supabase.
-- 📜 **Track Activity History**: View all interactions in aggregated activity logs.
-- 🔗 **Integrate via API**: Connect seamlessly with other systems using our API.
-- 🛠️ **Customize Everything**: Add custom fields, change the theme, and replace any component to fit your needs.
-- 🌍 **Multi-language**: Support for English, Simplified Chinese, and Traditional Chinese.
-- 🧩 **Template Center**: Apply built‑in templates and create custom templates per industry.
-- 🎨 **UI Refresh**: Updated landing + dashboard styling for Custly’s green identity.
-
-## Installation
-
-To run this project locally, you will need the following tools installed on your computer:
-
-- Node 22 LTS
-- Docker (only if you want to run Supabase locally)
-
-Clone this repository locally:
-
-```sh
-git clone https://github.com/[username]/custly.git
-```
-
-Install dependencies:
-
-```sh
-cd custly
-make install
-```
-
-Or use npm directly:
-
-```sh
-npm install
-```
-
-This installs the frontend dependencies. The backend runs separately (PocketBase or Supabase).
+- 📇 **Contact Management** — Full CRUD, CSV import/export, merge duplicates
+- 🏢 **Company Management** — Company profiles with linked contacts & industry tags
+- 📊 **Deal Pipeline** — Kanban board with stage management & revenue tracking
+- ⏰ **Task Management** — Tasks, reminders, and calendar view
+- 📝 **Notes & Attachments** — Rich notes with file attachments and status markers
+- 📜 **Activity History** — Full timeline of all interactions
+- 🔐 **Authentication** — Email/password + OAuth (Google, GitHub)
+- 🌍 **Multi-language** — English, 简体中文, 繁體中文
+- 🧩 **Template Center** — Industry-specific templates (e-commerce, consulting, etc.)
+- 💳 **Subscription Billing** — Stripe integration with multi-currency support (USD/HKD/CNY)
+- 🎨 **Custom Theming** — Sage green identity with dark mode support
 
 ## Quick Start
 
-**PocketBase (recommended)**
-1. Start your PocketBase instance (local or Pockethost).
-2. Set environment variables in `.env.development`:
-   ```
-   VITE_BACKEND=pocketbase
-   VITE_POCKETBASE_URL=http://127.0.0.1:8090
-   ```
-3. Run the frontend:
-   ```sh
-   npm run dev
-   ```
-4. Initialize PocketBase collections:
-   ```sh
-   POCKETBASE_URL=http://127.0.0.1:8090 \
-   POCKETBASE_ADMIN_EMAIL=you@example.com \
-   POCKETBASE_ADMIN_PASSWORD=yourpassword \
-   npm run pocketbase:init
-   ```
+```bash
+# Install dependencies
+npm install
 
-**Demo Mode** (no backend):
-```sh
+# Run in demo mode (no backend needed)
 npm run dev:demo
+
+# Run with PocketBase backend
+npm run dev
 ```
 
-Access the app via [http://localhost:5173/](http://localhost:5173/)
+Access the app at [http://localhost:5173](http://localhost:5173)
 
-## 📚 Documentation
+### Environment Variables
 
-**For developers**, see **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** (中文) for:
-- 项目架构和目录结构
-- 开发命令和常见问题
-- 多语言支持实现
-- 当前进度和待办事项
+Create `.env.development`:
+```
+VITE_BACKEND=pocketbase
+VITE_POCKETBASE_URL=http://127.0.0.1:8090
+```
 
-**For product requirements**, see [requirements/atomic-crm-prd.md](./requirements/atomic-crm-prd.md)
+### PocketBase Setup
 
-**Upstream documentation**:
-- [User Management](./doc/src/content/docs/users/user-management.mdx)
-- [Import/Export Data](./doc/src/content/docs/users/import-contacts.mdx)
-- [Inbound Email](./doc/src/content/docs/users/inbound-email.mdx)
-- [Customizing](./doc/src/content/docs/developers/customizing.mdx)
-- [Architecture](./doc/src/content/docs/developers/architecture-choices.mdx)
+```bash
+POCKETBASE_URL=http://127.0.0.1:8090 \
+POCKETBASE_ADMIN_EMAIL=you@example.com \
+POCKETBASE_ADMIN_PASSWORD=yourpassword \
+npm run pocketbase:init
+```
 
-## 🌍 Multi-language Support
+## Tech Stack
 
-Custly supports 3 languages:
-- 🇬🇧 English
-- 🇨🇳 简体中文 (Simplified Chinese)  
-- 🇹🇼 繁體中文 (Traditional Chinese)
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vite + React + React Admin v5 |
+| UI | shadcn/ui + Radix UI |
+| Backend | PocketBase |
+| Payments | Stripe (multi-currency) |
+| Deployment | Vercel + self-hosted PocketBase |
+| Auth | PocketBase (Email + OAuth) |
+| i18n | polyglot (EN / zh-CN / zh-TW) |
 
-Users can switch languages from the user menu.
+## Documentation
 
-## Deploying to Production
-
-**Frontend (Vercel)**
-- Set `VITE_BACKEND=pocketbase`
-- Set `VITE_POCKETBASE_URL=https://your-instance.pockethost.io`
-
-**Backend options**
-- PocketBase on Pockethost (recommended for speed)
-- Supabase (legacy option, see docs below)
-
-Supabase docs (optional):
-1. [Configuring Supabase](./doc/src/content/docs/developers/supabase-configuration.mdx)
-2. [Configuring Inbound Email](./doc/src/content/docs/developers/inbound-email-configuration.mdx)
-
-## OAuth Setup (PocketBase)
-
-1. In PocketBase Admin, open `sales` → Auth providers, enable Google/GitHub.
-2. Use the **redirect URL shown there** (typically `https://<pb-domain>/api/oauth2-redirect`) when creating OAuth apps.
-3. For frontend login flow, set the OAuth app callback to:
-   - `https://your-frontend-domain/login`
-   - and include `http://localhost:5173/login` for local dev
+- **[DEVELOPMENT_GUIDE.md](./DEVELOPMENT_GUIDE.md)** — Full development guide (中文)
+- **[CLAUDE.md](./CLAUDE.md)** — AI agent context
 
 ## Testing
 
-Run unit tests:
-
-```sh
-make test
+```bash
+npm test
 ```
-
-## Learn More
-
-For more information about the upstream project:
-- [marmelab/atomic-crm](https://github.com/marmelab/atomic-crm)
-- [Online Demo](https://marmelab.com/atomic-crm-demo)
-- [React-Admin Documentation](https://marmelab.com/react-admin/documentation.html)
-
-> [!WARNING]  
-> If the `registry.json` misses some changes you made, you MUST update the `scripts/generate-registry.mjs` to include those changes.
 
 ## License
 
-This project is licensed under the MIT License, courtesy of [Marmelab](https://marmelab.com). See the [LICENSE.md](./LICENSE.md) file for details.
+MIT License — courtesy of [Marmelab](https://marmelab.com). See [LICENSE.md](./LICENSE.md).
