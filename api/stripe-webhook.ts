@@ -14,12 +14,28 @@ const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuote
 const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;
 const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
 
-// Stripe Price IDs
+// Stripe Price IDs (all currencies)
 const PRICE_IDS = {
-  monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
-  yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
-  lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
+  // USD
+  "price_1SwmpqJTqJOgtjP4lrV1AlqF": { plan: "monthly" as const },
+  "price_1SwmqAJTqJOgtjP4sfzuJ4Vi": { plan: "yearly" as const },
+  "price_1SwmqMJTqJOgtjP48FPNkAM5": { plan: "lifetime" as const },
+  // HKD
+  "price_1T7rQSJTqJOgtjP4Llsv59Bq": { plan: "monthly" as const },
+  "price_1T7rQSJTqJOgtjP4LM6coUl7": { plan: "yearly" as const },
+  "price_1T7rQSJTqJOgtjP4peRkIycs": { plan: "lifetime" as const },
+  // CNY
+  "price_1T7rQTJTqJOgtjP4lRfPtTJZ": { plan: "monthly" as const },
+  "price_1T7rQTJTqJOgtjP4sC9lfWko": { plan: "yearly" as const },
+  "price_1T7rQSJTqJOgtjP4V9PkyPFc": { plan: "lifetime" as const },
 };
+
+// Lifetime price IDs for checkout session handling
+const LIFETIME_PRICE_IDS = [
+  "price_1SwmqMJTqJOgtjP48FPNkAM5",
+  "price_1T7rQSJTqJOgtjP4peRkIycs",
+  "price_1T7rQSJTqJOgtjP4V9PkyPFc",
+];
 
 async function getPocketBaseAdminToken(): Promise<string> {
   const response = await fetch(
@@ -65,10 +81,12 @@ async function pbRequest(
 }
 
 function getPlanTypeFromPriceId(priceId: string): "monthly" | "yearly" | "lifetime" {
-  if (priceId === PRICE_IDS.monthly) return "monthly";
-  if (priceId === PRICE_IDS.yearly) return "yearly";
-  if (priceId === PRICE_IDS.lifetime) return "lifetime";
-  return "monthly"; // Default fallback
+  const entry = PRICE_IDS[priceId as keyof typeof PRICE_IDS];
+  return entry?.plan || "monthly"; // Default fallback
+}
+
+function isLifetimePriceId(priceId: string): boolean {
+  return LIFETIME_PRICE_IDS.includes(priceId);
 }
 
 async function handleCheckoutSessionCompleted(
@@ -94,11 +112,15 @@ async function handleCheckoutSessionCompleted(
 
   if (mode === "payment") {
     // One-time payment (lifetime plan)
+    // Get the actual price ID from the session line items
+    const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
+    const actualPriceId = lineItems.data[0]?.price?.id || "price_1SwmqMJTqJOgtjP48FPNkAM5";
+
     const subscriptionData = {
       sales_id: salesId,
       stripe_customer_id: customerId,
       stripe_subscription_id: null,
-      stripe_price_id: PRICE_IDS.lifetime,
+      stripe_price_id: actualPriceId,
       status: "lifetime",
       plan_type: "lifetime",
       trial_start: null,

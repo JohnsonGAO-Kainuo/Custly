@@ -27,8 +27,13 @@ import {
   createCheckoutSession,
   openCustomerPortal,
   PRICING,
+  getDefaultCurrency,
+  saveCurrency,
+  formatPrice,
   type SubscriptionStatus,
+  type Currency,
 } from "../providers/pocketbase/subscriptionService";
+import { CurrencySelector } from "./CurrencySelector";
 
 const features = [
   { icon: Users, text: "Unlimited contacts & companies" },
@@ -47,7 +52,7 @@ const PricingCard = ({
   currentPlan,
 }: {
   plan: "monthly" | "yearly" | "lifetime";
-  pricing: typeof PRICING.monthly | typeof PRICING.yearly | typeof PRICING.lifetime;
+  pricing: { price: number; symbol: string; interval: string; savings?: string };
   isPopular?: boolean;
   onSelect: (plan: "monthly" | "yearly" | "lifetime") => void;
   isLoading: boolean;
@@ -65,12 +70,12 @@ const PricingCard = ({
       <CardHeader className="text-center pb-2">
         <CardTitle className="text-lg capitalize">{plan}</CardTitle>
         <div className="mt-4">
-          <span className="text-4xl font-bold">${pricing.price}</span>
+          <span className="text-4xl font-bold">{formatPrice(pricing.price, pricing.symbol)}</span>
           {pricing.interval !== "one-time" && (
             <span className="text-muted-foreground">/{pricing.interval}</span>
           )}
         </div>
-        {"savings" in pricing && (
+        {pricing.savings && (
           <Badge variant="secondary" className="mt-2">
             {pricing.savings}
           </Badge>
@@ -103,8 +108,14 @@ export const BillingPage = () => {
   const [status, setStatus] = useState<SubscriptionStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [currency, setCurrency] = useState<Currency>(getDefaultCurrency());
 
   const [isActivating, setIsActivating] = useState(false);
+
+  const handleCurrencyChange = (c: Currency) => {
+    setCurrency(c);
+    saveCurrency(c);
+  };
 
   useEffect(() => {
     loadSubscriptionStatus();
@@ -155,7 +166,7 @@ export const BillingPage = () => {
   const handleSelectPlan = async (plan: "monthly" | "yearly" | "lifetime") => {
     setCheckoutLoading(true);
     try {
-      const result = await createCheckoutSession(plan);
+      const result = await createCheckoutSession(plan, currency);
       if (result.url) {
         window.location.href = result.url;
       } else {
@@ -313,30 +324,35 @@ export const BillingPage = () => {
 
       {/* Pricing Cards */}
       {(!status?.hasActiveSubscription || status?.subscription?.status === "trialing") && (
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
-          <PricingCard
-            plan="monthly"
-            pricing={PRICING.monthly}
-            onSelect={handleSelectPlan}
-            isLoading={checkoutLoading}
-            currentPlan={status?.subscription?.plan_type}
-          />
-          <PricingCard
-            plan="yearly"
-            pricing={PRICING.yearly}
-            isPopular
-            onSelect={handleSelectPlan}
-            isLoading={checkoutLoading}
-            currentPlan={status?.subscription?.plan_type}
-          />
-          <PricingCard
-            plan="lifetime"
-            pricing={PRICING.lifetime}
-            onSelect={handleSelectPlan}
-            isLoading={checkoutLoading}
-            currentPlan={status?.subscription?.plan_type}
-          />
-        </div>
+        <>
+          <div className="flex justify-center mb-6">
+            <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+          </div>
+          <div className="grid md:grid-cols-3 gap-6 mb-8">
+            <PricingCard
+              plan="monthly"
+              pricing={PRICING[currency].monthly}
+              onSelect={handleSelectPlan}
+              isLoading={checkoutLoading}
+              currentPlan={status?.subscription?.plan_type}
+            />
+            <PricingCard
+              plan="yearly"
+              pricing={PRICING[currency].yearly}
+              isPopular
+              onSelect={handleSelectPlan}
+              isLoading={checkoutLoading}
+              currentPlan={status?.subscription?.plan_type}
+            />
+            <PricingCard
+              plan="lifetime"
+              pricing={PRICING[currency].lifetime}
+              onSelect={handleSelectPlan}
+              isLoading={checkoutLoading}
+              currentPlan={status?.subscription?.plan_type}
+            />
+          </div>
+        </>
       )}
 
       {/* FAQ Section */}
@@ -366,7 +382,7 @@ export const BillingPage = () => {
           <div>
             <h4 className="font-medium mb-1">What payment methods do you accept?</h4>
             <p className="text-sm text-muted-foreground">
-              We accept all major credit cards through Stripe's secure payment processing.
+              We accept all major credit cards and Alipay (for lifetime plan) through Stripe. We support USD, HKD, and CNY currencies.
             </p>
           </div>
         </CardContent>

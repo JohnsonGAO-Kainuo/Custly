@@ -3,12 +3,28 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-// Stripe Price IDs
-const PRICE_IDS = {
-  monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
-  yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
-  lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
+type Currency = "usd" | "hkd" | "cny";
+
+// Stripe Price IDs by currency
+const PRICE_IDS: Record<Currency, { monthly: string; yearly: string; lifetime: string }> = {
+  usd: {
+    monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
+    yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
+    lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
+  },
+  hkd: {
+    monthly: "price_1T7rQSJTqJOgtjP4Llsv59Bq",
+    yearly: "price_1T7rQSJTqJOgtjP4LM6coUl7",
+    lifetime: "price_1T7rQSJTqJOgtjP4peRkIycs",
+  },
+  cny: {
+    monthly: "price_1T7rQTJTqJOgtjP4lRfPtTJZ",
+    yearly: "price_1T7rQTJTqJOgtjP4sC9lfWko",
+    lifetime: "price_1T7rQSJTqJOgtjP4V9PkyPFc",
+  },
 };
+
+const VALID_CURRENCIES: Currency[] = ["usd", "hkd", "cny"];
 
 export default async function handler(
   req: VercelRequest,
@@ -33,8 +49,9 @@ export default async function handler(
   }
 
   try {
-    const { plan, salesId, email, successUrl, cancelUrl } = req.body as {
+    const { plan, currency: rawCurrency, salesId, email, successUrl, cancelUrl } = req.body as {
       plan: "monthly" | "yearly" | "lifetime";
+      currency?: string;
       salesId: string;
       email: string;
       successUrl?: string;
@@ -45,9 +62,13 @@ export default async function handler(
       return res.status(400).json({ error: "Missing required fields: plan, salesId, email" });
     }
 
-    const priceId = PRICE_IDS[plan];
+    const currency: Currency = VALID_CURRENCIES.includes(rawCurrency as Currency)
+      ? (rawCurrency as Currency)
+      : "usd";
+
+    const priceId = PRICE_IDS[currency]?.[plan];
     if (!priceId) {
-      return res.status(400).json({ error: "Invalid plan type" });
+      return res.status(400).json({ error: "Invalid plan type or currency" });
     }
 
     // Use production domain or fallback to localhost

@@ -1,18 +1,35 @@
 import { Link } from "react-router";
+import { useState } from "react";
 import { useTranslate } from "ra-core";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check, ArrowLeft } from "lucide-react";
 import { LocaleMenuButton } from "./LocaleMenuButton";
 import { MarketingBackdrop } from "./MarketingBackdrop";
+import {
+  PRICING,
+  getDefaultCurrency,
+  saveCurrency,
+  formatPrice,
+  type Currency,
+} from "../providers/pocketbase/subscriptionService";
+import { CurrencySelector } from "../billing/CurrencySelector";
 
 export const PricingPage = () => {
   const translate = useTranslate();
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+  const [currency, setCurrency] = useState<Currency>(getDefaultCurrency());
+
+  const handleCurrencyChange = (c: Currency) => {
+    setCurrency(c);
+    saveCurrency(c);
+  };
+
+  const currentPricing = PRICING[currency];
 
   const plans = [
     {
-      price: "$20",
+      price: formatPrice(currentPricing.monthly.price, currentPricing.monthly.symbol),
       key: "monthly",
       periodKey: "marketing.pricing_page.period.month",
       featureKeys: [
@@ -26,10 +43,10 @@ export const PricingPage = () => {
       popular: false
     },
     {
-      price: "$168",
+      price: formatPrice(currentPricing.yearly.price, currentPricing.yearly.symbol),
       key: "yearly",
       periodKey: "marketing.pricing_page.period.year",
-      savings: "30%",
+      savings: currentPricing.yearly.savings,
       featureKeys: [
         "unlimited_contacts",
         "deal_pipeline",
@@ -41,7 +58,7 @@ export const PricingPage = () => {
       popular: true
     },
     {
-      price: "$399",
+      price: formatPrice(currentPricing.lifetime.price, currentPricing.lifetime.symbol),
       key: "lifetime",
       periodKey: "marketing.pricing_page.period.lifetime",
       featureKeys: [
@@ -124,9 +141,13 @@ export const PricingPage = () => {
         <h1 className="text-5xl font-bold tracking-tight mb-6">
           {translate("marketing.pricing_page.hero.title")}
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-16">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
           {translate("marketing.pricing_page.hero.subtitle")}
         </p>
+
+        <div className="flex justify-center mb-12">
+          <CurrencySelector value={currency} onChange={handleCurrencyChange} />
+        </div>
 
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -152,7 +173,7 @@ export const PricingPage = () => {
                 {plan.popular && (
                   <div className="absolute top-3 left-1/2 -translate-x-1/2">
                     <span className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
-                      {plan.savings ? `${translate("marketing.pricing_page.save")} ${plan.savings}` : translate("marketing.pricing_page.most_popular")}
+                      {plan.savings ? plan.savings : translate("marketing.pricing_page.most_popular")}
                     </span>
                   </div>
                 )}

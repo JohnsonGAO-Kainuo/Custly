@@ -26,35 +26,75 @@ export interface SubscriptionStatus {
   canUseCRM: boolean;
 }
 
-// Price IDs
-export const PRICE_IDS = {
-  monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
-  yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
-  lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
-} as const;
+export type Currency = "usd" | "hkd" | "cny";
 
-// Pricing info
-export const PRICING = {
-  monthly: {
-    price: 20,
-    currency: "USD",
-    interval: "month",
-    label: "$20/month",
+export const CURRENCY_OPTIONS: { value: Currency; label: string; symbol: string }[] = [
+  { value: "usd", label: "USD", symbol: "$" },
+  { value: "hkd", label: "HKD", symbol: "HK$" },
+  { value: "cny", label: "CNY", symbol: "¥" },
+];
+
+// Price IDs by currency
+export const PRICE_IDS: Record<Currency, { monthly: string; yearly: string; lifetime: string }> = {
+  usd: {
+    monthly: "price_1SwmpqJTqJOgtjP4lrV1AlqF",
+    yearly: "price_1SwmqAJTqJOgtjP4sfzuJ4Vi",
+    lifetime: "price_1SwmqMJTqJOgtjP48FPNkAM5",
   },
-  yearly: {
-    price: 168,
-    currency: "USD",
-    interval: "year",
-    label: "$168/year",
-    savings: "Save 30%",
+  hkd: {
+    monthly: "price_1T7rQSJTqJOgtjP4Llsv59Bq",
+    yearly: "price_1T7rQSJTqJOgtjP4LM6coUl7",
+    lifetime: "price_1T7rQSJTqJOgtjP4peRkIycs",
   },
-  lifetime: {
-    price: 399,
-    currency: "USD",
-    interval: "one-time",
-    label: "$399 lifetime",
+  cny: {
+    monthly: "price_1T7rQTJTqJOgtjP4lRfPtTJZ",
+    yearly: "price_1T7rQTJTqJOgtjP4sC9lfWko",
+    lifetime: "price_1T7rQSJTqJOgtjP4V9PkyPFc",
   },
-} as const;
+};
+
+interface PlanPricing {
+  price: number;
+  currency: string;
+  symbol: string;
+  interval: string;
+  label: string;
+  savings?: string;
+}
+
+// Pricing info by currency
+export const PRICING: Record<Currency, { monthly: PlanPricing; yearly: PlanPricing; lifetime: PlanPricing }> = {
+  usd: {
+    monthly: { price: 20, currency: "USD", symbol: "$", interval: "month", label: "$20/month" },
+    yearly: { price: 168, currency: "USD", symbol: "$", interval: "year", label: "$168/year", savings: "Save 30%" },
+    lifetime: { price: 399, currency: "USD", symbol: "$", interval: "one-time", label: "$399 lifetime" },
+  },
+  hkd: {
+    monthly: { price: 158, currency: "HKD", symbol: "HK$", interval: "month", label: "HK$158/month" },
+    yearly: { price: 1288, currency: "HKD", symbol: "HK$", interval: "year", label: "HK$1,288/year", savings: "Save 32%" },
+    lifetime: { price: 3088, currency: "HKD", symbol: "HK$", interval: "one-time", label: "HK$3,088 lifetime" },
+  },
+  cny: {
+    monthly: { price: 148, currency: "CNY", symbol: "¥", interval: "month", label: "¥148/month" },
+    yearly: { price: 1188, currency: "CNY", symbol: "¥", interval: "year", label: "¥1,188/year", savings: "Save 33%" },
+    lifetime: { price: 2888, currency: "CNY", symbol: "¥", interval: "one-time", label: "¥2,888 lifetime" },
+  },
+};
+
+export function getDefaultCurrency(): Currency {
+  return (localStorage.getItem("custly_currency") as Currency) || "usd";
+}
+
+export function saveCurrency(currency: Currency) {
+  localStorage.setItem("custly_currency", currency);
+}
+
+export function formatPrice(price: number, symbol: string): string {
+  if (price >= 1000) {
+    return `${symbol}${price.toLocaleString()}`;
+  }
+  return `${symbol}${price}`;
+}
 
 /**
  * Fetch the current user's subscription status
@@ -175,7 +215,8 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
  * Create a checkout session for subscription
  */
 export async function createCheckoutSession(
-  plan: "monthly" | "yearly" | "lifetime"
+  plan: "monthly" | "yearly" | "lifetime",
+  currency: Currency = "usd"
 ): Promise<{ url: string | null; error?: string }> {
   const authState = getAuthState();
   
@@ -191,6 +232,7 @@ export async function createCheckoutSession(
       },
       body: JSON.stringify({
         plan,
+        currency,
         salesId: authState.record.id,
         email: authState.record.email,
       }),

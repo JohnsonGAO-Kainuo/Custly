@@ -443,7 +443,7 @@ const marketingEnglishMessages: TranslationMessages = {
         pricing: {
           question: "How much does Custly cost?",
           answer:
-            "Custly offers three plans: Monthly at $20/month, Yearly at $168/year (save 30%), and Lifetime at $399 one-time payment. All plans include the same full feature set with unlimited contacts and companies. Every new account gets a 14-day free trial with no credit card required.",
+            "Custly offers three plans: Monthly, Yearly (save ~30%), and Lifetime (one-time payment). We support USD, HKD, and CNY — you can switch currency on the pricing page. All plans include the same full feature set with unlimited contacts and companies. Every new account gets a 14-day free trial with no credit card required.",
         },
         trial: {
           question: "Can I try Custly before purchasing?",
@@ -453,7 +453,7 @@ const marketingEnglishMessages: TranslationMessages = {
         payment_methods: {
           question: "What payment methods do you accept?",
           answer:
-            "We accept all major credit and debit cards (Visa, Mastercard, American Express) through Stripe, our payment processor. All transactions are securely handled by Stripe.",
+            "We accept all major credit and debit cards (Visa, Mastercard, American Express) and Alipay (for lifetime plan) through Stripe. We support payments in USD, HKD, and CNY. All transactions are securely handled by Stripe.",
         },
         data_security: {
           question: "Is my data secure?",
@@ -483,7 +483,7 @@ const marketingEnglishMessages: TranslationMessages = {
         difference_plans: {
           question: "What's the difference between plans?",
           answer:
-            "All three plans include the same features. The only difference is billing: Monthly ($20/mo) offers flexibility, Yearly ($168/yr) saves 30%, and Lifetime ($399 once) means no recurring payments ever. Choose what works best for your budget.",
+            "All three plans include the same features. The only difference is billing: Monthly offers flexibility, Yearly saves ~30%, and Lifetime means no recurring payments ever. We support USD, HKD, and CNY — choose the currency and plan that works best for you.",
         },
         self_hosted: {
           question: "Is Custly open source?",

@@ -60,9 +60,9 @@ export const TermsOfServicePage = () => {
             </p>
             <h3>4.2 Subscription Plans</h3>
             <ul>
-              <li><strong>Monthly Plan:</strong> $20 per month, billed monthly</li>
-              <li><strong>Yearly Plan:</strong> $168 per year, billed annually (30% savings)</li>
-              <li><strong>Lifetime Plan:</strong> $399 one-time payment for perpetual access</li>
+              <li><strong>Monthly Plan:</strong> Billed monthly (e.g. $20 USD / HK$158 HKD / ¥148 CNY)</li>
+              <li><strong>Yearly Plan:</strong> Billed annually with ~30% savings (e.g. $168 USD / HK$1,288 HKD / ¥1,188 CNY)</li>
+              <li><strong>Lifetime Plan:</strong> One-time payment for perpetual access (e.g. $399 USD / HK$3,088 HKD / ¥2,888 CNY)</li>
             </ul>
             <h3>4.3 Payment Processing</h3>
             <p>
