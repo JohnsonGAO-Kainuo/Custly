@@ -90,8 +90,9 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
   }
 
   try {
+    const salesId = String(authState.record.id).replace(/[^a-zA-Z0-9_]/g, "");
     const response = await fetch(
-      `${baseUrl}/api/collections/subscriptions/records?filter=sales_id="${authState.record.id}"&sort=-created&perPage=1`,
+      `${baseUrl}/api/collections/subscriptions/records?filter=sales_id="${salesId}"&sort=-created&perPage=1`,
       {
         headers: {
           Authorization: token,

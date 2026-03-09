@@ -78,11 +78,16 @@ export default async function handler(
 ) {
   // Enable CORS
   const origin = req.headers.origin;
-  const allowedOrigins = [
-    "https://custlycrm.com",
-    "https://www.custlycrm.com",
-    "http://localhost:5173",
-  ];
+  const allowedOrigins = process.env.VERCEL_ENV === "production"
+    ? [
+        "https://custlycrm.com",
+        "https://www.custlycrm.com",
+      ]
+    : [
+        "https://custlycrm.com",
+        "https://www.custlycrm.com",
+        "http://localhost:5173",
+      ];
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }

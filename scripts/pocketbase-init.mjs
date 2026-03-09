@@ -150,12 +150,15 @@ const ensureCollection = async (token, definition) => {
 };
 
 const authRule = '@request.auth.id != ""';
+
+// Multi-tenant isolation: users can only access records they own (via sales_id)
+const ownerRule = 'sales_id = @request.auth.id';
 const authenticatedRules = {
-  listRule: authRule,
-  viewRule: authRule,
+  listRule: ownerRule,
+  viewRule: ownerRule,
   createRule: authRule,
-  updateRule: authRule,
-  deleteRule: authRule,
+  updateRule: ownerRule,
+  deleteRule: ownerRule,
 };
 
 const collectionsToEnsure = [
@@ -189,8 +192,10 @@ const collectionsToEnsure = [
     listRule: authRule,
     viewRule: authRule,
     createRule: "",
-    updateRule: authRule,
-    deleteRule: authRule,
+    // Users can only update their own record; admins can update anyone
+    updateRule: 'id = @request.auth.id || @request.auth.administrator = true',
+    // Only admins can delete user records
+    deleteRule: '@request.auth.administrator = true',
     authRule: "",
   },
   {
@@ -202,7 +207,12 @@ const collectionsToEnsure = [
       { name: "color", type: "text", required: true, options: { max: 20 } },
     ],
     indexes: [],
-    ...authenticatedRules,
+    // Tags are shared resources — any authenticated user can manage them
+    listRule: authRule,
+    viewRule: authRule,
+    createRule: authRule,
+    updateRule: authRule,
+    deleteRule: authRule,
   },
   {
     name: "companies",
@@ -430,7 +440,42 @@ const collectionsToEnsure = [
       },
     ],
     indexes: [],
-    ...authenticatedRules,
+    // Templates are shared resources
+    listRule: authRule,
+    viewRule: authRule,
+    createRule: authRule,
+    updateRule: authRule,
+    deleteRule: authRule,
+  },
+  {
+    name: "subscriptions",
+    type: "base",
+    system: false,
+    schema: [
+      {
+        name: "sales_id",
+        type: "relation",
+        required: true,
+        options: { collectionName: "sales", maxSelect: 1 },
+      },
+      { name: "stripe_customer_id", type: "text", required: false },
+      { name: "stripe_subscription_id", type: "text", required: false },
+      { name: "stripe_price_id", type: "text", required: false },
+      { name: "status", type: "text", required: true },
+      { name: "plan_type", type: "text", required: false },
+      { name: "trial_start", type: "date", required: false },
+      { name: "trial_end", type: "date", required: false },
+      { name: "current_period_start", type: "date", required: false },
+      { name: "current_period_end", type: "date", required: false },
+      { name: "cancel_at_period_end", type: "bool", required: false },
+    ],
+    indexes: [],
+    // Users can only view their own subscription; create/update/delete only via admin (webhook)
+    listRule: ownerRule,
+    viewRule: ownerRule,
+    createRule: null,
+    updateRule: null,
+    deleteRule: null,
   },
 ];
 

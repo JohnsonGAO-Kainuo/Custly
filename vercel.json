@@ -10,6 +10,19 @@
       "maxDuration": 15
     }
   },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
+        { "key": "X-DNS-Prefetch-Control", "value": "on" }
+      ]
+    }
+  ],
   "redirects": [
     {
       "source": "/:path(.*)",
@@ -29,8 +42,12 @@
       "destination": "/api/:path*"
     },
     {
-      "source": "/pb/(.*)",
-      "destination": "https://pb-custly.kainuotech.com/$1"
+      "source": "/pb/api/collections/:collection(sales|contacts|companies|deals|tasks|contactNotes|dealNotes|tags|subscriptions|templates)/:path*",
+      "destination": "https://pb-custly.kainuotech.com/api/collections/:collection/:path*"
+    },
+    {
+      "source": "/pb/api/files/:path*",
+      "destination": "https://pb-custly.kainuotech.com/api/files/:path*"
     },
     {
       "source": "/(.*)",

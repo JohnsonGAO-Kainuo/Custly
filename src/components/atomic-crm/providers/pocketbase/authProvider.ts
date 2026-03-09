@@ -82,31 +82,9 @@ export const authProvider: AuthProvider = {
         },
       );
 
-      // --- Debug hook: capture raw body for troubleshooting (even在导航后也能取到) ---
       const rawBody = await response.text();
-      const debugPayload = {
-        status: response.status,
-        ok: response.ok,
-        provider: resolvedProvider,
-        state,
-        stored,
-        rawBody,
-      };
-      if (typeof window !== "undefined") {
-        (window as any).__custlyOAuthDebug = debugPayload;
-        try {
-          window.sessionStorage.setItem(
-            "custly_oauth_debug",
-            JSON.stringify(debugPayload),
-          );
-        } catch (err) {
-          // 最后兜底：至少在控制台留一份
-          // eslint-disable-next-line no-console
-          console.warn("custly_oauth_debug: sessionStorage write failed", err);
-        }
-        // 直接在控制台打一份，方便用户复制
-        // eslint-disable-next-line no-console
-        console.debug("custly_oauth_debug", debugPayload);
+      if (typeof window !== "undefined" && false) {
+        // Debug code removed for security — do not store tokens in sessionStorage/window
       }
 
       let data: { token: string; record: Record<string, unknown> };
@@ -127,22 +105,7 @@ export const authProvider: AuthProvider = {
         setAuthState({ token: data.token, record: data.record });
         // Clear initialization cache after successful login so canAccess re-checks
         clearInitializedCache();
-        if (typeof window !== "undefined") {
-          const persisted = window.localStorage.getItem("custly_pb_auth");
-          // eslint-disable-next-line no-console
-          console.debug("custly_auth_written", persisted);
-          try {
-            window.sessionStorage.setItem(
-              "custly_auth_written",
-              persisted ?? "",
-            );
-          } catch {
-            /* ignore */
-          }
-        }
       } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error("custly_auth_set_failed", err);
         throw err;
       }
       return;
@@ -188,18 +151,8 @@ export const authProvider: AuthProvider = {
     // 3) 密码登录
     const { email, password } = params as { email?: string; password?: string };
     
-    // Debug: log login params
-    // eslint-disable-next-line no-console
-    console.log("[authProvider.login] Password login attempt:", { 
-      email, 
-      hasPassword: !!password, 
-      allParams: Object.keys(params || {})
-    });
-    
     // Skip if no credentials provided (this may happen during OAuth flows)
     if (!email && !password) {
-      // eslint-disable-next-line no-console
-      console.log("[authProvider.login] No email/password provided, skipping password login");
       return;
     }
     
@@ -273,25 +226,29 @@ export const authProvider: AuthProvider = {
     }
     if (
       window.location.pathname === "/set-password" ||
-      window.location.hash.includes("#/set-password")
+      window.location.hash === "#/set-password" ||
+      window.location.hash.startsWith("#/set-password?")
     ) {
       return;
     }
     if (
       window.location.pathname === "/forgot-password" ||
-      window.location.hash.includes("#/forgot-password")
+      window.location.hash === "#/forgot-password" ||
+      window.location.hash.startsWith("#/forgot-password?")
     ) {
       return;
     }
     if (
       window.location.pathname === "/reset-password" ||
-      window.location.hash.includes("#/reset-password")
+      window.location.hash === "#/reset-password" ||
+      window.location.hash.startsWith("#/reset-password?")
     ) {
       return;
     }
     if (
       window.location.pathname === "/sign-up" ||
-      window.location.hash.includes("#/sign-up")
+      window.location.hash === "#/sign-up" ||
+      window.location.hash.startsWith("#/sign-up?")
     ) {
       return;
     }

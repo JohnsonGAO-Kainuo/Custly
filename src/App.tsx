@@ -6,13 +6,10 @@ import {
 
 const pathname =
   typeof window !== "undefined" ? window.location.pathname : "";
-const searchParams =
-  typeof window !== "undefined"
-    ? new URLSearchParams(window.location.search)
-    : null;
 const isDemoPath = pathname.startsWith("/demo");
-const isDemoQuery = searchParams?.get("demo") === "1";
-const isDemo = isDemoPath || isDemoQuery;
+// Demo mode is ONLY via /demo path (used by demo build with fakerest)
+// ?demo=1 query parameter is NOT supported — prevents production bypass
+const isDemo = isDemoPath;
 const demoBasename = isDemoPath ? "/demo" : undefined;
 
 /**

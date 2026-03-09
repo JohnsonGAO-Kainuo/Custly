@@ -745,14 +745,6 @@
           "type": "registry:component"
         },
         {
-          "path": "src/components/atomic-crm/billing/SubscriptionGate.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "src/components/atomic-crm/billing/Paywall.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "src/components/atomic-crm/billing/BillingPage.tsx",
           "type": "registry:component"
         },

@@ -12,10 +12,12 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    visualizer({
-      open: process.env.NODE_ENV !== "CI",
-      filename: "./dist/stats.html",
-    }),
+    ...(process.env.NODE_ENV === "production" ? [] : [
+      visualizer({
+        open: process.env.NODE_ENV !== "CI",
+        filename: "./dist/stats.html",
+      }),
+    ]),
     createHtmlPlugin({
       minify: true,
       inject: {
@@ -47,7 +49,7 @@ export default defineConfig({
     keepNames: true,
   },
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
   resolve: {
     preserveSymlinks: true,

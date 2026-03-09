@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,7 @@ export const EnhancedLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const oauthProcessedRef = useRef(false);
   const navigate = useNavigate();
   const login = useLogin();
   const notify = useNotify();
@@ -75,21 +76,16 @@ export const EnhancedLoginPage = () => {
 
   useEffect(() => {
     if (!isPocketbase) return;
+    // Guard against React 18 StrictMode double-fire
+    if (oauthProcessedRef.current) return;
+    
     const params = new URLSearchParams(window.location.search);
     const code = params.get("code");
     const state = params.get("state");
     const oauthError = params.get("error");
     const errorDescription = params.get("error_description");
 
-    // Debug: log OAuth callback params
-    if (code || state || oauthError) {
-      // eslint-disable-next-line no-console
-      console.log("[OAuth Callback]", { code: code?.substring(0, 20) + "...", state, oauthError, errorDescription });
-    }
-
     if (oauthError) {
-      // eslint-disable-next-line no-console
-      console.error("[OAuth Error]", oauthError, errorDescription);
       notify(
         errorDescription || translate("marketing.auth.login.oauth_failed", {
           provider: "OAuth",
@@ -104,14 +100,10 @@ export const EnhancedLoginPage = () => {
 
     if (!code || !state) return;
 
+    oauthProcessedRef.current = true;
     setIsLoading(true);
-    // eslint-disable-next-line no-console
-    console.log("[OAuth] Starting login with code and state...");
-    
     login({ code, state })
       .then(() => {
-        // eslint-disable-next-line no-console
-        console.log("[OAuth] Login successful!");
         const url = new URL(window.location.href);
         url.searchParams.delete("code");
         url.searchParams.delete("state");
@@ -120,8 +112,6 @@ export const EnhancedLoginPage = () => {
         navigate("/", { replace: true });
       })
       .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error("[OAuth] Login failed:", error);
         const errorMessage = error?.message || error?.toString() || "Unknown error";
         notify(errorMessage, { type: "error" });
       })

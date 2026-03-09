@@ -18,7 +18,7 @@ import type {
 import { getActivityLog } from "../commons/activity";
 import { mergeContacts } from "../commons/mergeContacts";
 import type { CrmDataProvider } from "../types";
-import { buildFileUrl, getAuthToken, getPocketBaseUrl } from "./client";
+import { buildFileUrl, getAuthState, getAuthToken, getPocketBaseUrl } from "./client";
 import { getIsInitialized } from "./authProvider";
 
 type FileFieldConfig = {
@@ -47,7 +47,7 @@ const normalizeResource = (resource: string) => {
   return resource;
 };
 
-const escapeFilterValue = (value: string) => value.replace(/"/g, '\\"');
+const escapeFilterValue = (value: string) => value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 
 const formatFilterValue = (value: unknown) => {
   if (value === null) {
@@ -269,17 +269,12 @@ const requestJson = async <T>(
   }
   
   const url = `${baseUrl}${path}`;
-  // eslint-disable-next-line no-console
-  console.log("[requestJson] Fetching:", { url, method: options.method || "GET", hasBody: !!options.body });
-  
   const response = await fetch(url, {
     ...options,
     headers,
   });
   if (!response.ok) {
     const message = await response.text();
-    // eslint-disable-next-line no-console
-    console.error("[requestJson] Error response:", { status: response.status, message, url });
     const err = new Error(message || "PocketBase request failed") as Error & {
       status?: number;
     };
@@ -369,12 +364,13 @@ const baseDataProvider: DataProvider = {
     // For companies, calculate nb_contacts and nb_deals
     if (normalized === "companies") {
       try {
+        const safeId = escapeFilterValue(String(params.id));
         const [contactsRes, dealsRes] = await Promise.all([
           requestJson<{ totalItems: number }>(
-            `/api/collections/contacts/records?page=1&perPage=1&filter=company_id="${params.id}"`,
+            `/api/collections/contacts/records?page=1&perPage=1&filter=company_id="${safeId}"`,
           ),
           requestJson<{ totalItems: number }>(
-            `/api/collections/deals/records?page=1&perPage=1&filter=company_id="${params.id}"`,
+            `/api/collections/deals/records?page=1&perPage=1&filter=company_id="${safeId}"`,
           ),
         ]);
         data.nb_contacts = contactsRes.totalItems;
@@ -534,9 +530,6 @@ const dataProviderWithCustomMethods: CrmDataProvider = {
       first_name,
       last_name,
     };
-    // eslint-disable-next-line no-console
-    console.log("[signUp] Sending request with body:", { ...body, password: "***", passwordConfirm: "***" });
-    
     const response = await requestJson<Record<string, any>>(
       "/api/collections/sales/records",
       {
@@ -550,18 +543,22 @@ const dataProviderWithCustomMethods: CrmDataProvider = {
     return {
       id: response.id,
       email,
-      password,
+      password: undefined,
     };
   },
   async salesCreate(body: SalesFormData) {
+    // Only admins may set privileged fields
+    const state = getAuthState();
+    const isAdmin = state?.record?.administrator === true;
+    const { administrator, disabled, ...safeBody } = body;
+    const payload = isAdmin
+      ? { ...body, passwordConfirm: body.password }
+      : { ...safeBody, passwordConfirm: body.password };
     const response = await requestJson<Record<string, any>>(
       "/api/collections/sales/records",
       {
         method: "POST",
-        body: JSON.stringify({
-          ...body,
-          passwordConfirm: body.password,
-        }),
+        body: JSON.stringify(payload),
       },
     );
     return response as any;
@@ -570,26 +567,42 @@ const dataProviderWithCustomMethods: CrmDataProvider = {
     id: Identifier,
     data: Partial<Omit<SalesFormData, "password">>,
   ) {
+    // Only admins may modify privileged fields
+    const state = getAuthState();
+    const isAdmin = state?.record?.administrator === true;
+    let payload = data;
+    if (!isAdmin) {
+      const { administrator, disabled, ...safeData } = data;
+      payload = safeData;
+    }
     await requestJson<Record<string, any>>(
       `/api/collections/sales/records/${id}`,
       {
         method: "PATCH",
-        body: JSON.stringify(data),
+        body: JSON.stringify(payload),
       },
     );
     return data;
   },
   async updatePassword(id: Identifier) {
-    await requestJson<Record<string, any>>(
-      `/api/collections/sales/records/${id}`,
+    // Request a password reset email via PocketBase's built-in endpoint
+    const state = getAuthState();
+    const email = state?.record?.email;
+    if (!email || typeof email !== 'string') {
+      throw new Error('Cannot reset password: no email found');
+    }
+    const baseUrl = getPocketBaseUrl();
+    const response = await fetch(
+      `${baseUrl}/api/collections/sales/request-password-reset`,
       {
-        method: "PATCH",
-        body: JSON.stringify({
-          password: "demo_newPassword",
-          passwordConfirm: "demo_newPassword",
-        }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       },
     );
+    if (!response.ok) {
+      throw new Error('Failed to send password reset email');
+    }
     return true;
   },
   async unarchiveDeal(deal: Deal) {
