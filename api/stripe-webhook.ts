@@ -88,9 +88,9 @@ async function pbRequest(
 function getPlanTypeFromPriceId(priceId: string): "monthly" | "yearly" | "lifetime" {
   const entry = PRICE_IDS[priceId as keyof typeof PRICE_IDS];
   if (!entry) {
-    console.warn(`Unknown price ID: ${priceId}, defaulting to "monthly"`);
+    console.error(`Unknown price ID: ${priceId} — defaulting to "monthly". Consider adding it to PRICE_IDS.`);
   }
-  return entry?.plan || "monthly"; // Default fallback
+  return entry?.plan || "monthly"; // Default fallback for truly unknown prices
 }
 
 function isLifetimePriceId(priceId: string): boolean {
@@ -128,7 +128,12 @@ async function handleCheckoutSessionCompleted(
     // One-time payment (lifetime plan)
     // Get the actual price ID from the session line items
     const lineItems = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
-    const actualPriceId = lineItems.data[0]?.price?.id || "price_1SwmqMJTqJOgtjP48FPNkAM5";
+    const actualPriceId = lineItems.data[0]?.price?.id;
+
+    if (!actualPriceId) {
+      console.error(`No line items found for checkout session ${session.id}`);
+      return;
+    }
 
     const subscriptionData = {
       sales_id: salesId,
@@ -306,11 +311,17 @@ async function handleChargeRefunded(
   const customerId = charge.customer as string;
   if (!customerId) return;
 
-  // Find subscription by stripe_customer_id
+  // Only cancel subscription on FULL refund, not partial refund
+  if (!charge.refunded || charge.amount_refunded < charge.amount) {
+    console.log(`Partial refund for customer ${customerId} — skipping subscription cancellation`);
+    return;
+  }
+
+  // Find subscription by stripe_customer_id (most recent first)
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_customer_id="${sanitizePBFilter(customerId)}"`
+    `/api/collections/subscriptions/records?filter=stripe_customer_id="${sanitizePBFilter(customerId)}"&sort=-created&perPage=1`
   );
 
   if (existingQuery.items?.length > 0) {
@@ -331,13 +342,25 @@ async function handleChargeRefunded(
 }
 
 // Read raw body from request stream for Stripe signature verification
+// Max 512KB — Stripe webhook payloads are typically under 100KB
+const MAX_BODY_SIZE = 512 * 1024;
+
 async function getRawBody(req: VercelRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
+    let totalSize = 0;
     const timeout = setTimeout(() => {
       reject(new Error("Raw body read timed out after 10s"));
     }, 10000);
-    req.on("data", (chunk: Buffer) => chunks.push(chunk));
+    req.on("data", (chunk: Buffer) => {
+      totalSize += chunk.length;
+      if (totalSize > MAX_BODY_SIZE) {
+        clearTimeout(timeout);
+        reject(new Error(`Request body too large (>${MAX_BODY_SIZE} bytes)`));
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on("end", () => {
       clearTimeout(timeout);
       resolve(Buffer.concat(chunks));

@@ -1,7 +1,8 @@
 import { getPocketBaseUrl, getAuthToken, getAuthState } from "./client";
 
 // Module-level subscription state — accessible outside React tree (e.g., dataProvider)
-let _isSubscriptionExpired = false;
+// Default to true (blocked) — SubscriptionContext will set to false once status is confirmed
+let _isSubscriptionExpired = true;
 
 /** Called by SubscriptionContext to sync expired state */
 export const setSubscriptionExpired = (expired: boolean) => {
@@ -206,10 +207,12 @@ export async function createCheckoutSession(
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s timeout
 
+    const token = getAuthToken();
     const response = await fetch("/api/create-checkout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { Authorization: token } : {}),
       },
       body: JSON.stringify({
         plan,
@@ -244,10 +247,10 @@ export async function createCheckoutSession(
 export async function openCustomerPortal(
   flow?: "payment_method_update" | "subscription_cancel"
 ): Promise<{ url: string | null; error?: string }> {
-  const status = await getSubscriptionStatus();
-  
-  if (!status.subscription?.stripe_customer_id) {
-    return { url: null, error: "No subscription found" };
+  // Auth token is required — server will look up stripeCustomerId
+  const token = getAuthToken();
+  if (!token) {
+    return { url: null, error: "Not authenticated" };
   }
 
   try {
@@ -255,9 +258,9 @@ export async function openCustomerPortal(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: token,
       },
       body: JSON.stringify({
-        stripeCustomerId: status.subscription.stripe_customer_id,
         ...(flow && { flow }),
       }),
     });

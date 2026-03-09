@@ -3,6 +3,75 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
+const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
+const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;
+const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
+
+/**
+ * Verify PocketBase auth token and return the authenticated user record.
+ */
+async function verifyPBToken(authHeader: string | undefined): Promise<{ id: string; email: string } | null> {
+  if (!authHeader) return null;
+  const token = authHeader.startsWith("Bearer ") ? authHeader : `Bearer ${authHeader}`;
+
+  try {
+    const response = await fetch(`${POCKETBASE_URL}/api/collections/sales/auth-refresh`, {
+      method: "POST",
+      headers: { Authorization: token },
+    });
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const record = data.record;
+    if (!record?.id || !record?.email) return null;
+    return { id: record.id, email: record.email };
+  } catch {
+    return null;
+  }
+}
+
+/** Sanitize a value for use in PocketBase filter queries */
+function sanitizePBFilter(value: string): string {
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+/**
+ * Look up the Stripe customer ID for a given user from PocketBase.
+ * Uses admin auth to ensure access regardless of collection rules.
+ */
+async function getStripeCustomerIdForUser(userId: string): Promise<string | null> {
+  try {
+    // Get admin token
+    const authResp = await fetch(
+      `${POCKETBASE_URL}/api/collections/_superusers/auth-with-password`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identity: POCKETBASE_ADMIN_EMAIL,
+          password: POCKETBASE_ADMIN_PASSWORD,
+        }),
+      }
+    );
+    if (!authResp.ok) return null;
+    const { token } = await authResp.json();
+
+    // Look up subscription for this user
+    const subResp = await fetch(
+      `${POCKETBASE_URL}/api/collections/subscriptions/records?filter=sales_id="${sanitizePBFilter(userId)}"&sort=-created&perPage=1`,
+      {
+        headers: { Authorization: token },
+      }
+    );
+    if (!subResp.ok) return null;
+
+    const data = await subResp.json();
+    return data.items?.[0]?.stripe_customer_id || null;
+  } catch {
+    return null;
+  }
+}
+
 export default async function handler(
   req: VercelRequest,
   res: VercelResponse
@@ -30,20 +99,27 @@ export default async function handler(
   }
 
   try {
-    const { stripeCustomerId, flow } = req.body as {
-      stripeCustomerId: string;
+    // Verify PocketBase auth token
+    const user = await verifyPBToken(req.headers.authorization);
+    if (!user) {
+      return res.status(401).json({ error: "Authentication required" });
+    }
+
+    const { flow } = req.body as {
       flow?: "payment_method_update" | "subscription_cancel";
     };
 
+    // Look up the Stripe customer ID server-side — never trust client-sent value
+    const stripeCustomerId = await getStripeCustomerIdForUser(user.id);
     if (!stripeCustomerId) {
-      return res.status(400).json({ error: "Missing stripeCustomerId" });
+      return res.status(404).json({ error: "No subscription found for this user" });
     }
 
-    // Always use server-side base URL to prevent open redirect attacks
-    const baseUrl = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : process.env.NODE_ENV === "production"
-        ? "https://custlycrm.com"
+    // Use production domain or fallback for local dev
+    const baseUrl = process.env.VERCEL_ENV === "production"
+      ? "https://custlycrm.com"
+      : process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
         : "http://localhost:5173";
 
     const sessionParams: Stripe.BillingPortal.SessionCreateParams = {
@@ -66,7 +142,7 @@ export default async function handler(
       // Get the customer's active subscription for the cancel flow
       const subscriptions = await stripe.subscriptions.list({
         customer: stripeCustomerId,
-        status: "all",
+        status: "active",
         limit: 1,
       });
       const activeSub = subscriptions.data[0];

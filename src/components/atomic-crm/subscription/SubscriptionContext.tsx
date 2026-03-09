@@ -44,31 +44,19 @@ const SubscriptionContext = createContext<SubscriptionContextValue>(defaultConte
 
 export const useSubscription = () => useContext(SubscriptionContext);
 
-// Detect demo mode from URL or sessionStorage (persists across navigation)
+// Detect demo mode — only when using fakerest backend (demo build)
 const isDemoMode = () => {
   if (typeof window === "undefined") return false;
 
-  const searchParams = new URLSearchParams(window.location.search);
-  const fromUrl =
-    window.location.pathname.startsWith("/demo") ||
-    searchParams.get("demo") === "1";
+  // Only allow demo mode when running the demo/fakerest build
+  // This prevents ?demo=1 from bypassing subscription checks in production
+  const backend = import.meta.env.VITE_BACKEND;
+  if (backend === "fakerest") return true;
 
-  // Once detected, persist in sessionStorage so it survives URL changes
-  if (fromUrl) {
-    try {
-      sessionStorage.setItem("custly_demo", "1");
-    } catch {
-      // ignore
-    }
-    return true;
-  }
+  // Also allow demo mode if explicitly configured via env
+  if (import.meta.env.VITE_IS_DEMO === "true") return true;
 
-  // Fallback: check sessionStorage in case ?demo=1 was stripped from URL
-  try {
-    return sessionStorage.getItem("custly_demo") === "1";
-  } catch {
-    return false;
-  }
+  return false;
 };
 
 export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
@@ -150,7 +138,8 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   // Sync expired state to module-level for dataProvider access
   useEffect(() => {
     setSubscriptionExpired(isExpired);
-    return () => setSubscriptionExpired(false);
+    // On unmount, default to blocked (safe fallback)
+    return () => setSubscriptionExpired(true);
   }, [isExpired]);
 
   const value: SubscriptionContextValue = {
