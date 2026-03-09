@@ -95,7 +95,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
       `${baseUrl}/api/collections/subscriptions/records?filter=sales_id="${salesId}"&sort=-created&perPage=1`,
       {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       }
     );

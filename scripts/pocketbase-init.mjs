@@ -469,7 +469,9 @@ const collectionsToEnsure = [
       { name: "current_period_end", type: "date", required: false },
       { name: "cancel_at_period_end", type: "bool", required: false },
     ],
-    indexes: [],
+    indexes: [
+      "CREATE UNIQUE INDEX IF NOT EXISTS idx_subscriptions_sales_id ON subscriptions (sales_id)",
+    ],
     // Users can only view their own subscription; create/update/delete only via admin (webhook)
     listRule: ownerRule,
     viewRule: ownerRule,

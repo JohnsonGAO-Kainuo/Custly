@@ -141,6 +141,12 @@ async function handleCheckoutSessionCompleted(
       return;
     }
 
+    // Defense-in-depth: verify the price ID is a known lifetime price
+    if (!isLifetimePriceId(actualPriceId)) {
+      console.error(`Checkout session ${session.id}: price ${actualPriceId} is not a recognized lifetime price, skipping`);
+      return;
+    }
+
     const subscriptionData = {
       sales_id: salesId,
       stripe_customer_id: customerId,
@@ -504,13 +510,10 @@ export default async function handler(
     // Mark event as processed
     processedEventIds.add(event.id);
     if (processedEventIds.size > MAX_PROCESSED_CACHE) {
-      // Evict oldest entries
-      const iterator = processedEventIds.values();
-      for (let i = 0; i < 200; i++) iterator.next();
-      const remaining = new Set<string>();
-      for (const id of processedEventIds) remaining.add(id);
+      // Evict oldest entries — convert to array to reliably slice
+      const all = [...processedEventIds];
       processedEventIds.clear();
-      for (const id of remaining) processedEventIds.add(id);
+      for (const id of all.slice(200)) processedEventIds.add(id);
     }
 
     return res.status(200).json({ received: true });
