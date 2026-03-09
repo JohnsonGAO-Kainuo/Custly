@@ -32,6 +32,7 @@ export interface SubscriptionStatus {
   hasActiveSubscription: boolean;
   isTrialing: boolean;
   isLifetime: boolean;
+  isPastDue: boolean;
   subscription: Subscription | null;
   daysRemaining: number | null;
   canUseCRM: boolean;
@@ -80,6 +81,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
       hasActiveSubscription: false,
       isTrialing: false,
       isLifetime: false,
+      isPastDue: false,
       subscription: null,
       daysRemaining: null,
       canUseCRM: false,
@@ -102,6 +104,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
         hasActiveSubscription: false,
         isTrialing: false,
         isLifetime: false,
+        isPastDue: false,
         subscription: null,
         daysRemaining: null,
         canUseCRM: false,
@@ -128,6 +131,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
           hasActiveSubscription: isInTrial,
           isTrialing: isInTrial,
           isLifetime: false,
+          isPastDue: false,
           subscription: null,
           daysRemaining: isInTrial ? daysRemaining : 0,
           canUseCRM: isInTrial,
@@ -138,6 +142,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
         hasActiveSubscription: false,
         isTrialing: false,
         isLifetime: false,
+        isPastDue: false,
         subscription: null,
         daysRemaining: null,
         canUseCRM: false,
@@ -149,6 +154,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
     const isTrialing = subscription.status === "trialing" &&
       (!subscription.trial_end || new Date(subscription.trial_end) > now);
     const isActive = subscription.status === "active";
+    const isPastDue = subscription.status === "past_due";
     const hasActiveSubscription = isLifetime || isTrialing || isActive;
 
     let daysRemaining: number | null = null;
@@ -165,6 +171,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
       hasActiveSubscription,
       isTrialing,
       isLifetime,
+      isPastDue,
       subscription,
       daysRemaining,
       canUseCRM: hasActiveSubscription,
@@ -175,6 +182,7 @@ export async function getSubscriptionStatus(): Promise<SubscriptionStatus> {
       hasActiveSubscription: false,
       isTrialing: false,
       isLifetime: false,
+      isPastDue: false,
       subscription: null,
       daysRemaining: null,
       canUseCRM: false,

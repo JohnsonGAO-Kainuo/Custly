@@ -269,7 +269,7 @@ export const BillingPage = () => {
 
       {/* Current Subscription Status */}
       {status?.subscription && (
-        <Card className="mb-8">
+        <Card className={`mb-8 ${status.subscription.status === "past_due" ? "border-orange-500" : ""}`}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
@@ -282,15 +282,33 @@ export const BillingPage = () => {
             </div>
           </CardHeader>
           <CardContent>
+            {status.subscription.status === "past_due" && (
+              <div className="mb-4 p-3 rounded-md bg-orange-50 dark:bg-orange-950 text-orange-800 dark:text-orange-200 text-sm">
+                <p className="font-medium mb-1">⚠️ Your payment has failed</p>
+                <p>
+                  Please update your payment method via the button below. If not resolved, your subscription will be canceled automatically and you will lose editing access to your data.
+                </p>
+              </div>
+            )}
+            {status.subscription.status === "canceled" && (
+              <div className="mb-4 p-3 rounded-md bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-200 text-sm">
+                <p className="font-medium mb-1">Your subscription has been canceled</p>
+                <p>
+                  You can still view and export your data. Choose a plan below to regain full editing access.
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap gap-4">
               {status.subscription.stripe_customer_id && (
                 <Button
-                  variant="outline"
+                  variant={status.subscription.status === "past_due" ? "default" : "outline"}
                   onClick={handleManageSubscription}
                   disabled={checkoutLoading}
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  Manage Subscription
+                  {status.subscription.status === "past_due"
+                    ? "Update Payment Method"
+                    : "Manage Subscription"}
                 </Button>
               )}
               {status.subscription.status === "trialing" && (
@@ -311,8 +329,8 @@ export const BillingPage = () => {
         </Card>
       )}
 
-      {/* Pricing Cards */}
-      {(!status?.hasActiveSubscription || status?.subscription?.status === "trialing") && (
+      {/* Pricing Cards — show for users without active subscription, or past_due/canceled users who need to re-subscribe */}
+      {(!status?.hasActiveSubscription || status?.subscription?.status === "trialing" || status?.subscription?.status === "past_due" || status?.subscription?.status === "canceled") && (
         <>
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <PricingCard

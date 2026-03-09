@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 import { useSubscription } from "./SubscriptionContext";
-import { Loader2, AlertTriangle } from "lucide-react";
+import { Loader2, AlertTriangle, CreditCard } from "lucide-react";
 
 interface SubscriptionGuardProps {
   children: ReactNode;
@@ -33,11 +33,27 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
 };
 
 /**
- * ExpiredBanner component — shown when subscription has expired.
+ * ExpiredBanner component — shown when subscription has expired or payment failed.
  * Non-blocking persistent banner that encourages re-subscription.
  */
 export const ExpiredBanner = () => {
-  const { isExpired } = useSubscription();
+  const { isExpired, isPastDue } = useSubscription();
+
+  if (isPastDue) {
+    return (
+      <div className="bg-orange-500 text-white px-4 py-3 text-center text-sm">
+        <div className="flex items-center justify-center gap-2">
+          <CreditCard className="h-4 w-4 flex-shrink-0" />
+          <span>
+            Your payment failed. Please update your payment method to avoid losing access.{" "}
+            <a href="/#/billing" className="underline font-medium hover:opacity-80">
+              Update payment
+            </a>
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   if (!isExpired) {
     return null;

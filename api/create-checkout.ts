@@ -61,6 +61,8 @@ export default async function handler(
       customer_email: email,
       client_reference_id: salesId,
       allow_promotion_codes: true,
+      billing_address_collection: "required",
+      tax_id_collection: { enabled: true },
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
       cancel_url: cancelUrl || `${baseUrl}/#/billing?canceled=true`,
       metadata: {

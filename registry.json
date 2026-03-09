@@ -161,6 +161,10 @@
           "type": "registry:component"
         },
         {
+          "path": "src/components/atomic-crm/providers/readOnlyDataProvider.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "src/components/atomic-crm/providers/supabase/supabase.ts",
           "type": "registry:component"
         },
