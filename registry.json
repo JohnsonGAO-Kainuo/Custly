@@ -809,6 +809,10 @@
           "type": "registry:hook"
         },
         {
+          "path": "src/hooks/usePageSEO.ts",
+          "type": "registry:hook"
+        },
+        {
           "path": "src/hooks/useBulkExport.tsx",
           "type": "registry:hook"
         },

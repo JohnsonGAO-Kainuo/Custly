@@ -60,6 +60,7 @@ export default async function handler(
       // currency, customer location, and Dashboard settings
       customer_email: email,
       client_reference_id: salesId,
+      allow_promotion_codes: true,
       success_url: successUrl || `${baseUrl}/#/billing?success=true`,
       cancel_url: cancelUrl || `${baseUrl}/#/billing?canceled=true`,
       metadata: {
