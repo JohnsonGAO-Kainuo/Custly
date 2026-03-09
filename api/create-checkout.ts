@@ -16,7 +16,11 @@ export default async function handler(
 ) {
   // Enable CORS
   const origin = req.headers.origin;
-  const allowedOrigins = ["https://custlycrm.com", "http://localhost:5173"];
+  const allowedOrigins = [
+    "https://custlycrm.com",
+    "https://www.custlycrm.com",
+    "http://localhost:5173",
+  ];
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
@@ -33,12 +37,10 @@ export default async function handler(
   }
 
   try {
-    const { plan, salesId, email, successUrl, cancelUrl } = req.body as {
+    const { plan, salesId, email } = req.body as {
       plan: "monthly" | "yearly" | "lifetime";
       salesId: string;
       email: string;
-      successUrl?: string;
-      cancelUrl?: string;
     };
 
     if (!plan || !salesId || !email) {
@@ -50,10 +52,12 @@ export default async function handler(
       return res.status(400).json({ error: "Invalid plan type" });
     }
 
-    // Use production domain or fallback to localhost
-    const baseUrl = process.env.NODE_ENV === "production"
-      ? "https://custlycrm.com"
-      : "http://localhost:5173";
+    // Always use server-side base URL to prevent open redirect attacks
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NODE_ENV === "production"
+        ? "https://custlycrm.com"
+        : "http://localhost:5173";
 
     const sessionConfig: Stripe.Checkout.SessionCreateParams = {
       // Don't specify payment_method_types — Stripe auto-selects based on
@@ -63,8 +67,8 @@ export default async function handler(
       allow_promotion_codes: true,
       billing_address_collection: "required",
       tax_id_collection: { enabled: true },
-      success_url: successUrl || `${baseUrl}/#/billing?success=true`,
-      cancel_url: cancelUrl || `${baseUrl}/#/billing?canceled=true`,
+      success_url: `${baseUrl}/#/billing?success=true`,
+      cancel_url: `${baseUrl}/#/billing?canceled=true`,
       metadata: {
         salesId,
         plan,
@@ -105,7 +109,6 @@ export default async function handler(
     });
   } catch (error: unknown) {
     console.error("Error creating checkout session:", error);
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    return res.status(500).json({ error: "Failed to create checkout session", details: errorMessage });
+    return res.status(500).json({ error: "Failed to create checkout session" });
   }
 }

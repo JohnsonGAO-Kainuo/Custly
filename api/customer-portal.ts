@@ -9,7 +9,11 @@ export default async function handler(
 ) {
   // Enable CORS
   const origin = req.headers.origin;
-  const allowedOrigins = ["https://custlycrm.com", "http://localhost:5173"];
+  const allowedOrigins = [
+    "https://custlycrm.com",
+    "https://www.custlycrm.com",
+    "http://localhost:5173",
+  ];
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
@@ -26,9 +30,8 @@ export default async function handler(
   }
 
   try {
-    const { stripeCustomerId, returnUrl, flow } = req.body as {
+    const { stripeCustomerId, flow } = req.body as {
       stripeCustomerId: string;
-      returnUrl?: string;
       flow?: "payment_method_update" | "subscription_cancel";
     };
 
@@ -36,14 +39,16 @@ export default async function handler(
       return res.status(400).json({ error: "Missing stripeCustomerId" });
     }
 
-    // Use production domain or fallback to localhost
-    const baseUrl = process.env.NODE_ENV === "production"
-      ? "https://custlycrm.com"
-      : "http://localhost:5173";
+    // Always use server-side base URL to prevent open redirect attacks
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.NODE_ENV === "production"
+        ? "https://custlycrm.com"
+        : "http://localhost:5173";
 
     const sessionParams: Stripe.BillingPortal.SessionCreateParams = {
       customer: stripeCustomerId,
-      return_url: returnUrl || `${baseUrl}/#/billing`,
+      return_url: `${baseUrl}/#/billing`,
     };
 
     // Deep link flows — skip portal homepage and go directly to the action

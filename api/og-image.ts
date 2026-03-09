@@ -4,8 +4,14 @@ export const config = {
   runtime: "edge",
 };
 
-export default function handler() {
-  return new ImageResponse(
+export default function handler(req: Request) {
+  // Only allow GET requests for OG images
+  if (req.method !== "GET" && req.method !== "HEAD") {
+    return new Response("Method Not Allowed", { status: 405, headers: { Allow: "GET, HEAD" } });
+  }
+
+  try {
+    return new ImageResponse(
     ({
       type: "div",
       props: {
@@ -158,4 +164,8 @@ export default function handler() {
       height: 630,
     },
   );
+  } catch (error) {
+    console.error("OG image generation failed:", error);
+    return new Response("Failed to generate image", { status: 500 });
+  }
 }

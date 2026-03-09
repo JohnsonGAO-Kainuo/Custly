@@ -2,9 +2,26 @@
   "functions": {
     "api/stripe-webhook.ts": {
       "maxDuration": 30
+    },
+    "api/create-checkout.ts": {
+      "maxDuration": 15
+    },
+    "api/customer-portal.ts": {
+      "maxDuration": 15
     }
   },
   "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.custlycrm.com"
+        }
+      ],
+      "destination": "https://custlycrm.com/:path",
+      "permanent": true
+    },
     {
       "source": "/demo",
       "destination": "/?demo=1",

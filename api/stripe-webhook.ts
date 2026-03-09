@@ -87,11 +87,20 @@ async function pbRequest(
 
 function getPlanTypeFromPriceId(priceId: string): "monthly" | "yearly" | "lifetime" {
   const entry = PRICE_IDS[priceId as keyof typeof PRICE_IDS];
+  if (!entry) {
+    console.warn(`Unknown price ID: ${priceId}, defaulting to "monthly"`);
+  }
   return entry?.plan || "monthly"; // Default fallback
 }
 
 function isLifetimePriceId(priceId: string): boolean {
   return LIFETIME_PRICE_IDS.includes(priceId);
+}
+
+/** Sanitize a value for use in PocketBase filter queries to prevent injection */
+function sanitizePBFilter(value: string): string {
+  // Escape double quotes and backslashes to prevent filter injection
+  return value.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
 }
 
 async function handleCheckoutSessionCompleted(
@@ -112,7 +121,7 @@ async function handleCheckoutSessionCompleted(
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=sales_id="${salesId}"`
+    `/api/collections/subscriptions/records?filter=sales_id="${sanitizePBFilter(salesId)}"`
   );
 
   if (mode === "payment") {
@@ -213,7 +222,7 @@ async function handleSubscriptionUpdated(
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sub.id}"`
+    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sanitizePBFilter(sub.id)}"`
   );
 
   if (existingQuery.items?.length > 0) {
@@ -247,7 +256,7 @@ async function handleSubscriptionDeleted(
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${subscription.id}"`
+    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sanitizePBFilter(subscription.id)}"`
   );
 
   if (existingQuery.items?.length > 0) {
@@ -275,7 +284,7 @@ async function handleInvoicePaymentFailed(
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${subscriptionId}"`
+    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sanitizePBFilter(subscriptionId)}"`
   );
 
   if (existingQuery.items?.length > 0) {
@@ -301,13 +310,14 @@ async function handleChargeRefunded(
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_customer_id="${customerId}"`
+    `/api/collections/subscriptions/records?filter=stripe_customer_id="${sanitizePBFilter(customerId)}"`
   );
 
   if (existingQuery.items?.length > 0) {
     const sub = existingQuery.items[0];
-    // If it's a lifetime plan that was refunded, cancel it
-    if (sub.plan_type === "lifetime") {
+    // Cancel subscription on refund regardless of plan type
+    if (sub.status !== "canceled") {
+      console.log(`Canceling subscription ${sub.id} (plan: ${sub.plan_type}) due to refund`);
       await pbRequest(
         token,
         "PATCH",
@@ -324,9 +334,18 @@ async function handleChargeRefunded(
 async function getRawBody(req: VercelRequest): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
+    const timeout = setTimeout(() => {
+      reject(new Error("Raw body read timed out after 10s"));
+    }, 10000);
     req.on("data", (chunk: Buffer) => chunks.push(chunk));
-    req.on("end", () => resolve(Buffer.concat(chunks)));
-    req.on("error", reject);
+    req.on("end", () => {
+      clearTimeout(timeout);
+      resolve(Buffer.concat(chunks));
+    });
+    req.on("error", (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
   });
 }
 
