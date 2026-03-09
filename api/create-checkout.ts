@@ -3,7 +3,7 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
+const POCKETBASE_URL = process.env.POCKETBASE_URL;
 
 // Multi-currency Price IDs (Stripe auto-detects currency by customer IP via currency_options)
 const PRICE_IDS = {
@@ -57,6 +57,10 @@ export default async function handler(
         "https://www.custlycrm.com",
         "http://localhost:5173",
       ];
+  if (!process.env.STRIPE_SECRET_KEY || !POCKETBASE_URL) {
+    return res.status(500).json({ error: "Server misconfigured" });
+  }
+
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }

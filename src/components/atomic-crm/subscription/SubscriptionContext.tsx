@@ -12,12 +12,7 @@ import {
   setSubscriptionExpired,
   type SubscriptionStatus,
 } from "../providers/pocketbase/subscriptionService";
-
-// Admin emails that are exempt from subscription requirements
-const ADMIN_EMAILS = [
-  "kainuotech@gmail.com",
-  // Add more admin emails here
-];
+import { getAuthState } from "../providers/pocketbase/client";
 
 interface SubscriptionContextValue extends SubscriptionStatus {
   isLoading: boolean;
@@ -73,8 +68,9 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
   });
   const [isLoading, setIsLoading] = useState(!isDemo);
 
-  // Check if current user is an admin
-  const isAdmin = identity?.email ? ADMIN_EMAILS.includes(identity.email as string) : false;
+  // Check if current user is an admin (from server-validated PocketBase auth record)
+  const authState = getAuthState();
+  const isAdmin = authState?.record?.administrator === true;
 
   const fetchSubscriptionStatus = useCallback(async () => {
     // Skip subscription check in demo mode

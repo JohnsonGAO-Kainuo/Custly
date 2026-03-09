@@ -220,8 +220,22 @@ export const authProvider: AuthProvider = {
     clearInitializedCache();
   },
   checkAuth: async () => {
-    // 已有有效 token 直接通过，避免初始化检查把新 OAuth 会话清掉
-    if (getAuthToken()) {
+    // Validate token exists and is not expired
+    const token = getAuthToken();
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        if (payload.exp && payload.exp * 1000 < Date.now()) {
+          // Token expired — clear auth and force re-login
+          clearAuthState();
+          throw new Error("Session expired");
+        }
+      } catch (e) {
+        if (e instanceof Error && e.message === "Session expired") throw e;
+        // Malformed token — clear and force re-login
+        clearAuthState();
+        throw new Error("Invalid session");
+      }
       return;
     }
     if (

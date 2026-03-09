@@ -19,7 +19,8 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
-        { "key": "X-DNS-Prefetch-Control", "value": "on" }
+        { "key": "X-DNS-Prefetch-Control", "value": "on" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://pb-custly.kainuotech.com https://checkout.stripe.com https://api.stripe.com; img-src 'self' data: https: blob:; font-src 'self'; frame-src https://checkout.stripe.com https://js.stripe.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://checkout.stripe.com" }
       ]
     }
   ],
@@ -46,8 +47,8 @@
       "destination": "https://pb-custly.kainuotech.com/api/collections/:collection/:path*"
     },
     {
-      "source": "/pb/api/files/:path*",
-      "destination": "https://pb-custly.kainuotech.com/api/files/:path*"
+      "source": "/pb/api/files/:collection(sales|contacts|companies|deals|tasks|contactNotes|dealNotes|tags|subscriptions|templates)/:path*",
+      "destination": "https://pb-custly.kainuotech.com/api/files/:collection/:path*"
     },
     {
       "source": "/(.*)",

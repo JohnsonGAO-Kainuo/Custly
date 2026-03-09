@@ -3,9 +3,9 @@ import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
-const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;
-const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
+const POCKETBASE_URL = process.env.POCKETBASE_URL;
+const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL;
+const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD;
 
 /**
  * Verify PocketBase auth token and return the authenticated user record.
@@ -88,6 +88,10 @@ export default async function handler(
         "https://www.custlycrm.com",
         "http://localhost:5173",
       ];
+  if (!process.env.STRIPE_SECRET_KEY || !POCKETBASE_URL || !POCKETBASE_ADMIN_EMAIL || !POCKETBASE_ADMIN_PASSWORD) {
+    return res.status(500).json({ error: "Server misconfigured" });
+  }
+
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
@@ -111,8 +115,14 @@ export default async function handler(
     }
 
     const { flow } = req.body as {
-      flow?: "payment_method_update" | "subscription_cancel";
+      flow?: string;
     };
+
+    // Validate flow parameter against allowlist
+    const VALID_FLOWS = ["payment_method_update", "subscription_cancel"] as const;
+    const validatedFlow = flow && VALID_FLOWS.includes(flow as typeof VALID_FLOWS[number])
+      ? (flow as typeof VALID_FLOWS[number])
+      : undefined;
 
     // Look up the Stripe customer ID server-side — never trust client-sent value
     const stripeCustomerId = await getStripeCustomerIdForUser(user.id);
@@ -133,7 +143,7 @@ export default async function handler(
     };
 
     // Deep link flows — skip portal homepage and go directly to the action
-    if (flow === "payment_method_update") {
+    if (validatedFlow === "payment_method_update") {
       sessionParams.flow_data = {
         type: "payment_method_update",
         after_completion: {
@@ -143,7 +153,7 @@ export default async function handler(
           },
         },
       };
-    } else if (flow === "subscription_cancel") {
+    } else if (validatedFlow === "subscription_cancel") {
       // Get the customer's active subscription for the cancel flow
       const subscriptions = await stripe.subscriptions.list({
         customer: stripeCustomerId,

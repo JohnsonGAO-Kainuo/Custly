@@ -10,9 +10,9 @@ export const config = {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const POCKETBASE_URL = process.env.POCKETBASE_URL || "https://pb-custly.kainuotech.com";
-const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL!;
-const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD!;
+const POCKETBASE_URL = process.env.POCKETBASE_URL;
+const POCKETBASE_ADMIN_EMAIL = process.env.POCKETBASE_ADMIN_EMAIL;
+const POCKETBASE_ADMIN_PASSWORD = process.env.POCKETBASE_ADMIN_PASSWORD;
 
 // Stripe Price IDs — new multi-currency prices + old ones for backward compatibility
 const PRICE_IDS: Record<string, { plan: "monthly" | "yearly" | "lifetime" }> = {
@@ -41,6 +41,11 @@ const LIFETIME_PRICE_IDS = [
   "price_1T7rQSJTqJOgtjP4peRkIycs",   // legacy HKD
   "price_1T7rQSJTqJOgtjP4V9PkyPFc",   // legacy CNY
 ];
+
+// Idempotency: track processed Stripe event IDs to prevent double-processing
+// This works for warm function reuse; PocketBase unique constraints provide ultimate safety
+const processedEventIds = new Set<string>();
+const MAX_PROCESSED_CACHE = 1000;
 
 async function getPocketBaseAdminToken(): Promise<string> {
   const response = await fetch(
@@ -85,12 +90,13 @@ async function pbRequest(
   return response.json();
 }
 
-function getPlanTypeFromPriceId(priceId: string): "monthly" | "yearly" | "lifetime" {
+function getPlanTypeFromPriceId(priceId: string): "monthly" | "yearly" | "lifetime" | null {
   const entry = PRICE_IDS[priceId as keyof typeof PRICE_IDS];
   if (!entry) {
-    console.error(`Unknown price ID: ${priceId} — defaulting to "monthly". Consider adding it to PRICE_IDS.`);
+    console.error(`Unknown price ID: ${priceId} — rejecting. Add it to PRICE_IDS if valid.`);
+    return null;
   }
-  return entry?.plan || "monthly"; // Default fallback for truly unknown prices
+  return entry.plan;
 }
 
 function isLifetimePriceId(priceId: string): boolean {
@@ -172,6 +178,11 @@ async function handleCheckoutSessionCompleted(
     const priceId = subscription.items.data[0]?.price.id;
     const planType = getPlanTypeFromPriceId(priceId || "");
 
+    if (!planType) {
+      console.error(`Checkout session ${session.id}: unknown price ID ${priceId}, skipping`);
+      return;
+    }
+
     const periodStart = subscription.current_period_start ?? Math.floor(Date.now() / 1000);
     const periodEnd = subscription.current_period_end ?? Math.floor(Date.now() / 1000) + 30 * 86400;
 
@@ -219,6 +230,11 @@ async function handleSubscriptionUpdated(
   const customerId = sub.customer as string;
   const priceId = sub.items.data[0]?.price.id;
   const planType = getPlanTypeFromPriceId(priceId || "");
+
+  if (!planType) {
+    console.error(`Subscription ${sub.id}: unknown price ID ${priceId}, skipping`);
+    return;
+  }
 
   const periodStart = sub.current_period_start ?? Math.floor(Date.now() / 1000);
   const periodEnd = sub.current_period_end ?? Math.floor(Date.now() / 1000) + 30 * 86400;
@@ -313,22 +329,47 @@ async function handleChargeRefunded(
 
   // Only cancel subscription on FULL refund, not partial refund
   if (!charge.refunded || charge.amount_refunded < charge.amount) {
-    console.log(`Partial refund for customer ${customerId} — skipping subscription cancellation`);
     return;
   }
 
-  // Find subscription by stripe_customer_id (most recent first)
-  const existingQuery = await pbRequest(
-    token,
-    "GET",
-    `/api/collections/subscriptions/records?filter=stripe_customer_id="${sanitizePBFilter(customerId)}"&sort=-created&perPage=1`
-  );
+  // Try to find the specific subscription via the payment intent's invoice
+  let subscriptionId: string | null = null;
+  if (charge.payment_intent) {
+    try {
+      const pi = await stripe.paymentIntents.retrieve(charge.payment_intent as string);
+      if (pi.invoice) {
+        const invoice = await stripe.invoices.retrieve(pi.invoice as string);
+        if (typeof invoice.subscription === 'string') {
+          subscriptionId = invoice.subscription;
+        }
+      }
+    } catch {
+      // Fall back to customer-based lookup
+    }
+  }
+
+  // Find the specific subscription record
+  let existingQuery;
+  if (subscriptionId) {
+    existingQuery = await pbRequest(
+      token,
+      "GET",
+      `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sanitizePBFilter(subscriptionId)}"&perPage=1`
+    );
+  }
+  // Fallback: look up by customer ID (most recent)
+  if (!existingQuery?.items?.length) {
+    existingQuery = await pbRequest(
+      token,
+      "GET",
+      `/api/collections/subscriptions/records?filter=stripe_customer_id="${sanitizePBFilter(customerId)}"&sort=-created&perPage=1`
+    );
+  }
 
   if (existingQuery.items?.length > 0) {
     const sub = existingQuery.items[0];
     // Cancel subscription on refund regardless of plan type
     if (sub.status !== "canceled") {
-      console.log(`Canceling subscription ${sub.id} (plan: ${sub.plan_type}) due to refund`);
       await pbRequest(
         token,
         "PATCH",
@@ -376,6 +417,11 @@ export default async function handler(
   req: VercelRequest,
   res: VercelResponse
 ) {
+  if (!process.env.STRIPE_SECRET_KEY || !POCKETBASE_URL || !POCKETBASE_ADMIN_EMAIL || !POCKETBASE_ADMIN_PASSWORD) {
+    console.error("Missing required environment variables");
+    return res.status(500).json({ error: "Server misconfigured" });
+  }
+
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
     return res.status(405).end("Method Not Allowed");
@@ -403,7 +449,13 @@ export default async function handler(
     return res.status(400).json({ error: "Webhook signature verification failed" });
   }
 
-  console.log(`Received Stripe event: ${event.type}`);
+  console.log(`Received Stripe event: ${event.type} (${event.id})`);
+
+  // Idempotency guard: skip already-processed events
+  if (processedEventIds.has(event.id)) {
+    console.log(`Event ${event.id} already processed, skipping`);
+    return res.status(200).json({ received: true, duplicate: true });
+  }
 
   try {
     const token = await getPocketBaseAdminToken();
@@ -447,6 +499,18 @@ export default async function handler(
 
       default:
         console.log(`Unhandled event type: ${event.type}`);
+    }
+
+    // Mark event as processed
+    processedEventIds.add(event.id);
+    if (processedEventIds.size > MAX_PROCESSED_CACHE) {
+      // Evict oldest entries
+      const iterator = processedEventIds.values();
+      for (let i = 0; i < 200; i++) iterator.next();
+      const remaining = new Set<string>();
+      for (const id of processedEventIds) remaining.add(id);
+      processedEventIds.clear();
+      for (const id of remaining) processedEventIds.add(id);
     }
 
     return res.status(200).json({ received: true });

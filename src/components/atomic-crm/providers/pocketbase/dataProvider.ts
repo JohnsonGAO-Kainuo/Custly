@@ -391,9 +391,10 @@ const baseDataProvider: DataProvider = {
     const filter = ids
       .map((id) => `id = ${formatFilterValue(id)}`)
       .join(" || ");
+    const cappedPerPage = Math.min(ids.length, 200);
     const search = new URLSearchParams({
       page: "1",
-      perPage: String(ids.length),
+      perPage: String(cappedPerPage),
       filter,
     });
     const response = await requestJson<{
@@ -450,6 +451,15 @@ const baseDataProvider: DataProvider = {
     const data = { ...params.data };
     if (normalized === "companies" && !data.created_at) {
       data.created_at = new Date().toISOString();
+    }
+    // Auto-inject sales_id for multi-tenant isolation
+    // Skip for collections that don't use sales_id (tags, templates)
+    const SHARED_COLLECTIONS = ["tags", "templates"];
+    if (!SHARED_COLLECTIONS.includes(normalized)) {
+      const authState = getAuthState();
+      if (authState?.record?.id) {
+        data.sales_id = authState.record.id;
+      }
     }
     const uploads = extractFileUploads(normalized, data);
     const response =
