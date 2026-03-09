@@ -6,7 +6,7 @@ export const config = {
 
 export default function handler() {
   return new ImageResponse(
-    {
+    ({
       type: "div",
       props: {
         style: {
@@ -152,7 +152,7 @@ export default function handler() {
           },
         ],
       },
-    },
+    }) as React.ReactElement,
     {
       width: 1200,
       height: 630,

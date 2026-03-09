@@ -154,9 +154,12 @@ async function handleCheckoutSessionCompleted(
     }
   } else if (mode === "subscription" && subscriptionId) {
     // Subscription payment - get subscription details
-    const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+    const subscription = await stripe.subscriptions.retrieve(subscriptionId) as Stripe.Subscription & { current_period_start?: number; current_period_end?: number };
     const priceId = subscription.items.data[0]?.price.id;
     const planType = getPlanTypeFromPriceId(priceId || "");
+
+    const periodStart = subscription.current_period_start ?? Math.floor(Date.now() / 1000);
+    const periodEnd = subscription.current_period_end ?? Math.floor(Date.now() / 1000) + 30 * 86400;
 
     const subscriptionData = {
       sales_id: salesId,
@@ -171,12 +174,8 @@ async function handleCheckoutSessionCompleted(
       trial_end: subscription.trial_end
         ? new Date(subscription.trial_end * 1000).toISOString()
         : null,
-      current_period_start: new Date(
-        subscription.current_period_start * 1000
-      ).toISOString(),
-      current_period_end: new Date(
-        subscription.current_period_end * 1000
-      ).toISOString(),
+      current_period_start: new Date(periodStart * 1000).toISOString(),
+      current_period_end: new Date(periodEnd * 1000).toISOString(),
       cancel_at_period_end: subscription.cancel_at_period_end,
     };
 
@@ -202,15 +201,19 @@ async function handleSubscriptionUpdated(
   subscription: Stripe.Subscription,
   token: string
 ) {
-  const customerId = subscription.customer as string;
-  const priceId = subscription.items.data[0]?.price.id;
+  const sub = subscription as Stripe.Subscription & { current_period_start?: number; current_period_end?: number };
+  const customerId = sub.customer as string;
+  const priceId = sub.items.data[0]?.price.id;
   const planType = getPlanTypeFromPriceId(priceId || "");
+
+  const periodStart = sub.current_period_start ?? Math.floor(Date.now() / 1000);
+  const periodEnd = sub.current_period_end ?? Math.floor(Date.now() / 1000) + 30 * 86400;
 
   // Find subscription by stripe_subscription_id
   const existingQuery = await pbRequest(
     token,
     "GET",
-    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${subscription.id}"`
+    `/api/collections/subscriptions/records?filter=stripe_subscription_id="${sub.id}"`
   );
 
   if (existingQuery.items?.length > 0) {
@@ -219,22 +222,18 @@ async function handleSubscriptionUpdated(
       "PATCH",
       `/api/collections/subscriptions/records/${existingQuery.items[0].id}`,
       {
-        status: subscription.status,
+        status: sub.status,
         stripe_price_id: priceId,
         plan_type: planType,
-        trial_start: subscription.trial_start
-          ? new Date(subscription.trial_start * 1000).toISOString()
+        trial_start: sub.trial_start
+          ? new Date(sub.trial_start * 1000).toISOString()
           : null,
-        trial_end: subscription.trial_end
-          ? new Date(subscription.trial_end * 1000).toISOString()
+        trial_end: sub.trial_end
+          ? new Date(sub.trial_end * 1000).toISOString()
           : null,
-        current_period_start: new Date(
-          subscription.current_period_start * 1000
-        ).toISOString(),
-        current_period_end: new Date(
-          subscription.current_period_end * 1000
-        ).toISOString(),
-        cancel_at_period_end: subscription.cancel_at_period_end,
+        current_period_start: new Date(periodStart * 1000).toISOString(),
+        current_period_end: new Date(periodEnd * 1000).toISOString(),
+        cancel_at_period_end: sub.cancel_at_period_end,
       }
     );
   }
@@ -268,7 +267,8 @@ async function handleInvoicePaymentFailed(
   invoice: Stripe.Invoice,
   token: string
 ) {
-  const subscriptionId = invoice.subscription as string;
+  const rawSub = (invoice as unknown as Record<string, unknown>).subscription;
+  const subscriptionId = typeof rawSub === 'string' ? rawSub : (rawSub as { id?: string })?.id;
   if (!subscriptionId) return;
 
   // Find subscription by stripe_subscription_id
