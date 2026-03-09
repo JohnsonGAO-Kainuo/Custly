@@ -42,6 +42,7 @@ import {
   authProvider as pocketbaseAuthProvider,
   dataProvider as pocketbaseDataProvider,
 } from "../providers/pocketbase";
+import { withReadOnlyGuard } from "../providers/readOnlyDataProvider";
 import sales from "../sales";
 import { SettingsPage } from "../settings/SettingsPage";
 import { TemplateCenterPage } from "../templates/TemplateCenterPage";
@@ -138,13 +139,14 @@ export const CRM = ({
   const backend = import.meta.env.VITE_BACKEND?.toLowerCase() ?? "supabase";
   const isPocketbase = backend === "pocketbase";
   const isFakerest = backend === "fakerest";
-  const resolvedDataProvider =
+  const resolvedDataProvider = withReadOnlyGuard(
     dataProvider ??
     (isFakerest
       ? fakerestDataProvider
       : isPocketbase
         ? pocketbaseDataProvider
-        : defaultDataProvider);
+        : defaultDataProvider)
+  );
   const resolvedAuthProvider =
     authProvider ??
     (isFakerest

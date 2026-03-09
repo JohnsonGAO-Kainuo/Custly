@@ -1,5 +1,16 @@
 import { getPocketBaseUrl, getAuthToken, getAuthState } from "./client";
 
+// Module-level subscription state — accessible outside React tree (e.g., dataProvider)
+let _isSubscriptionExpired = false;
+
+/** Called by SubscriptionContext to sync expired state */
+export const setSubscriptionExpired = (expired: boolean) => {
+  _isSubscriptionExpired = expired;
+};
+
+/** Check if subscription is expired (for use outside React components) */
+export const isSubscriptionExpired = () => _isSubscriptionExpired;
+
 export interface Subscription {
   id: string;
   sales_id: string;

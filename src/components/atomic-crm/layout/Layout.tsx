@@ -9,11 +9,13 @@ import {
   SubscriptionProvider,
   SubscriptionGuard,
   TrialBanner,
+  ExpiredBanner,
 } from "../subscription";
 
 export const Layout = ({ children }: { children: ReactNode }) => (
   <SubscriptionProvider>
     <SubscriptionGuard>
+      <ExpiredBanner />
       <TrialBanner />
       <Header />
       <main className="max-w-screen-2xl mx-auto pt-6 px-6 pb-8" id="main-content">

@@ -1,17 +1,19 @@
 import { type ReactNode } from "react";
 import { useSubscription } from "./SubscriptionContext";
-import { Paywall } from "../billing/Paywall";
-import { Loader2 } from "lucide-react";
+import { Loader2, AlertTriangle } from "lucide-react";
 
 interface SubscriptionGuardProps {
   children: ReactNode;
 }
 
 /**
- * SubscriptionGuard component that wraps content and shows paywall if user doesn't have active subscription
+ * SubscriptionGuard component that wraps content.
+ * When subscription expires, users enter read-only mode (can view data, not edit).
+ * A persistent banner encourages re-subscription.
+ * Mutations are blocked at the dataProvider level via readOnlyDataProvider.
  */
 export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
-  const { canUseCRM, isLoading, isAdmin, refresh } = useSubscription();
+  const { isLoading } = useSubscription();
 
   // Show loading state while checking subscription
   if (isLoading) {
@@ -25,18 +27,36 @@ export const SubscriptionGuard = ({ children }: SubscriptionGuardProps) => {
     );
   }
 
-  // Admin users bypass paywall
-  if (isAdmin) {
-    return <>{children}</>;
-  }
-
-  // Users without active subscription see paywall
-  if (!canUseCRM) {
-    return <Paywall onTrialStarted={refresh} />;
-  }
-
-  // Users with active subscription can use the app
+  // Always render children — expired users get read-only access
+  // Mutations are blocked at the dataProvider level
   return <>{children}</>;
+};
+
+/**
+ * ExpiredBanner component — shown when subscription has expired.
+ * Non-blocking persistent banner that encourages re-subscription.
+ */
+export const ExpiredBanner = () => {
+  const { isExpired } = useSubscription();
+
+  if (!isExpired) {
+    return null;
+  }
+
+  return (
+    <div className="bg-destructive text-destructive-foreground px-4 py-3 text-center text-sm">
+      <div className="flex items-center justify-center gap-2">
+        <AlertTriangle className="h-4 w-4 flex-shrink-0" />
+        <span>
+          Your subscription has expired. You can still view and export your data, but editing is disabled.{" "}
+          <a href="/#/billing" className="underline font-medium hover:opacity-80">
+            Subscribe now
+          </a>{" "}
+          to regain full access.
+        </span>
+      </div>
+    </div>
+  );
 };
 
 /**

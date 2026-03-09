@@ -9,6 +9,7 @@ import {
 import { useGetIdentity } from "ra-core";
 import {
   getSubscriptionStatus,
+  setSubscriptionExpired,
   type SubscriptionStatus,
 } from "../providers/pocketbase/subscriptionService";
 
@@ -21,6 +22,7 @@ const ADMIN_EMAILS = [
 interface SubscriptionContextValue extends SubscriptionStatus {
   isLoading: boolean;
   isAdmin: boolean;
+  isExpired: boolean;
   refresh: () => Promise<void>;
 }
 
@@ -33,6 +35,7 @@ const defaultContext: SubscriptionContextValue = {
   canUseCRM: false,
   isLoading: true,
   isAdmin: false,
+  isExpired: false,
   refresh: async () => {},
 };
 
@@ -139,12 +142,22 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     return () => clearInterval(interval);
   }, [status.hasActiveSubscription, fetchSubscriptionStatus]);
 
+  // Determine if subscription is expired (authenticated but no active access)
+  const isExpired = !isDemo && !isAdmin && !status.canUseCRM && !isLoading && !identityLoading;
+
+  // Sync expired state to module-level for dataProvider access
+  useEffect(() => {
+    setSubscriptionExpired(isExpired);
+    return () => setSubscriptionExpired(false);
+  }, [isExpired]);
+
   const value: SubscriptionContextValue = {
     ...status,
     // Demo mode and admin users can always use CRM
     canUseCRM: isDemo || isAdmin || status.canUseCRM,
     isLoading: isDemo ? false : isLoading || identityLoading,
     isAdmin: isAdmin || isDemo,
+    isExpired,
     refresh: fetchSubscriptionStatus,
   };
 
