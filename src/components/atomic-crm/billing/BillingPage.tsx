@@ -21,6 +21,7 @@ import {
   Shield,
   Users,
   BarChart3,
+  CreditCard,
 } from "lucide-react";
 import {
   getSubscriptionStatus,
@@ -137,6 +138,9 @@ export const BillingPage = () => {
     } else if (hash.includes("canceled=true")) {
       notify("Checkout was canceled", { type: "info" });
       window.history.replaceState({}, "", window.location.pathname + "#/billing");
+    } else if (hash.includes("payment_updated=true")) {
+      notify("Payment method updated successfully! Your subscription will resume shortly.", { type: "success" });
+      window.history.replaceState({}, "", window.location.pathname + "#/billing");
     }
   }, [notify]);
 
@@ -179,6 +183,38 @@ export const BillingPage = () => {
       }
     } catch (error) {
       notify("Failed to open billing portal", { type: "error" });
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleUpdatePaymentMethod = async () => {
+    setCheckoutLoading(true);
+    try {
+      const result = await openCustomerPortal("payment_method_update");
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        notify(result.error || "Failed to open payment update page", { type: "error" });
+      }
+    } catch (error) {
+      notify("Failed to open payment update page", { type: "error" });
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    setCheckoutLoading(true);
+    try {
+      const result = await openCustomerPortal("subscription_cancel");
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        notify(result.error || "Failed to open cancellation page", { type: "error" });
+      }
+    } catch (error) {
+      notify("Failed to open cancellation page", { type: "error" });
     } finally {
       setCheckoutLoading(false);
     }
@@ -299,16 +335,35 @@ export const BillingPage = () => {
               </div>
             )}
             <div className="flex flex-wrap gap-4">
+              {status.subscription.stripe_customer_id && status.subscription.status === "past_due" && (
+                <Button
+                  variant="default"
+                  onClick={handleUpdatePaymentMethod}
+                  disabled={checkoutLoading}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Update Payment Method
+                </Button>
+              )}
               {status.subscription.stripe_customer_id && (
                 <Button
-                  variant={status.subscription.status === "past_due" ? "default" : "outline"}
+                  variant="outline"
                   onClick={handleManageSubscription}
                   disabled={checkoutLoading}
                 >
                   <ExternalLink className="h-4 w-4 mr-2" />
-                  {status.subscription.status === "past_due"
-                    ? "Update Payment Method"
-                    : "Manage Subscription"}
+                  Manage Subscription
+                </Button>
+              )}
+              {status.subscription.stripe_customer_id && 
+               (status.subscription.status === "past_due" || status.subscription.status === "active") && (
+                <Button
+                  variant="ghost"
+                  className="text-destructive hover:text-destructive"
+                  onClick={handleCancelSubscription}
+                  disabled={checkoutLoading}
+                >
+                  Cancel Subscription
                 </Button>
               )}
               {status.subscription.status === "trialing" && (

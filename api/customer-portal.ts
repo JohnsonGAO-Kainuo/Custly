@@ -26,9 +26,10 @@ export default async function handler(
   }
 
   try {
-    const { stripeCustomerId, returnUrl } = req.body as {
+    const { stripeCustomerId, returnUrl, flow } = req.body as {
       stripeCustomerId: string;
       returnUrl?: string;
+      flow?: "payment_method_update" | "subscription_cancel";
     };
 
     if (!stripeCustomerId) {
@@ -40,10 +41,47 @@ export default async function handler(
       ? "https://custlycrm.com"
       : "http://localhost:5173";
 
-    const session = await stripe.billingPortal.sessions.create({
+    const sessionParams: Stripe.BillingPortal.SessionCreateParams = {
       customer: stripeCustomerId,
       return_url: returnUrl || `${baseUrl}/#/billing`,
-    });
+    };
+
+    // Deep link flows — skip portal homepage and go directly to the action
+    if (flow === "payment_method_update") {
+      sessionParams.flow_data = {
+        type: "payment_method_update",
+        after_completion: {
+          type: "redirect",
+          redirect: {
+            return_url: `${baseUrl}/#/billing?payment_updated=true`,
+          },
+        },
+      };
+    } else if (flow === "subscription_cancel") {
+      // Get the customer's active subscription for the cancel flow
+      const subscriptions = await stripe.subscriptions.list({
+        customer: stripeCustomerId,
+        status: "all",
+        limit: 1,
+      });
+      const activeSub = subscriptions.data[0];
+      if (activeSub) {
+        sessionParams.flow_data = {
+          type: "subscription_cancel",
+          subscription_cancel: {
+            subscription: activeSub.id,
+          },
+          after_completion: {
+            type: "redirect",
+            redirect: {
+              return_url: `${baseUrl}/#/billing?canceled=true`,
+            },
+          },
+        };
+      }
+    }
+
+    const session = await stripe.billingPortal.sessions.create(sessionParams);
 
     return res.status(200).json({
       url: session.url,

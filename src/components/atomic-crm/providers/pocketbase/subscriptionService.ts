@@ -239,8 +239,11 @@ export async function createCheckoutSession(
 
 /**
  * Open Stripe Customer Portal for managing subscription
+ * @param flow - Optional deep link flow: "payment_method_update" or "subscription_cancel"
  */
-export async function openCustomerPortal(): Promise<{ url: string | null; error?: string }> {
+export async function openCustomerPortal(
+  flow?: "payment_method_update" | "subscription_cancel"
+): Promise<{ url: string | null; error?: string }> {
   const status = await getSubscriptionStatus();
   
   if (!status.subscription?.stripe_customer_id) {
@@ -255,6 +258,7 @@ export async function openCustomerPortal(): Promise<{ url: string | null; error?
       },
       body: JSON.stringify({
         stripeCustomerId: status.subscription.stripe_customer_id,
+        ...(flow && { flow }),
       }),
     });
 
