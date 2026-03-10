@@ -24,9 +24,8 @@ declare global {
 export const GA_MEASUREMENT_ID =
   import.meta.env.VITE_GA_MEASUREMENT_ID ?? "";
 
-/** Google Ads ID from env */
-export const GOOGLE_ADS_ID =
-  import.meta.env.VITE_GOOGLE_ADS_ID ?? "";
+/** Google Ads ID */
+export const GOOGLE_ADS_ID = "AW-18006123691";
 
 /** Google Ads conversion label for sign-ups */
 export const GOOGLE_ADS_CONVERSION_LABEL =
