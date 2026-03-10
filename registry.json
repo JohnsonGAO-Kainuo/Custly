@@ -805,6 +805,10 @@
           "type": "registry:hook"
         },
         {
+          "path": "src/hooks/useRouteTracker.ts",
+          "type": "registry:hook"
+        },
+        {
           "path": "src/hooks/usePageSEO.ts",
           "type": "registry:hook"
         },
