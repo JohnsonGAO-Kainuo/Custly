@@ -16,11 +16,24 @@ import { Notification } from "@/components/admin/notification";
 import { LocaleMenuButton } from "./LocaleMenuButton";
 import { MarketingBackdrop } from "./MarketingBackdrop";
 import { usePocketbaseOAuthProviders } from "./usePocketbaseOAuthProviders";
+import { usePageSEO } from "@/hooks/usePageSEO";
+import { trackSignUpConversion, trackSignUpStart, trackSignUpComplete } from "@/utils/gtag";
 
 export const SignupPage = () => {
   const queryClient = useQueryClient();
   const dataProvider = useDataProvider<CrmDataProvider>();
   const { darkModeLogo: logo, title } = useConfigurationContext();
+
+  // SEO for sign-up page — key Google Ads landing page
+  usePageSEO({
+    title: "Sign Up — Custly CRM | Start Your Free 14-Day Trial",
+    description:
+      "Create your Custly CRM account in seconds. Get instant access to industry templates for e-commerce, consulting, healthcare & more. No credit card required.",
+    canonical: "https://custlycrm.com/sign-up",
+    keywords:
+      "CRM sign up, free CRM trial, CRM registration, Custly sign up, free trial CRM, start CRM free, template CRM signup",
+  });
+
   const { data: isInitialized, isPending } = useQuery({
     queryKey: ["init"],
     queryFn: async () => {
@@ -34,6 +47,10 @@ export const SignupPage = () => {
       return dataProvider.signUp(data);
     },
     onSuccess: (data) => {
+      // Track Google Ads conversion on successful sign-up
+      trackSignUpComplete();
+      trackSignUpConversion(data.email);
+
       login({
         email: data.email,
         password: data.password,

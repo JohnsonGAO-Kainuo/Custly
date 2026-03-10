@@ -6,12 +6,13 @@ interface PageSEOOptions {
   canonical?: string;
   ogTitle?: string;
   ogDescription?: string;
+  keywords?: string;
 }
 
 /**
  * Hook to set per-page SEO meta tags dynamically.
- * Updates document.title and meta description/OG tags when a marketing page mounts.
- * Restores the default title on unmount.
+ * Updates document.title, meta description, keywords, OG tags and canonical
+ * when a marketing page mounts. Restores previous values on unmount.
  */
 export function usePageSEO({
   title,
@@ -19,6 +20,7 @@ export function usePageSEO({
   canonical,
   ogTitle,
   ogDescription,
+  keywords,
 }: PageSEOOptions) {
   useEffect(() => {
     const prevTitle = document.title;
@@ -26,9 +28,18 @@ export function usePageSEO({
     // Set page title
     document.title = title;
 
+    // Update meta keywords (per-page targeting for Google Ads)
+    const keywordsMeta = document.querySelector(
+      'meta[name="keywords"]',
+    ) as HTMLMetaElement | null;
+    const prevKeywords = keywordsMeta?.content;
+    if (keywordsMeta && keywords) {
+      keywordsMeta.content = keywords;
+    }
+
     // Update meta description
     if (description) {
-      let meta = document.querySelector(
+      const meta = document.querySelector(
         'meta[name="description"]',
       ) as HTMLMetaElement | null;
       const prevDescription = meta?.content;
@@ -85,11 +96,15 @@ export function usePageSEO({
           twitterDescMeta.content = prevTwitterDesc;
         if (canonicalLink && prevCanonical !== undefined)
           canonicalLink.href = prevCanonical;
+        if (keywordsMeta && prevKeywords !== undefined)
+          keywordsMeta.content = prevKeywords;
       };
     }
 
     return () => {
       document.title = prevTitle;
+      if (keywordsMeta && prevKeywords !== undefined)
+        keywordsMeta.content = prevKeywords;
     };
-  }, [title, description, canonical, ogTitle, ogDescription]);
+  }, [title, description, canonical, ogTitle, ogDescription, keywords]);
 }

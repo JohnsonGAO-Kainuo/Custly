@@ -26,9 +26,10 @@ export const FeaturesPage = () => {
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   usePageSEO({
-    title: "Features — Custly CRM | Contacts, Deals, Templates & Analytics",
+    title: "CRM Features — Contacts, Deals, Templates & Analytics",
     description: "Explore Custly's full feature set: contact management, deal pipeline Kanban, industry templates, task tracking, analytics dashboard, CSV import/export, and more.",
     canonical: "https://custlycrm.com/features",
+    keywords: "CRM features, contact management, deal pipeline, sales pipeline, industry templates, task management, analytics dashboard, CSV import export, CRM Kanban board, CRM templates, email templates CRM, team collaboration CRM",
   });
 
   const features = [

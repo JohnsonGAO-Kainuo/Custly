@@ -15,9 +15,10 @@ export const PricingPage = () => {
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   usePageSEO({
-    title: "Pricing — Custly CRM | From $20/mo, Lifetime $399",
+    title: "CRM Pricing — From $20/mo | Custly CRM Plans",
     description: "Simple, transparent CRM pricing. Monthly $20, Yearly $168 (save 30%), or Lifetime $399. All plans include unlimited contacts, deal pipeline, templates. 14-day free trial.",
     canonical: "https://custlycrm.com/pricing",
+    keywords: "CRM pricing, cheap CRM, affordable CRM, CRM cost, CRM plans, CRM monthly plan, CRM lifetime deal, CRM free trial, small business CRM price, best value CRM, CRM subscription",
   });
 
   const plans = [

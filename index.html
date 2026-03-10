@@ -13,11 +13,31 @@
     <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://pb-custly.kainuotech.com" crossorigin />
     <link rel="dns-prefetch" href="https://pb-custly.kainuotech.com" />
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+    <!-- Google Analytics 4 + Google Ads -->
+    <!-- Replace G-XXXXXXXXXX with your GA4 Measurement ID -->
+    <!-- Replace AW-XXXXXXXXX with your Google Ads ID -->
+    <!-- Set these as Vercel env vars: VITE_GA_MEASUREMENT_ID, VITE_GOOGLE_ADS_ID -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // GA4 — replace G-XXXXXXXXXX with your Measurement ID
+      gtag('config', 'G-XXXXXXXXXX', {
+        send_page_view: true,
+        cookie_flags: 'SameSite=None;Secure'
+      });
+      // Google Ads — replace AW-XXXXXXXXX with your Ads ID
+      // gtag('config', 'AW-XXXXXXXXX');
+    </script>
 
     <!-- SEO Meta Tags -->
-    <title>Custly CRM — The Template-First CRM for Growing Teams | Customizable Industry Templates</title>
+    <title>Custly CRM — Template-First CRM for Growing Teams</title>
     <meta name="description" content="Skip months of CRM setup. Custly gives you ready-to-use industry templates for e-commerce, consulting, healthcare & more — then lets you customize everything. Manage contacts, deals, and tasks your way. 14-day free trial, no credit card required." />
-    <meta name="keywords" content="CRM with templates, customizable CRM, industry-specific CRM, small business CRM, template-driven CRM, e-commerce CRM, consulting CRM, sales pipeline templates, contact management, deal tracking, lightweight CRM, affordable CRM, open source CRM, CRM for startups, team CRM" />
+    <meta name="keywords" content="CRM with templates, customizable CRM, industry-specific CRM, small business CRM, template-driven CRM, e-commerce CRM, consulting CRM, sales pipeline templates, contact management, deal tracking, lightweight CRM, affordable CRM, CRM for startups, team CRM, CRM software, best CRM for small business, free CRM trial, CRM templates, customer relationship management, sales CRM" />
     <meta name="author" content="Kainuo Innovision Tech" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href="https://custlycrm.com" />
@@ -120,7 +140,7 @@
     }
     </script>
 
-    <!-- Structured Data: FAQ (top questions for rich snippets) -->
+    <!-- Structured Data: FAQ (all 12 questions for rich snippets) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -144,14 +164,6 @@
         },
         {
           "@type": "Question",
-          "name": "What makes Custly different from other CRMs?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Unlike bloated enterprise CRMs, Custly is template-first: you pick an industry template (e-commerce, consulting, healthcare, etc.) and start working in minutes. It's lightweight, affordable, supports 3 languages (English, Simplified Chinese, Traditional Chinese), and is open source on GitHub."
-          }
-        },
-        {
-          "@type": "Question",
           "name": "Can I try Custly before purchasing?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -160,10 +172,74 @@
         },
         {
           "@type": "Question",
+          "name": "What payment methods does Custly accept?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We accept all major credit and debit cards (Visa, Mastercard, American Express), Alipay, and other local payment methods through Stripe. Prices are automatically shown in your local currency at checkout. All transactions are securely handled by Stripe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my CRM data secure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Your data is transmitted over HTTPS and stored securely. We use role-based access controls so only authorized team members can view or edit data. Your CRM data belongs to you and can be exported at any time."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I import my existing data into Custly?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Custly supports importing contacts, companies, and deals from CSV files. You can also export your data at any time in standard formats."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Custly offer customer support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. All plans include email support. You can reach us at contact@kainuotech.com and we aim to respond within 24 hours on business days."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I cancel my Custly subscription anytime?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, you can cancel your subscription at any time from the Billing page. After cancellation, you'll retain access until the end of your current billing period. You can export all your data before canceling."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What features are included in Custly CRM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All plans include: unlimited contacts and companies, deal pipeline management with Kanban board, activity timeline and notes, task management, data import/export, customizable industry templates, analytics dashboard, multi-language support, and team collaboration features."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What's the difference between Custly pricing plans?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All three plans include the same features. The only difference is billing: Monthly ($20/mo) offers flexibility, Yearly ($168/yr) saves ~30%, and Lifetime ($399) means no recurring payments ever."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Is Custly CRM open source?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Yes, Custly is fully open source on GitHub. You can inspect the code, contribute, or self-host your own instance. The hosted version at custlycrm.com provides a managed experience with automatic updates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who owns my data in Custly CRM?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You do. Your CRM data belongs entirely to you. You can export all your data at any time, and if you delete your account, your data will be removed from our servers."
           }
         }
       ]
@@ -186,6 +262,40 @@
       },
       "sameAs": [
         "https://github.com/JohnsonGAO-Kainuo/Custly"
+      ]
+    }
+    </script>
+
+    <!-- Structured Data: WebSite (for Google Sitelinks) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Custly CRM",
+      "url": "https://custlycrm.com",
+      "description": "Template-first, lightweight CRM for growing teams. Manage contacts, deals, tasks with industry-specific templates.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://custlycrm.com/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- Structured Data: BreadcrumbList -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://custlycrm.com" },
+        { "@type": "ListItem", "position": 2, "name": "Features", "item": "https://custlycrm.com/features" },
+        { "@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://custlycrm.com/pricing" },
+        { "@type": "ListItem", "position": 4, "name": "FAQ", "item": "https://custlycrm.com/faq" },
+        { "@type": "ListItem", "position": 5, "name": "Sign Up", "item": "https://custlycrm.com/sign-up" }
       ]
     }
     </script>

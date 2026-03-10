@@ -18,9 +18,10 @@ export const FAQPage = () => {
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   usePageSEO({
-    title: "FAQ — Custly CRM | Pricing, Features, Data Security & More",
+    title: "CRM FAQ — Pricing, Features & Security | Custly",
     description: "Answers to common questions about Custly CRM: pricing plans, free trial, payment methods, data security, import/export, open source, and support.",
     canonical: "https://custlycrm.com/faq",
+    keywords: "CRM FAQ, CRM questions, CRM free trial, CRM data security, CRM import export, is Custly free, CRM open source, CRM support, CRM cancel subscription",
   });
 
   const faqKeys = [

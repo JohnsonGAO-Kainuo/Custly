@@ -61,9 +61,12 @@ export const LandingPage = () => {
   const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
 
   usePageSEO({
-    title: "Custly CRM — The Template-First CRM for Growing Teams",
-    description: "Skip months of CRM setup. Pick an industry template for e-commerce, consulting, healthcare & more. Customize contacts, deals, tasks. 14-day free trial, no credit card.",
+    title: "Custly CRM — Template-First CRM for Growing Teams",
+    description:
+      "Skip months of CRM setup. Pick an industry template for e-commerce, consulting, healthcare & more. Customize contacts, deals, tasks. 14-day free trial, no credit card.",
     canonical: "https://custlycrm.com/landing",
+    keywords:
+      "CRM with templates, template-first CRM, customizable CRM, industry-specific CRM, small business CRM, e-commerce CRM, consulting CRM, sales pipeline, contact management, deal tracking, lightweight CRM, affordable CRM, CRM for startups",
   });
 
   return (

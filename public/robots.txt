@@ -18,6 +18,7 @@ Allow: /features
 Allow: /pricing
 Allow: /faq
 Allow: /sign-up
+Allow: /login
 Allow: /terms
 Allow: /privacy
 Allow: /policies
