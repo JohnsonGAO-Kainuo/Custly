@@ -28,8 +28,7 @@ export const GA_MEASUREMENT_ID =
 export const GOOGLE_ADS_ID = "AW-18006123691";
 
 /** Google Ads conversion label for sign-ups */
-export const GOOGLE_ADS_CONVERSION_LABEL =
-  import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL ?? "";
+export const GOOGLE_ADS_CONVERSION_LABEL = "JwtaCK2G-4UcEKvJ_olD";
 
 /** Safely call gtag — no-op if not loaded */
 function gtag(...args: unknown[]) {
@@ -75,7 +74,8 @@ export function trackSignUpConversion(email?: string) {
 
   gtag("event", "conversion", {
     send_to: `${GOOGLE_ADS_ID}/${GOOGLE_ADS_CONVERSION_LABEL}`,
-    ...(email ? { email } : {}),
+    value: 1.0,
+    currency: "HKD",
   });
 }
 
