@@ -49,7 +49,7 @@ export const SignupPage = () => {
     onSuccess: (data) => {
       // Track Google Ads conversion on successful sign-up
       trackSignUpComplete();
-      trackSignUpConversion(data.email);
+      trackSignUpConversion();
 
       login({
         email: data.email,

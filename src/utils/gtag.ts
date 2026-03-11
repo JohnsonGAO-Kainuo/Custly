@@ -20,9 +20,8 @@ declare global {
   }
 }
 
-/** GA4 Measurement ID from env */
-export const GA_MEASUREMENT_ID =
-  import.meta.env.VITE_GA_MEASUREMENT_ID ?? "";
+/** GA4 Measurement ID */
+export const GA_MEASUREMENT_ID = "G-DE2XP0ZH6L";
 
 /** Google Ads ID */
 export const GOOGLE_ADS_ID = "AW-18006123691";
@@ -69,7 +68,7 @@ export function trackEvent(
  * Fire a Google Ads sign-up conversion.
  * Call this after a successful account creation.
  */
-export function trackSignUpConversion(email?: string) {
+export function trackSignUpConversion() {
   if (!GOOGLE_ADS_ID || !GOOGLE_ADS_CONVERSION_LABEL) return;
 
   gtag("event", "conversion", {
