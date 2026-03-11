@@ -21,7 +21,7 @@ declare global {
 }
 
 /** GA4 Measurement ID */
-export const GA_MEASUREMENT_ID = "G-DE2XP0ZH6L";
+export const GA_MEASUREMENT_ID = "G-NP4HE17LV6";
 
 /** Google Ads ID */
 export const GOOGLE_ADS_ID = "AW-18006123691";
