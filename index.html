@@ -19,6 +19,9 @@
     <!-- Google Ads + GA4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18006123691"></script>
     <script>
+      // Block Kinolu GA4 from receiving Custly data (shared Ads account auto-links both)
+      window['ga-disable-G-CBGJR3DG21'] = true;
+
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
