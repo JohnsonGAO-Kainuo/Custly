@@ -39,16 +39,18 @@ const SubscriptionContext = createContext<SubscriptionContextValue>(defaultConte
 
 export const useSubscription = () => useContext(SubscriptionContext);
 
-// Detect demo mode — only when using fakerest backend (demo build)
+// Detect demo mode — via URL path (/demo) or fakerest backend env var
 const isDemoMode = () => {
   if (typeof window === "undefined") return false;
 
-  // Only allow demo mode when running the demo/fakerest build
-  // This prevents ?demo=1 from bypassing subscription checks in production
+  // Primary check: URL path (works in production at custlycrm.com/demo)
+  // App.tsx uses this same check to switch to fakerest provider
+  if (window.location.pathname.startsWith("/demo")) return true;
+
+  // Fallback: env var check (used in local fakerest dev builds)
   const backend = import.meta.env.VITE_BACKEND;
   if (backend === "fakerest") return true;
 
-  // Also allow demo mode if explicitly configured via env
   if (import.meta.env.VITE_IS_DEMO === "true") return true;
 
   return false;
