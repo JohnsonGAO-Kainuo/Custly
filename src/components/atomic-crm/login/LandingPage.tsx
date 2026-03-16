@@ -70,7 +70,7 @@ export const LandingPage = () => {
   });
 
   return (
-    <div className="relative bg-background">
+    <div className="relative bg-background overflow-hidden">
       <MarketingBackdrop />
       <div className="relative z-10">
         {/* Navigation Header */}

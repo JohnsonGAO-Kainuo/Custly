@@ -1,5 +1,5 @@
 export const MarketingBackdrop = () => (
-  <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+  <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(42,95,106,0.14),_transparent_60%)]" />
     <div className="absolute inset-0 opacity-30 bg-[linear-gradient(to_right,_rgba(42,95,106,0.08)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(42,95,106,0.08)_1px,_transparent_1px)] [background-size:48px_48px]" />
     <div className="absolute -top-24 right-[-10%] h-72 w-72 rounded-full bg-primary/15 blur-3xl" />
