@@ -58,7 +58,7 @@ const GitHubIconButton = () => {
 
 export const LandingPage = () => {
   const translate = useTranslate();
-  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+  const demoUrl = "/demo";
 
   usePageSEO({
     title: "Custly CRM — Template-First CRM | Free 14-Day Trial",

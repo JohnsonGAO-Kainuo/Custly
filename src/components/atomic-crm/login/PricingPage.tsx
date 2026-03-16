@@ -12,7 +12,7 @@ import {
 
 export const PricingPage = () => {
   const translate = useTranslate();
-  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+  const demoUrl = "/demo";
 
   usePageSEO({
     title: "CRM Pricing — From $20/mo, Free 14-Day Trial",

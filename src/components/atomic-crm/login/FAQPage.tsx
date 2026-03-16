@@ -15,7 +15,7 @@ import { MarketingBackdrop } from "./MarketingBackdrop";
 
 export const FAQPage = () => {
   const translate = useTranslate();
-  const demoUrl = import.meta.env.VITE_DEMO_URL?.trim() || "/demo";
+  const demoUrl = "/demo";
 
   usePageSEO({
     title: "CRM FAQ — Pricing, Features & Security | Custly",
